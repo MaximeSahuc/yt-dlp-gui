@@ -33,6 +33,7 @@ async fn run_ytdlp_tool(
     ];
     args.extend(utils::build_js_runtime_args(app));
     args.extend(utils::build_plugin_args(app));
+    args.extend(utils::build_youtube_extractor_args());
 
     let output_template = std::path::PathBuf::from(download_dir)
         .join("%(title).200s.%(ext)s")

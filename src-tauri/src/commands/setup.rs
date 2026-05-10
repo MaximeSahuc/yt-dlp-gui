@@ -36,6 +36,12 @@ pub fn set_binary_path_resolve_mode(mode: String) -> Result<(), String> {
     utils::set_binary_path_resolve_mode(&mode)
 }
 
+/// 设置 YouTube 提取器参数（PO Token / visitor_data），用于绕过 YouTube 403 / 限流
+#[tauri::command]
+pub fn set_youtube_extractor_args(po_token: String, visitor_data: String) -> Result<(), String> {
+    utils::set_youtube_extractor_args(&po_token, &visitor_data)
+}
+
 // ========== yt-dlp 管理 ==========
 
 /// 获取 yt-dlp 安装状态和版本
@@ -243,8 +249,8 @@ pub async fn install_plugin(app: AppHandle, url: String) -> Result<(), String> {
     let plugin_dir_clone = plugin_dir.clone();
     tokio::task::spawn_blocking(move || {
         let cursor = std::io::Cursor::new(bytes);
-        let mut archive = zip::ZipArchive::new(cursor)
-            .map_err(|e| format!("err_read_zip:{}", e))?;
+        let mut archive =
+            zip::ZipArchive::new(cursor).map_err(|e| format!("err_read_zip:{}", e))?;
 
         for i in 0..archive.len() {
             let mut entry = archive

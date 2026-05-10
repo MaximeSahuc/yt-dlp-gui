@@ -235,6 +235,8 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
     // JS 运行时（Deno）
     args.extend(utils::build_js_runtime_args(app));
     args.extend(utils::build_plugin_args(app));
+    // YouTube PO Token / visitor_data（如设置）
+    args.extend(utils::build_youtube_extractor_args());
 
     // 格式选择
     match params.download_mode.as_str() {

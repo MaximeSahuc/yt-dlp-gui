@@ -66,6 +66,13 @@ const applyBinaryPathResolveMode = async () => {
   });
 };
 
+const applyYoutubeExtractorArgs = async () => {
+  await invoke("set_youtube_extractor_args", {
+    poToken: settingStore.youtubePoToken,
+    visitorData: settingStore.youtubeVisitorData,
+  });
+};
+
 const ytdlpStatus = ref<YtdlpStatus | null>(null);
 const ytdlpChecking = ref(true);
 const ytdlpDownloading = ref(false);
@@ -190,6 +197,7 @@ onMounted(async () => {
   platform.value = await invoke<string>("get_platform");
   appVersion.value = await getVersion();
   await applyBinaryPathResolveMode();
+  await applyYoutubeExtractorArgs();
   refreshAll();
 });
 
@@ -198,6 +206,14 @@ watch(
   async () => {
     await applyBinaryPathResolveMode();
     refreshAll();
+  },
+);
+
+// PO Token / visitor_data 变更时同步到后端；不刷新状态（无需重新探测 yt-dlp）。
+watch(
+  () => [settingStore.youtubePoToken, settingStore.youtubeVisitorData],
+  async () => {
+    await applyYoutubeExtractorArgs();
   },
 );
 </script>
@@ -354,6 +370,36 @@ watch(
           </n-collapse-transition>
         </n-flex>
       </n-spin>
+    </n-card>
+
+    <n-card :title="$t('settings.youtubeAdvanced')" size="small" class="section-card">
+      <n-flex vertical :size="12">
+        <n-text depth="3" style="font-size: 13px">
+          {{ $t("settings.youtubeAdvancedDesc") }}
+        </n-text>
+        <div class="info-list">
+          <div class="info-row">
+            <span class="info-label">{{ $t("settings.youtubePoToken") }}</span>
+            <n-input
+              v-model:value="settingStore.youtubePoToken"
+              :placeholder="$t('settings.youtubePoTokenPlaceholder')"
+              size="small"
+              clearable
+              style="flex: 1; max-width: 480px"
+            />
+          </div>
+          <div class="info-row">
+            <span class="info-label">{{ $t("settings.youtubeVisitorData") }}</span>
+            <n-input
+              v-model:value="settingStore.youtubeVisitorData"
+              :placeholder="$t('settings.youtubeVisitorDataPlaceholder')"
+              size="small"
+              clearable
+              style="flex: 1; max-width: 480px"
+            />
+          </div>
+        </div>
+      </n-flex>
     </n-card>
 
     <n-card :title="$t('settings.appearance')" size="small" class="section-card">

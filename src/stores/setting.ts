@@ -56,6 +56,12 @@ export const useSettingStore = defineStore(
     /** 二进制路径解析模式 */
     const binaryPathResolveMode = ref<"system-preferred" | "app-only">("system-preferred");
 
+    /** YouTube PO Token（用于绕过 403 / 限流） */
+    const youtubePoToken = ref("");
+
+    /** YouTube visitor_data（与 PO Token 配套） */
+    const youtubeVisitorData = ref("");
+
     /** 在任务栏显示下载进度 */
     const showTaskbarProgress = ref(true);
 
@@ -76,6 +82,8 @@ export const useSettingStore = defineStore(
       closeToTray,
       autoCheckUpdate,
       binaryPathResolveMode,
+      youtubePoToken,
+      youtubeVisitorData,
       showTaskbarProgress,
     };
   },

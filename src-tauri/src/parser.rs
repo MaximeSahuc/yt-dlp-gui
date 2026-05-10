@@ -127,14 +127,16 @@ mod tests {
 
     #[test]
     fn parse_ffmpeg_time_zero_returns_zero() {
-        let line = "frame=    1 fps=0.0 q=0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=N/A";
+        let line =
+            "frame=    1 fps=0.0 q=0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=N/A";
         let secs = parse_ffmpeg_time(line).unwrap();
         assert!((secs - 0.0).abs() < 0.01);
     }
 
     #[test]
     fn parse_ffmpeg_time_negative_returns_none() {
-        let line = "frame=    0 fps=0.0 q=0.0 size=       0kB time=-577014:32:22.77 bitrate=N/A speed=N/A";
+        let line =
+            "frame=    0 fps=0.0 q=0.0 size=       0kB time=-577014:32:22.77 bitrate=N/A speed=N/A";
         assert!(parse_ffmpeg_time(line).is_none());
     }
 

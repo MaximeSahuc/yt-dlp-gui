@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { invoke } from "@tauri-apps/api/core";
 import { save } from "@tauri-apps/plugin-dialog";
-import { showErrorDialog } from "@/utils/format";
+import { showErrorDialog, sanitizeFilename } from "@/utils/format";
 import { isValidUrl } from "@/utils/validate";
 import { useSettingStore } from "@/stores/setting";
 import { useStatusStore } from "@/stores/status";
@@ -91,7 +91,7 @@ const handleFetch = async () => {
 const handleSave = async (thumb: ThumbnailInfo) => {
   const ext = getExtFromUrl(thumb.url);
   const defaultName = videoTitle.value
-    ? `${videoTitle.value.slice(0, 200)}.${ext}`
+    ? `${sanitizeFilename(videoTitle.value).slice(0, 200)}.${ext}`
     : `thumbnail.${ext}`;
 
   const filePath = await save({

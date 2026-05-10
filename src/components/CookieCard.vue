@@ -19,6 +19,7 @@ const browserOptions = [
   { label: "Chrome", value: "chrome" },
   { label: "Edge", value: "edge" },
   { label: "Firefox", value: "firefox" },
+  { label: "Waterfox", value: "waterfox" },
   { label: "Brave", value: "brave" },
   { label: "Opera", value: "opera" },
   { label: "Vivaldi", value: "vivaldi" },

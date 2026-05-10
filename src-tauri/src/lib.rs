@@ -1,7 +1,7 @@
-use tauri::Emitter;
-use tauri::Manager;
 use tauri::menu::{Menu, MenuItem};
 use tauri::tray::TrayIconEvent;
+use tauri::Emitter;
+use tauri::Manager;
 
 mod commands;
 mod parser;
@@ -9,14 +9,17 @@ mod process;
 mod utils;
 
 #[tauri::command]
-fn update_tray_menu(app: tauri::AppHandle, show_label: String, quit_label: String) -> Result<(), String> {
+fn update_tray_menu(
+    app: tauri::AppHandle,
+    show_label: String,
+    quit_label: String,
+) -> Result<(), String> {
     if let Some(tray) = app.tray_by_id("main") {
         let show = MenuItem::with_id(&app, "show", &show_label, true, None::<&str>)
             .map_err(|e| e.to_string())?;
         let quit = MenuItem::with_id(&app, "quit", &quit_label, true, None::<&str>)
             .map_err(|e| e.to_string())?;
-        let menu = Menu::with_items(&app, &[&show, &quit])
-            .map_err(|e| e.to_string())?;
+        let menu = Menu::with_items(&app, &[&show, &quit]).map_err(|e| e.to_string())?;
         tray.set_menu(Some(menu)).map_err(|e| e.to_string())?;
     }
     Ok(())
@@ -92,6 +95,7 @@ pub fn run() {
             update_tray_menu,
             commands::get_platform,
             commands::set_binary_path_resolve_mode,
+            commands::set_youtube_extractor_args,
             commands::get_ytdlp_status,
             commands::download_ytdlp,
             commands::update_ytdlp,

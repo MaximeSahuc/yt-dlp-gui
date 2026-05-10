@@ -78,6 +78,7 @@ pub async fn run_ytdlp_json(
     }
     args.extend(utils::build_js_runtime_args(app));
     args.extend(utils::build_plugin_args(app));
+    args.extend(utils::build_youtube_extractor_args());
     append_cookie_proxy_args(&mut args, cookie_file, cookie_browser, proxy);
     args.push(url.to_string());
 
@@ -100,8 +101,7 @@ pub async fn run_ytdlp_json(
         .lines()
         .find(|line| line.trim_start().starts_with('{'))
     {
-        return serde_json::from_str(json_str)
-            .map_err(|e| format!("err_parse_video_info:{}", e));
+        return serde_json::from_str(json_str).map_err(|e| format!("err_parse_video_info:{}", e));
     }
 
     // 未找到 JSON，从 stderr 提取 ERROR 行作为错误信息
@@ -121,7 +121,10 @@ pub fn extract_ytdlp_error(stderr: &str) -> String {
 
 /// 验证文件路径安全性（防止路径遍历攻击）
 /// 确保解析后的路径位于 base_dir 之下
-pub fn validate_path_within(base_dir: &std::path::Path, relative_path: &str) -> Result<std::path::PathBuf, String> {
+pub fn validate_path_within(
+    base_dir: &std::path::Path,
+    relative_path: &str,
+) -> Result<std::path::PathBuf, String> {
     let target = base_dir.join(relative_path);
     // 标准化路径，消除 .. 等相对路径组件
     let canonical_base = base_dir

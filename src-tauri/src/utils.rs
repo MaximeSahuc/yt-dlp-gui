@@ -37,6 +37,54 @@ pub fn set_binary_path_resolve_mode(mode: &str) -> Result<(), String> {
     Ok(())
 }
 
+// ========== YouTube extractor 参数（po_token / visitor_data）==========
+
+#[derive(Default, Clone)]
+struct YoutubeExtractorArgs {
+    po_token: String,
+    visitor_data: String,
+}
+
+static YOUTUBE_EXTRACTOR_ARGS: OnceLock<RwLock<YoutubeExtractorArgs>> = OnceLock::new();
+
+fn youtube_args_lock() -> &'static RwLock<YoutubeExtractorArgs> {
+    YOUTUBE_EXTRACTOR_ARGS.get_or_init(|| RwLock::new(YoutubeExtractorArgs::default()))
+}
+
+/// 设置 YouTube PO Token / visitor_data；空字符串表示清除。
+/// 用于绕过 YouTube 403 / 限流（详见 yt-dlp wiki: Extractors > YouTube）。
+pub fn set_youtube_extractor_args(po_token: &str, visitor_data: &str) -> Result<(), String> {
+    let mut guard = youtube_args_lock()
+        .write()
+        .map_err(|e| format!("err_set_youtube_args:{}", e))?;
+    guard.po_token = po_token.trim().to_string();
+    guard.visitor_data = visitor_data.trim().to_string();
+    Ok(())
+}
+
+/// 根据当前 PO Token / visitor_data 构建 yt-dlp `--extractor-args` 参数；
+/// 两个值都为空时返回空 vec（不追加参数）。
+pub fn build_youtube_extractor_args() -> Vec<String> {
+    let guard = match youtube_args_lock().read() {
+        Ok(g) => g,
+        Err(_) => return vec![],
+    };
+    let mut parts: Vec<String> = Vec::new();
+    if !guard.po_token.is_empty() {
+        parts.push(format!("po_token={}", guard.po_token));
+    }
+    if !guard.visitor_data.is_empty() {
+        parts.push(format!("visitor_data={}", guard.visitor_data));
+    }
+    if parts.is_empty() {
+        return vec![];
+    }
+    vec![
+        "--extractor-args".to_string(),
+        format!("youtube:{}", parts.join(";")),
+    ]
+}
+
 /// 构建应用数据目录下的可执行文件路径
 fn get_managed_executable_path(app: &AppHandle, file_name: &str) -> Result<PathBuf, String> {
     let app_data = app
