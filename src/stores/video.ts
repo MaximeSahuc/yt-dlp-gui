@@ -5,6 +5,24 @@ import { useSettingStore } from "@/stores/setting";
 import { useStatusStore } from "@/stores/status";
 import type { VideoInfo, VideoFormat, PlaylistEntry, DenoStatus } from "@/types";
 
+type SubtitleMap = NonNullable<PlaylistEntry["subtitles"]>;
+
+/** 聚合 playlist 各 entry 的字幕到一个并集；同语言取首个出现的 entry 的 tracks */
+const aggregateSubtitleMap = (
+  entries: PlaylistEntry[],
+  field: "subtitles" | "automatic_captions",
+): SubtitleMap => {
+  const merged: SubtitleMap = {};
+  for (const entry of entries) {
+    const map = entry[field];
+    if (!map) continue;
+    for (const [lang, tracks] of Object.entries(map)) {
+      if (!merged[lang] && tracks?.length) merged[lang] = tracks;
+    }
+  }
+  return merged;
+};
+
 export const useVideoStore = defineStore("video", () => {
   const url = ref("");
   const videoInfo = ref<VideoInfo | null>(null);
@@ -60,12 +78,17 @@ export const useVideoStore = defineStore("video", () => {
         selectedPlaylistItems.value = playlistEntries.value.map((_, i) => i + 1);
         const firstEntry = info.entries[0];
         const formats: VideoFormat[] = firstEntry?.formats || info.formats || [];
+        // 合集字幕：yt-dlp -J 对 playlist 不会在 root 暴露 subtitles，
+        // 必须从各 entry 聚合。同语言的 tracks 取首个出现该语言的 entry，
+        // 这样默认数据来源跟随 P1（与现有「分 P 默认全选」一致）。
         videoInfo.value = {
           ...info,
           title: info.title || firstEntry?.title || "",
           thumbnail: info.thumbnail || firstEntry?.thumbnail || "",
           duration: info.duration || firstEntry?.duration || 0,
           formats,
+          subtitles: aggregateSubtitleMap(info.entries, "subtitles"),
+          automatic_captions: aggregateSubtitleMap(info.entries, "automatic_captions"),
         };
       } else {
         isPlaylist.value = false;

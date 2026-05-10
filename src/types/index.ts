@@ -102,6 +102,8 @@ export interface PlaylistEntry {
   url: string;
   thumbnail?: string;
   formats?: VideoFormat[];
+  subtitles?: Record<string, { ext: string; url: string; name?: string }[]>;
+  automatic_captions?: Record<string, { ext: string; url: string; name?: string }[]>;
 }
 
 export interface ThumbnailInfo {
