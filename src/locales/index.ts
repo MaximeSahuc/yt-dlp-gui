@@ -23,8 +23,8 @@ export interface LocaleEntry {
   rtl?: boolean;
 }
 
+// 顺序按 ISO 639-1 语言代码字母序（世界通用顺序）；中文按地区代码细分
 export const localeEntries: LocaleEntry[] = [
-  { code: "en-US", flag: "🇺🇸", label: "English", match: (lang) => lang.startsWith("en") },
   {
     code: "ar-EG",
     flag: "🇪🇬",
@@ -32,6 +32,11 @@ export const localeEntries: LocaleEntry[] = [
     match: (lang) => lang.startsWith("ar"),
     rtl: true,
   },
+  { code: "en-US", flag: "🇺🇸", label: "English", match: (lang) => lang.startsWith("en") },
+  { code: "es-ES", flag: "🇪🇸", label: "Español", match: (lang) => lang.startsWith("es") },
+  { code: "ja-JP", flag: "🇯🇵", label: "日本語", match: (lang) => lang.startsWith("ja") },
+  { code: "ko-KR", flag: "🇰🇷", label: "한국어", match: (lang) => lang.startsWith("ko") },
+  { code: "ru-RU", flag: "🇷🇺", label: "Русский", match: (lang) => lang.startsWith("ru") },
   {
     code: "zh-CN",
     flag: "🇨🇳",
@@ -39,10 +44,6 @@ export const localeEntries: LocaleEntry[] = [
     match: (lang) => lang === "zh-CN" || lang === "zh-SG" || lang === "zh",
   },
   { code: "zh-TW", flag: "🇭🇰", label: "繁體中文", match: (lang) => lang.startsWith("zh") },
-  { code: "ja-JP", flag: "🇯🇵", label: "日本語", match: (lang) => lang.startsWith("ja") },
-  { code: "ko-KR", flag: "🇰🇷", label: "한국어", match: (lang) => lang.startsWith("ko") },
-  { code: "es-ES", flag: "🇪🇸", label: "Español", match: (lang) => lang.startsWith("es") },
-  { code: "ru-RU", flag: "🇷🇺", label: "Русский", match: (lang) => lang.startsWith("ru") },
 ];
 
 /** locale code → entry 快速查找 */
@@ -50,11 +51,11 @@ const localeMap = new Map(localeEntries.map((e) => [e.code, e]));
 
 // ==================== 工具函数 ====================
 
-/** 根据系统语言返回最匹配的 locale code */
+/** 根据系统语言返回最匹配的 locale code；未匹配时 fallback 到英文 */
 const getSystemLocale = (): string => {
   const lang = navigator.language;
   const matched = localeEntries.find((e) => e.match(lang));
-  return matched ? matched.code : localeEntries[0].code;
+  return matched ? matched.code : "en-US";
 };
 
 /** 从 localStorage 读取用户的语言偏好 */
