@@ -32,8 +32,13 @@
   },
   "nav": {
     "home": "首页",
+    "pending": "待下载",
     "downloads": "下载",
     "toolbox": "工具"
+  },
+  "pending": {
+    "empty": "暂无待下载项目",
+    "goParse": "去解析视频"
   },
   "home": {
     "slogan": "粘贴视频链接，快速下载",

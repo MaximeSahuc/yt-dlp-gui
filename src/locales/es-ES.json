@@ -32,8 +32,13 @@
   },
   "nav": {
     "home": "Inicio",
+    "pending": "Pendientes",
     "downloads": "Descargas",
     "toolbox": "Herramientas"
+  },
+  "pending": {
+    "empty": "No hay elementos pendientes",
+    "goParse": "Analizar un video"
   },
   "home": {
     "slogan": "Pega el enlace del vídeo y descárgalo al instante",

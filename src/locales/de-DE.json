@@ -32,8 +32,13 @@
   },
   "nav": {
     "home": "Start",
+    "pending": "Ausstehend",
     "downloads": "Downloads",
     "toolbox": "Werkzeuge"
+  },
+  "pending": {
+    "empty": "Keine ausstehenden Elemente",
+    "goParse": "Video analysieren"
   },
   "home": {
     "slogan": "Video-Link einfügen, sofort herunterladen",

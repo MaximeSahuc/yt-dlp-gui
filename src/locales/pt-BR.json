@@ -32,8 +32,13 @@
   },
   "nav": {
     "home": "Início",
+    "pending": "Pendentes",
     "downloads": "Downloads",
     "toolbox": "Ferramentas"
+  },
+  "pending": {
+    "empty": "Nenhum item pendente",
+    "goParse": "Analisar um vídeo"
   },
   "home": {
     "slogan": "Cole um link de vídeo, baixe instantaneamente",

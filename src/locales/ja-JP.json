@@ -32,8 +32,13 @@
   },
   "nav": {
     "home": "ホーム",
+    "pending": "保留中",
     "downloads": "ダウンロード",
     "toolbox": "ツール"
+  },
+  "pending": {
+    "empty": "保留中の項目はありません",
+    "goParse": "動画を解析する"
   },
   "home": {
     "slogan": "動画リンクを貼り付けて、すぐダウンロード",

@@ -32,8 +32,13 @@
   },
   "nav": {
     "home": "Accueil",
+    "pending": "En attente",
     "downloads": "Téléchargements",
     "toolbox": "Outils"
+  },
+  "pending": {
+    "empty": "Aucun élément en attente",
+    "goParse": "Analyser une vidéo"
   },
   "home": {
     "slogan": "Collez un lien vidéo, téléchargez instantanément",

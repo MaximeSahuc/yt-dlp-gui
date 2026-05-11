@@ -32,8 +32,13 @@
   },
   "nav": {
     "home": "Home",
+    "pending": "Pending",
     "downloads": "Downloads",
     "toolbox": "Tools"
+  },
+  "pending": {
+    "empty": "No pending items",
+    "goParse": "Parse a video"
   },
   "home": {
     "slogan": "Paste a video link, download instantly",

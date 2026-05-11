@@ -3,7 +3,13 @@ import { invoke } from "@tauri-apps/api/core";
 import { showErrorDialog } from "@/utils/format";
 import { useSettingStore } from "@/stores/setting";
 import { useStatusStore } from "@/stores/status";
-import type { VideoInfo, VideoFormat, PlaylistEntry, DenoStatus } from "@/types";
+import type {
+  VideoInfo,
+  VideoFormat,
+  PlaylistEntry,
+  DenoStatus,
+  FetchedVideoData,
+} from "@/types";
 
 type SubtitleMap = NonNullable<PlaylistEntry["subtitles"]>;
 
@@ -24,16 +30,7 @@ const aggregateSubtitleMap = (
 };
 
 export const useVideoStore = defineStore("video", () => {
-  const url = ref("");
-  const videoInfo = ref<VideoInfo | null>(null);
-  const videoFormats = ref<VideoFormat[]>([]);
-  const audioFormats = ref<VideoFormat[]>([]);
   const fetching = ref(false);
-
-  // 播放列表
-  const isPlaylist = ref(false);
-  const playlistEntries = ref<PlaylistEntry[]>([]);
-  const selectedPlaylistItems = ref<number[]>([]);
 
   /** 获取当前有效的 Cookie 参数 */
   const getCookieArgs = async (): Promise<{
@@ -55,8 +52,8 @@ export const useVideoStore = defineStore("video", () => {
     return { cookieFile: null, cookieBrowser: null };
   };
 
-  /** 解析视频信息并填充 store，返回是否成功 */
-  const fetchVideoInfo = async (targetUrl: string): Promise<boolean> => {
+  /** 解析视频信息，成功返回结构化结果，失败返回 null */
+  const fetchVideoInfo = async (targetUrl: string): Promise<FetchedVideoData | null> => {
     const settingStore = useSettingStore();
     fetching.value = true;
     try {
@@ -68,23 +65,23 @@ export const useVideoStore = defineStore("video", () => {
         proxy: settingStore.proxy || null,
       });
 
-      url.value = targetUrl;
+      let videoInfo: VideoInfo;
+      let isPlaylist = false;
+      let playlistEntries: PlaylistEntry[] = [];
 
       if (info._type === "playlist" && info.entries?.length) {
-        isPlaylist.value = true;
-        playlistEntries.value = info.entries.map((e, i) => ({
+        isPlaylist = true;
+        playlistEntries = info.entries.map((e, i) => ({
           id: e.id || String(i + 1),
           title: e.title || `第 ${i + 1} P`,
           duration: e.duration ?? null,
           url: e.url || "",
         }));
-        selectedPlaylistItems.value = playlistEntries.value.map((_, i) => i + 1);
         const firstEntry = info.entries[0];
         const formats: VideoFormat[] = firstEntry?.formats || info.formats || [];
         // 合集字幕：yt-dlp -J 对 playlist 不会在 root 暴露 subtitles，
-        // 必须从各 entry 聚合。同语言的 tracks 取首个出现该语言的 entry，
-        // 这样默认数据来源跟随 P1（与现有「分 P 默认全选」一致）。
-        videoInfo.value = {
+        // 必须从各 entry 聚合。同语言的 tracks 取首个出现该语言的 entry。
+        videoInfo = {
           ...info,
           title: info.title || firstEntry?.title || "",
           thumbnail: info.thumbnail || firstEntry?.thumbnail || "",
@@ -94,17 +91,14 @@ export const useVideoStore = defineStore("video", () => {
           automatic_captions: aggregateSubtitleMap(info.entries, "automatic_captions"),
         };
       } else {
-        isPlaylist.value = false;
-        playlistEntries.value = [];
-        selectedPlaylistItems.value = [];
-        videoInfo.value = info;
+        videoInfo = info;
       }
 
-      const formats: VideoFormat[] = videoInfo.value.formats || [];
-      videoFormats.value = formats
+      const formats: VideoFormat[] = videoInfo.formats || [];
+      const videoFormats = formats
         .filter((f) => f.vcodec && f.vcodec !== "none" && (!f.acodec || f.acodec === "none"))
         .sort((a, b) => (b.height || 0) - (a.height || 0));
-      audioFormats.value = formats
+      const audioFormats = formats
         .filter((f) => f.acodec && f.acodec !== "none" && (!f.vcodec || f.vcodec === "none"))
         .sort((a, b) => (b.abr || 0) - (a.abr || 0));
 
@@ -121,7 +115,14 @@ export const useVideoStore = defineStore("video", () => {
         }
       }
 
-      return true;
+      return {
+        url: targetUrl,
+        videoInfo,
+        videoFormats,
+        audioFormats,
+        isPlaylist,
+        playlistEntries,
+      };
     } catch (e: unknown) {
       const raw = e instanceof Error ? e.message : String(e) || "获取视频信息失败";
       if (/err_ytdlp_not_installed/.test(raw)) {
@@ -135,33 +136,15 @@ export const useVideoStore = defineStore("video", () => {
       } else {
         showErrorDialog(raw);
       }
-      return false;
+      return null;
     } finally {
       fetching.value = false;
     }
   };
 
-  const clear = () => {
-    url.value = "";
-    videoInfo.value = null;
-    videoFormats.value = [];
-    audioFormats.value = [];
-    isPlaylist.value = false;
-    playlistEntries.value = [];
-    selectedPlaylistItems.value = [];
-  };
-
   return {
-    url,
-    videoInfo,
-    videoFormats,
-    audioFormats,
     fetching,
-    isPlaylist,
-    playlistEntries,
-    selectedPlaylistItems,
     fetchVideoInfo,
     getCookieArgs,
-    clear,
   };
 });

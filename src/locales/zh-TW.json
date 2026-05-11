@@ -32,8 +32,13 @@
   },
   "nav": {
     "home": "首頁",
+    "pending": "待下載",
     "downloads": "下載",
     "toolbox": "工具"
+  },
+  "pending": {
+    "empty": "暫無待下載項目",
+    "goParse": "去解析影片"
   },
   "home": {
     "slogan": "貼上影片連結，快速下載",

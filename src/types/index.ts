@@ -98,6 +98,38 @@ export interface DownloadTask {
   params: DownloadTaskParams;
 }
 
+export interface FetchedVideoData {
+  url: string;
+  videoInfo: VideoInfo;
+  videoFormats: VideoFormat[];
+  audioFormats: VideoFormat[];
+  isPlaylist: boolean;
+  playlistEntries: PlaylistEntry[];
+}
+
+export interface PendingItem extends FetchedVideoData {
+  id: string;
+  createdAt: number;
+  selectedPlaylistItems: number[];
+  downloadMode: "default" | "video" | "audio";
+  selectedVideoFormat: string;
+  selectedAudioFormat: string;
+  startTime: number | null;
+  endTime: number | null;
+  embedSubs: boolean;
+  embedThumbnail: boolean;
+  embedMetadata: boolean;
+  embedChapters: boolean;
+  sponsorblockRemove: boolean;
+  extractAudio: boolean;
+  audioConvertFormat: string;
+  noMerge: boolean;
+  recodeFormat: string;
+  limitRate: string;
+  ffmpegArgs: string;
+  selectedSubtitles: string[];
+}
+
 export interface PlaylistEntry {
   id: string;
   title: string;

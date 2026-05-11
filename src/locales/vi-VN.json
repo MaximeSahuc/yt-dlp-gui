@@ -32,8 +32,13 @@
   },
   "nav": {
     "home": "Trang chủ",
+    "pending": "Chờ tải",
     "downloads": "Tải xuống",
     "toolbox": "Công cụ"
+  },
+  "pending": {
+    "empty": "Chưa có mục nào chờ tải",
+    "goParse": "Phân tích video"
   },
   "home": {
     "slogan": "Dán liên kết video, tải xuống ngay lập tức",

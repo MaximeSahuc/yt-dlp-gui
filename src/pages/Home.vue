@@ -2,12 +2,14 @@
 import { readText } from "@tauri-apps/plugin-clipboard-manager";
 import { isValidUrl } from "@/utils/validate";
 import { useVideoStore } from "@/stores/video";
+import { usePendingStore } from "@/stores/pending";
 import { useHistoryStore } from "@/stores/history";
 import { useI18n } from "vue-i18n";
 
 const { t, tm } = useI18n();
 const router = useRouter();
 const videoStore = useVideoStore();
+const pendingStore = usePendingStore();
 const historyStore = useHistoryStore();
 
 const url = ref("");
@@ -130,10 +132,11 @@ const handleSearch = async () => {
     window.$message.warning(t("home.enterValidUrl"));
     return;
   }
-  const success = await videoStore.fetchVideoInfo(trimmed);
-  if (success) {
-    historyStore.add(trimmed, videoStore.videoInfo?.title);
-    router.push({ name: "detail" });
+  const data = await videoStore.fetchVideoInfo(trimmed);
+  if (data) {
+    historyStore.add(trimmed, data.videoInfo.title);
+    pendingStore.add(data);
+    router.push({ name: "pending" });
   }
 };
 </script>

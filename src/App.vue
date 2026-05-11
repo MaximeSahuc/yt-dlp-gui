@@ -6,12 +6,15 @@ import { exit } from "@tauri-apps/plugin-process";
 import { check } from "@tauri-apps/plugin-updater";
 import { onOpenUrl, getCurrent as getCurrentDeepLink } from "@tauri-apps/plugin-deep-link";
 import IconMdiHome from "~icons/mdi/home";
+import IconMdiPlaylistPlay from "~icons/mdi/playlist-play";
 import IconMdiDownload from "~icons/mdi/download";
 import IconMdiToolbox from "~icons/mdi/toolbox";
 import type { Component } from "vue";
+import { useThemeVars } from "naive-ui";
 import { useI18n } from "vue-i18n";
 import { useSettingStore } from "@/stores/setting";
 import { useDownloadStore } from "@/stores/download";
+import { usePendingStore } from "@/stores/pending";
 import { useStatusStore } from "@/stores/status";
 import { localeEntries } from "@/locales";
 
@@ -20,6 +23,15 @@ const router = useRouter();
 const route = useRoute();
 const settingStore = useSettingStore();
 const downloadStore = useDownloadStore();
+const pendingStore = usePendingStore();
+const themeVars = useThemeVars();
+
+const navBadgeCounts = computed<Record<string, number>>(() => ({
+  pending: pendingStore.items.length,
+  downloads: downloadStore.tasks.filter(
+    (t) => t.status === "downloading" || t.status === "queued" || t.status === "paused",
+  ).length,
+}));
 
 /** 同步托盘菜单语言 */
 const syncTrayMenu = () => {
@@ -50,13 +62,13 @@ const localeOptions = localeEntries.map((e) => ({ label: `${e.flag} ${e.label}`,
 
 const currentRoute = computed(() => {
   const name = (route.name as string) ?? "";
-  if (name === "detail") return "home";
   if (name.startsWith("toolbox")) return "toolbox";
   return name;
 });
 
 const navItems: { key: string; icon: Component; labelKey: string }[] = [
   { key: "home", icon: IconMdiHome, labelKey: "nav.home" },
+  { key: "pending", icon: IconMdiPlaylistPlay, labelKey: "nav.pending" },
   { key: "downloads", icon: IconMdiDownload, labelKey: "nav.downloads" },
   { key: "toolbox", icon: IconMdiToolbox, labelKey: "nav.toolbox" },
 ];
@@ -161,25 +173,33 @@ onMounted(async () => {
           </div>
         </div>
         <div class="header-nav">
-          <n-button
+          <n-badge
             v-for="item in navItems"
             :key="item.key"
-            :quaternary="currentRoute !== item.key"
-            :type="currentRoute === item.key ? 'primary' : 'default'"
-            :secondary="currentRoute === item.key"
-            :focusable="false"
-            round
-            @click="router.push({ name: item.key })"
+            :value="navBadgeCounts[item.key] || 0"
+            :max="99"
+            :show="(navBadgeCounts[item.key] || 0) > 0"
+            :color="themeVars.primaryColor"
+            :offset="[-6, 4]"
           >
-            <template #icon>
-              <n-icon>
-                <component :is="item.icon" />
-              </n-icon>
-            </template>
-            <span class="nav-label" :class="{ expanded: currentRoute === item.key }">
-              {{ $t(item.labelKey) }}
-            </span>
-          </n-button>
+            <n-button
+              :quaternary="currentRoute !== item.key"
+              :type="currentRoute === item.key ? 'primary' : 'default'"
+              :secondary="currentRoute === item.key"
+              :focusable="false"
+              round
+              @click="router.push({ name: item.key })"
+            >
+              <template #icon>
+                <n-icon>
+                  <component :is="item.icon" />
+                </n-icon>
+              </template>
+              <span class="nav-label" :class="{ expanded: currentRoute === item.key }">
+                {{ $t(item.labelKey) }}
+              </span>
+            </n-button>
+          </n-badge>
         </div>
         <div class="header-side header-side-right">
           <n-button
