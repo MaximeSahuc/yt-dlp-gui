@@ -105,6 +105,7 @@
     "denoTitle": "Runtime JS Deno",
     "denoDesc": "YouTube nécessite un runtime JavaScript pour analyser les infos vidéo. Sans lui, certains formats peuvent être indisponibles",
     "appearance": "Général",
+    "advanced": "Avancé",
     "themeMode": "Thème",
     "themeAuto": "Système",
     "themeLight": "Clair",

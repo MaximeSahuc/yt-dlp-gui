@@ -177,25 +177,30 @@ const refreshAll = () => {
 };
 
 const navSections = computed(() => [
-  { id: "section-ytdlp", label: "yt-dlp" },
-  { id: "section-deno", label: t("settings.denoTitle") },
-  { id: "section-youtube", label: "YouTube" },
   { id: "section-appearance", label: t("settings.appearance") },
-  { id: "section-personal", label: t("settings.personalization") },
   { id: "section-cookies", label: "Cookies" },
   { id: "section-dir", label: t("downloadDir.title") },
-  { id: "section-download", label: t("settings.downloadOptions") },
+  { id: "section-advanced", label: t("settings.advanced") },
   { id: "section-about", label: t("settings.about") },
 ]);
+
+/** 「高级」折叠面板的展开状态，默认关闭 */
+const advancedExpanded = ref<string[]>([]);
 
 const contentEl = ref<HTMLElement | null>(null);
 
 function scrollToSection(id: string) {
-  const container = contentEl.value;
-  const el = document.getElementById(id);
-  if (!container || !el) return;
-  const top = el.offsetTop - container.offsetTop;
-  container.scrollTo({ top, behavior: "smooth" });
+  // 点击「高级」时先展开折叠面板，待内容撑开后再滚动定位
+  if (id === "section-advanced" && !advancedExpanded.value.includes("advanced")) {
+    advancedExpanded.value = ["advanced"];
+  }
+  nextTick(() => {
+    const container = contentEl.value;
+    const el = document.getElementById(id);
+    if (!container || !el) return;
+    const top = el.offsetTop - container.offsetTop;
+    container.scrollTo({ top, behavior: "smooth" });
+  });
 }
 
 onMounted(async () => {
@@ -259,175 +264,6 @@ watch(
       <n-config-provider :theme="null" abstract>
       <div class="settings-content" ref="contentEl">
 
-        <div id="section-ytdlp">
-          <n-card title="yt-dlp" size="small" class="section-card">
-            <template #header-extra>
-              <n-flex align="center" :size="8">
-                <n-tag v-if="!ytdlpChecking" :type="ytdlpStatus?.installed ? 'success' : 'error'" round>
-                  {{ ytdlpStatus?.installed ? $t("settings.installed") : $t("settings.notInstalled") }}
-                </n-tag>
-                <n-button
-                  v-if="ytdlpStatus?.installed"
-                  :loading="ytdlpUpdating"
-                  strong
-                  secondary
-                  round
-                  size="small"
-                  @click="handleUpdateYtdlp"
-                >
-                  {{ $t("settings.checkUpdate") }}
-                </n-button>
-                <n-button
-                  v-if="ytdlpStatus && !ytdlpStatus.installed"
-                  :loading="ytdlpDownloading"
-                  :disabled="ytdlpDownloading"
-                  type="primary"
-                  size="small"
-                  strong
-                  secondary
-                  round
-                  @click="handleDownloadYtdlp"
-                >
-                  {{ $t("common.download") }}
-                </n-button>
-              </n-flex>
-            </template>
-
-            <n-spin :show="ytdlpChecking">
-              <n-flex vertical :size="12">
-                <n-text depth="3" style="font-size: 13px">
-                  {{ $t("settings.ytdlpDesc") }}
-                </n-text>
-
-                <n-alert
-                  v-if="ytdlpStatus?.installed && ytdlpStatus.isManaged === false"
-                  type="warning"
-                  :bordered="false"
-                  :show-icon="false"
-                  style="font-size: 12px"
-                >
-                  {{ $t("settings.systemBinaryNotice") }}
-                </n-alert>
-
-                <div class="info-list">
-                  <div class="info-row">
-                    <span class="info-label">{{ $t("settings.version") }}</span>
-                    <n-text code>{{ ytdlpStatus?.version || "—" }}</n-text>
-                  </div>
-                  <div class="info-row">
-                    <span class="info-label">{{ $t("settings.path") }}</span>
-                    <n-ellipsis :line-clamp="1" :tooltip="{ width: 360 }">
-                      {{ ytdlpStatus?.path || "—" }}
-                    </n-ellipsis>
-                  </div>
-                </div>
-
-                <n-collapse-transition :show="ytdlpDownloading">
-                  <n-progress
-                    type="line"
-                    :percentage="Math.round(ytdlpDownloadPercent)"
-                    :processing="true"
-                    indicator-placement="inside"
-                    :height="20"
-                    :border-radius="4"
-                    style="margin-top: 4px"
-                  />
-                </n-collapse-transition>
-              </n-flex>
-            </n-spin>
-          </n-card>
-        </div>
-
-        <div id="section-deno">
-          <n-card :title="$t('settings.denoTitle')" size="small" class="section-card">
-            <template #header-extra>
-              <n-flex align="center" :size="8">
-                <n-tag v-if="!denoChecking" :type="denoStatus?.installed ? 'success' : 'error'" round>
-                  {{ denoStatus?.installed ? $t("settings.installed") : $t("settings.notInstalled") }}
-                </n-tag>
-                <n-button
-                  v-if="denoStatus && !denoStatus.installed"
-                  :loading="denoDownloading"
-                  :disabled="denoDownloading"
-                  type="primary"
-                  size="small"
-                  strong
-                  secondary
-                  round
-                  @click="handleDownloadDeno"
-                >
-                  {{ $t("common.download") }}
-                </n-button>
-              </n-flex>
-            </template>
-
-            <n-spin :show="denoChecking">
-              <n-flex vertical :size="12">
-                <n-text depth="3" style="font-size: 13px">
-                  {{ $t("settings.denoDesc") }}
-                </n-text>
-
-                <div class="info-list">
-                  <div class="info-row">
-                    <span class="info-label">{{ $t("settings.version") }}</span>
-                    <n-text code>{{ denoStatus?.version || "—" }}</n-text>
-                  </div>
-                  <div class="info-row">
-                    <span class="info-label">{{ $t("settings.path") }}</span>
-                    <n-ellipsis :line-clamp="1" :tooltip="{ width: 360 }">
-                      {{ denoStatus?.path || "—" }}
-                    </n-ellipsis>
-                  </div>
-                </div>
-
-                <n-collapse-transition :show="denoDownloading">
-                  <n-progress
-                    type="line"
-                    :percentage="Math.round(denoDownloadPercent)"
-                    :processing="true"
-                    indicator-placement="inside"
-                    :height="20"
-                    :border-radius="4"
-                    style="margin-top: 4px"
-                  />
-                </n-collapse-transition>
-              </n-flex>
-            </n-spin>
-          </n-card>
-        </div>
-
-        <div id="section-youtube">
-          <n-card :title="$t('settings.youtubeAdvanced')" size="small" class="section-card">
-            <n-flex vertical :size="12">
-              <n-text depth="3" style="font-size: 13px">
-                {{ $t("settings.youtubeAdvancedDesc") }}
-              </n-text>
-              <div class="info-list">
-                <div class="info-row">
-                  <span class="info-label">{{ $t("settings.youtubePoToken") }}</span>
-                  <n-input
-                    v-model:value="settingStore.youtubePoToken"
-                    :placeholder="$t('settings.youtubePoTokenPlaceholder')"
-                    size="small"
-                    clearable
-                    style="flex: 1; max-width: 480px"
-                  />
-                </div>
-                <div class="info-row">
-                  <span class="info-label">{{ $t("settings.youtubeVisitorData") }}</span>
-                  <n-input
-                    v-model:value="settingStore.youtubeVisitorData"
-                    :placeholder="$t('settings.youtubeVisitorDataPlaceholder')"
-                    size="small"
-                    clearable
-                    style="flex: 1; max-width: 480px"
-                  />
-                </div>
-              </div>
-            </n-flex>
-          </n-card>
-        </div>
-
         <div id="section-appearance">
           <n-card :title="$t('settings.appearance')" size="small" class="section-card">
             <div class="info-list">
@@ -457,17 +293,6 @@ watch(
           </n-card>
         </div>
 
-        <div id="section-personal">
-          <n-card :title="$t('settings.personalization')" size="small" class="section-card">
-            <div class="info-list">
-              <div class="info-row">
-                <span class="info-label">{{ $t("settings.showTaskbarProgress") }}</span>
-                <n-switch v-model:value="settingStore.showTaskbarProgress" />
-              </div>
-            </div>
-          </n-card>
-        </div>
-
         <div id="section-cookies">
           <CookieCard class="section-card" />
         </div>
@@ -476,62 +301,249 @@ watch(
           <DownloadDirCard class="section-card" />
         </div>
 
-        <div id="section-download">
-          <n-card :title="$t('settings.downloadOptions')" size="small" class="section-card">
-            <n-flex vertical :size="12">
-              <div class="info-list">
-                <div class="info-row">
-                  <span class="info-label">{{ $t("settings.proxy") }}</span>
-                  <n-input
-                    v-model:value="settingStore.proxy"
-                    :placeholder="$t('settings.proxyPlaceholder')"
-                    size="small"
-                    clearable
-                    style="width: 220px"
-                  />
-                </div>
+        <!-- 高级：默认折叠 -->
+        <div id="section-advanced">
+          <n-collapse v-model:expanded-names="advancedExpanded" class="advanced-collapse">
+            <n-collapse-item :title="$t('settings.advanced')" name="advanced">
+              <div id="section-ytdlp">
+                <n-card title="yt-dlp" size="small" class="section-card">
+                  <template #header-extra>
+                    <n-flex align="center" :size="8">
+                      <n-tag v-if="!ytdlpChecking" :type="ytdlpStatus?.installed ? 'success' : 'error'" round>
+                        {{ ytdlpStatus?.installed ? $t("settings.installed") : $t("settings.notInstalled") }}
+                      </n-tag>
+                      <n-button
+                        v-if="ytdlpStatus?.installed"
+                        :loading="ytdlpUpdating"
+                        strong
+                        secondary
+                        round
+                        size="small"
+                        @click="handleUpdateYtdlp"
+                      >
+                        {{ $t("settings.checkUpdate") }}
+                      </n-button>
+                      <n-button
+                        v-if="ytdlpStatus && !ytdlpStatus.installed"
+                        :loading="ytdlpDownloading"
+                        :disabled="ytdlpDownloading"
+                        type="primary"
+                        size="small"
+                        strong
+                        secondary
+                        round
+                        @click="handleDownloadYtdlp"
+                      >
+                        {{ $t("common.download") }}
+                      </n-button>
+                    </n-flex>
+                  </template>
+
+                  <n-spin :show="ytdlpChecking">
+                    <n-flex vertical :size="12">
+                      <n-text depth="3" style="font-size: 13px">
+                        {{ $t("settings.ytdlpDesc") }}
+                      </n-text>
+
+                      <n-alert
+                        v-if="ytdlpStatus?.installed && ytdlpStatus.isManaged === false"
+                        type="warning"
+                        :bordered="false"
+                        :show-icon="false"
+                        style="font-size: 12px"
+                      >
+                        {{ $t("settings.systemBinaryNotice") }}
+                      </n-alert>
+
+                      <div class="info-list">
+                        <div class="info-row">
+                          <span class="info-label">{{ $t("settings.version") }}</span>
+                          <n-text code>{{ ytdlpStatus?.version || "—" }}</n-text>
+                        </div>
+                        <div class="info-row">
+                          <span class="info-label">{{ $t("settings.path") }}</span>
+                          <n-ellipsis :line-clamp="1" :tooltip="{ width: 360 }">
+                            {{ ytdlpStatus?.path || "—" }}
+                          </n-ellipsis>
+                        </div>
+                      </div>
+
+                      <n-collapse-transition :show="ytdlpDownloading">
+                        <n-progress
+                          type="line"
+                          :percentage="Math.round(ytdlpDownloadPercent)"
+                          :processing="true"
+                          indicator-placement="inside"
+                          :height="20"
+                          :border-radius="4"
+                          style="margin-top: 4px"
+                        />
+                      </n-collapse-transition>
+                    </n-flex>
+                  </n-spin>
+                </n-card>
               </div>
-              <div class="info-list">
-                <div class="info-row">
-                  <span class="info-label">{{ $t("settings.concurrentFragments") }}</span>
-                  <n-select
-                    v-model:value="settingStore.concurrentFragments"
-                    :options="concurrentFragmentsOptions"
-                    size="small"
-                    style="width: 120px"
-                  />
-                </div>
+
+              <div id="section-deno">
+                <n-card :title="$t('settings.denoTitle')" size="small" class="section-card">
+                  <template #header-extra>
+                    <n-flex align="center" :size="8">
+                      <n-tag v-if="!denoChecking" :type="denoStatus?.installed ? 'success' : 'error'" round>
+                        {{ denoStatus?.installed ? $t("settings.installed") : $t("settings.notInstalled") }}
+                      </n-tag>
+                      <n-button
+                        v-if="denoStatus && !denoStatus.installed"
+                        :loading="denoDownloading"
+                        :disabled="denoDownloading"
+                        type="primary"
+                        size="small"
+                        strong
+                        secondary
+                        round
+                        @click="handleDownloadDeno"
+                      >
+                        {{ $t("common.download") }}
+                      </n-button>
+                    </n-flex>
+                  </template>
+
+                  <n-spin :show="denoChecking">
+                    <n-flex vertical :size="12">
+                      <n-text depth="3" style="font-size: 13px">
+                        {{ $t("settings.denoDesc") }}
+                      </n-text>
+
+                      <div class="info-list">
+                        <div class="info-row">
+                          <span class="info-label">{{ $t("settings.version") }}</span>
+                          <n-text code>{{ denoStatus?.version || "—" }}</n-text>
+                        </div>
+                        <div class="info-row">
+                          <span class="info-label">{{ $t("settings.path") }}</span>
+                          <n-ellipsis :line-clamp="1" :tooltip="{ width: 360 }">
+                            {{ denoStatus?.path || "—" }}
+                          </n-ellipsis>
+                        </div>
+                      </div>
+
+                      <n-collapse-transition :show="denoDownloading">
+                        <n-progress
+                          type="line"
+                          :percentage="Math.round(denoDownloadPercent)"
+                          :processing="true"
+                          indicator-placement="inside"
+                          :height="20"
+                          :border-radius="4"
+                          style="margin-top: 4px"
+                        />
+                      </n-collapse-transition>
+                    </n-flex>
+                  </n-spin>
+                </n-card>
               </div>
-              <div class="info-list">
-                <div class="info-row">
-                  <span class="info-label">{{ $t("settings.maxConcurrentDownloads") }}</span>
-                  <n-select
-                    v-model:value="settingStore.maxConcurrentDownloads"
-                    :options="maxConcurrentOptions"
-                    size="small"
-                    style="width: 120px"
-                  />
-                </div>
+
+              <div id="section-personal">
+                <n-card :title="$t('settings.personalization')" size="small" class="section-card">
+                  <div class="info-list">
+                    <div class="info-row">
+                      <span class="info-label">{{ $t("settings.showTaskbarProgress") }}</span>
+                      <n-switch v-model:value="settingStore.showTaskbarProgress" />
+                    </div>
+                  </div>
+                </n-card>
               </div>
-              <div class="info-list">
-                <div class="info-row">
-                  <span class="info-label">{{ $t("settings.downloadNotification") }}</span>
-                  <n-select
-                    v-model:value="settingStore.notifyMode"
-                    :options="notifyModeOptions"
-                    size="small"
-                    style="width: 120px"
-                  />
-                </div>
+
+              <div id="section-youtube">
+                <n-card :title="$t('settings.youtubeAdvanced')" size="small" class="section-card">
+                  <n-flex vertical :size="12">
+                    <n-text depth="3" style="font-size: 13px">
+                      {{ $t("settings.youtubeAdvancedDesc") }}
+                    </n-text>
+                    <div class="info-list">
+                      <div class="info-row">
+                        <span class="info-label">{{ $t("settings.youtubePoToken") }}</span>
+                        <n-input
+                          v-model:value="settingStore.youtubePoToken"
+                          :placeholder="$t('settings.youtubePoTokenPlaceholder')"
+                          size="small"
+                          clearable
+                          style="flex: 1; max-width: 480px"
+                        />
+                      </div>
+                      <div class="info-row">
+                        <span class="info-label">{{ $t("settings.youtubeVisitorData") }}</span>
+                        <n-input
+                          v-model:value="settingStore.youtubeVisitorData"
+                          :placeholder="$t('settings.youtubeVisitorDataPlaceholder')"
+                          size="small"
+                          clearable
+                          style="flex: 1; max-width: 480px"
+                        />
+                      </div>
+                    </div>
+                  </n-flex>
+                </n-card>
               </div>
-              <div class="info-list">
-                <div class="info-row">
-                  <span class="info-label">{{ $t("settings.noOverwrites") }}</span>
-                  <n-switch v-model:value="settingStore.noOverwrites" />
-                </div>
+
+              <div id="section-download">
+                <n-card :title="$t('settings.downloadOptions')" size="small" class="section-card">
+                  <n-flex vertical :size="12">
+                    <div class="info-list">
+                      <div class="info-row">
+                        <span class="info-label">{{ $t("settings.proxy") }}</span>
+                        <n-input
+                          v-model:value="settingStore.proxy"
+                          :placeholder="$t('settings.proxyPlaceholder')"
+                          size="small"
+                          clearable
+                          style="width: 220px"
+                        />
+                      </div>
+                    </div>
+                    <div class="info-list">
+                      <div class="info-row">
+                        <span class="info-label">{{ $t("settings.concurrentFragments") }}</span>
+                        <n-select
+                          v-model:value="settingStore.concurrentFragments"
+                          :options="concurrentFragmentsOptions"
+                          size="small"
+                          style="width: 120px"
+                        />
+                      </div>
+                    </div>
+                    <div class="info-list">
+                      <div class="info-row">
+                        <span class="info-label">{{ $t("settings.maxConcurrentDownloads") }}</span>
+                        <n-select
+                          v-model:value="settingStore.maxConcurrentDownloads"
+                          :options="maxConcurrentOptions"
+                          size="small"
+                          style="width: 120px"
+                        />
+                      </div>
+                    </div>
+                    <div class="info-list">
+                      <div class="info-row">
+                        <span class="info-label">{{ $t("settings.downloadNotification") }}</span>
+                        <n-select
+                          v-model:value="settingStore.notifyMode"
+                          :options="notifyModeOptions"
+                          size="small"
+                          style="width: 120px"
+                        />
+                      </div>
+                    </div>
+                    <div class="info-list">
+                      <div class="info-row">
+                        <span class="info-label">{{ $t("settings.noOverwrites") }}</span>
+                        <n-switch v-model:value="settingStore.noOverwrites" />
+                      </div>
+                    </div>
+                  </n-flex>
+                </n-card>
               </div>
-            </n-flex>
-          </n-card>
+            </n-collapse-item>
+          </n-collapse>
         </div>
 
         <div id="section-about">
@@ -706,6 +718,19 @@ watch(
 
 .section-card {
   margin-bottom: 12px;
+}
+
+.advanced-collapse {
+  margin-bottom: 12px;
+
+  // 折叠面板内的卡片去掉外间距，最后一张不留多余空白
+  :deep(.section-card) {
+    margin-bottom: 12px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 .info-list {
