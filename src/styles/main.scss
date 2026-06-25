@@ -1,5 +1,42 @@
 :root {
   --titlebar-height: 0px;
+
+  // ===== MP3 Buddy 主题调色板（浅色，跟随设置中的主题切换） =====
+  --mp3-surface: #ffffff;
+  --mp3-surface-2: #f5f6f8;
+  --mp3-surface-3: #f9fafb;
+  --mp3-border: #e4e7ec;
+  --mp3-border-strong: #d0d5dd;
+  --mp3-divider: rgba(0, 0, 0, 0.09);
+  --mp3-divider-soft: #f0f1f3;
+  --mp3-text: #1a1a2e;
+  --mp3-text-2: #344054;
+  --mp3-text-3: #6b7280;
+  --mp3-text-muted: #9ca3af;
+  --mp3-hover: #e9eaec;
+  --mp3-hover-soft: #f0f1f3;
+  --mp3-input-bg: #ffffff;
+  --mp3-icon-faint: rgba(0, 0, 0, 0.12);
+  --mp3-accent: #4a9cd6;
+}
+
+:root.dark {
+  --mp3-surface: #18181c;
+  --mp3-surface-2: #202027;
+  --mp3-surface-3: #26262e;
+  --mp3-border: #33333d;
+  --mp3-border-strong: #44444f;
+  --mp3-divider: rgba(255, 255, 255, 0.1);
+  --mp3-divider-soft: rgba(255, 255, 255, 0.06);
+  --mp3-text: #e8e8ea;
+  --mp3-text-2: #c4c4cc;
+  --mp3-text-3: #9aa0aa;
+  --mp3-text-muted: #6f7680;
+  --mp3-hover: #33333d;
+  --mp3-hover-soft: #2a2a32;
+  --mp3-input-bg: #26262e;
+  --mp3-icon-faint: rgba(255, 255, 255, 0.18);
+  --mp3-accent: #4a9cd6;
 }
 
 * {

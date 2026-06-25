@@ -26,7 +26,7 @@ function formatDuration(seconds: number): string {
 <template>
   <div class="preview-box">
     <div v-if="state === 'idle'" class="preview-center">
-      <n-icon size="44" color="rgba(0,0,0,0.12)">
+      <n-icon size="44" color="var(--mp3-icon-faint)">
         <IconMdiImageOutline />
       </n-icon>
       <p class="preview-hint">{{ t("mp3buddy.idlePlaceholder") }}</p>
@@ -51,7 +51,7 @@ function formatDuration(seconds: number): string {
       <div class="preview-meta">
         <div class="preview-title">{{ info.title }}</div>
         <div class="preview-row">
-          <n-icon size="13" color="#6b7280" style="flex-shrink:0">
+          <n-icon size="13" color="var(--mp3-text-3)" style="flex-shrink:0">
             <IconMdiAccount />
           </n-icon>
           <span class="preview-sub">{{ info.uploader }}</span>
@@ -91,7 +91,7 @@ function formatDuration(seconds: number): string {
 
 .preview-hint {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--mp3-text-muted);
   text-align: center;
   margin: 0;
 }
@@ -126,7 +126,7 @@ function formatDuration(seconds: number): string {
   font-size: 13px;
   font-weight: 600;
   line-height: 1.35;
-  color: #1a1a2e;
+  color: var(--mp3-text);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -141,7 +141,7 @@ function formatDuration(seconds: number): string {
 
 .preview-sub {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--mp3-text-3);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -153,7 +153,7 @@ function formatDuration(seconds: number): string {
 }
 
 .duration {
-  color: rgba(0, 0, 0, 0.4);
+  color: var(--mp3-text-muted);
   margin-left: 4px;
 }
 </style>

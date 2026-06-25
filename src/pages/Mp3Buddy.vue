@@ -154,7 +154,7 @@ onMounted(() => {
 .mp3-card {
   width: 100%;
   height: 100%;
-  background: #fff;
+  background: var(--mp3-surface);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -171,8 +171,8 @@ onMounted(() => {
   width: 195px;
   min-width: 195px;
   flex-shrink: 0;
-  border-right: 1px solid rgba(0, 0, 0, 0.09);
-  background: #f5f6f8;
+  border-right: 1px solid var(--mp3-divider);
+  background: var(--mp3-surface-2);
   overflow: hidden;
   display: flex;
   flex-direction: column;

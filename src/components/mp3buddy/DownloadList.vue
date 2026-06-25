@@ -63,7 +63,7 @@ async function changeFolder() {
     </div>
     <div class="dl-footer">
       <div class="dl-folder-row">
-        <n-icon size="13" :color="'#6b7280'" style="flex-shrink: 0">
+        <n-icon size="13" color="var(--mp3-text-3)" style="flex-shrink: 0">
           <IconMdiFolderOpenOutline />
         </n-icon>
         <span class="dl-folder-path" :title="settingStore.downloadDir || ''">
@@ -90,9 +90,9 @@ async function changeFolder() {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: #6b7280;
+  color: var(--mp3-text-3);
   padding: 8px 10px 4px;
-  border-bottom: 1px solid #e4e7ec;
+  border-bottom: 1px solid var(--mp3-border);
   flex-shrink: 0;
 }
 
@@ -109,12 +109,12 @@ async function changeFolder() {
 
 .dl-empty-text {
   font-size: 11px;
-  color: #9ca3af;
+  color: var(--mp3-text-muted);
 }
 
 .dl-item {
   padding: 5px 10px;
-  border-bottom: 1px solid #f0f1f3;
+  border-bottom: 1px solid var(--mp3-divider-soft);
 }
 
 .dl-item-row {
@@ -132,7 +132,7 @@ async function changeFolder() {
   font-size: 11px;
   font-weight: 600;
   line-height: 1.3;
-  color: #1a1a2e;
+  color: var(--mp3-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -140,7 +140,7 @@ async function changeFolder() {
 
 .dl-item-uploader {
   font-size: 10px;
-  color: #6b7280;
+  color: var(--mp3-text-3);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -148,19 +148,19 @@ async function changeFolder() {
 
 .dl-item-label {
   font-size: 10px;
-  color: #9ca3af;
+  color: var(--mp3-text-muted);
 }
 
 .dl-item-percent {
   font-size: 10px;
-  color: #9ca3af;
+  color: var(--mp3-text-muted);
   margin-top: 1px;
 }
 
 .dl-footer {
   flex-shrink: 0;
   padding: 8px 10px;
-  border-top: 1px solid #e4e7ec;
+  border-top: 1px solid var(--mp3-border);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -175,7 +175,7 @@ async function changeFolder() {
 
 .dl-folder-path {
   font-size: 10px;
-  color: #6b7280;
+  color: var(--mp3-text-3);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -185,18 +185,18 @@ async function changeFolder() {
 .folder-btn {
   width: 100%;
   height: 26px;
-  border: 1px solid #d0d5dd;
+  border: 1px solid var(--mp3-border-strong);
   border-radius: 5px;
-  background: #f9fafb;
+  background: var(--mp3-surface-3);
   font-size: 11px;
-  color: #344054;
+  color: var(--mp3-text-2);
   cursor: pointer;
   box-sizing: border-box;
   transition: background 0.15s, border-color 0.15s;
 
   &:hover {
-    background: #e9eaec;
-    border-color: #b0b7c3;
+    background: var(--mp3-hover);
+    border-color: var(--mp3-text-muted);
   }
 }
 </style>

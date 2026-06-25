@@ -93,7 +93,7 @@ function onInput(e: Event) {
   flex-direction: column;
   gap: 8px;
   padding-top: 10px;
-  border-top: 1px solid #e4e7ec;
+  border-top: 1px solid var(--mp3-border);
   flex-shrink: 0;
 }
 
@@ -106,22 +106,22 @@ function onInput(e: Event) {
 .url-input {
   flex: 1;
   height: 34px;
-  border: 1px solid #d0d5dd;
+  border: 1px solid var(--mp3-border-strong);
   border-radius: 6px;
   padding: 0 10px;
   font-size: 13px;
-  background: #fff;
-  color: #1a1a2e;
+  background: var(--mp3-input-bg);
+  color: var(--mp3-text);
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.2s;
 
   &::placeholder {
-    color: #adb5bd;
+    color: var(--mp3-text-muted);
   }
 
   &:focus {
-    border-color: #4a9cd6;
+    border-color: var(--mp3-accent);
     box-shadow: 0 0 0 2px rgba(74, 156, 214, 0.15);
   }
 }
@@ -132,19 +132,19 @@ function onInput(e: Event) {
   gap: 5px;
   height: 34px;
   padding: 0 12px;
-  border: 1px solid #d0d5dd;
+  border: 1px solid var(--mp3-border-strong);
   border-radius: 6px;
-  background: #f9fafb;
+  background: var(--mp3-surface-3);
   font-size: 13px;
-  color: #344054;
+  color: var(--mp3-text-2);
   cursor: pointer;
   white-space: nowrap;
   box-sizing: border-box;
   transition: background 0.15s, border-color 0.15s;
 
   &:hover {
-    background: #f0f1f3;
-    border-color: #b0b7c3;
+    background: var(--mp3-hover-soft);
+    border-color: var(--mp3-text-muted);
   }
 }
 
@@ -157,19 +157,19 @@ function onInput(e: Event) {
 .quality-select {
   flex: 1;
   height: 34px;
-  border: 1px solid #d0d5dd;
+  border: 1px solid var(--mp3-border-strong);
   border-radius: 6px;
   padding: 0 8px;
   font-size: 13px;
-  background: #f9fafb;
-  color: #344054;
+  background: var(--mp3-surface-3);
+  color: var(--mp3-text-2);
   cursor: pointer;
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.15s;
 
   &:focus {
-    border-color: #4a9cd6;
+    border-color: var(--mp3-accent);
   }
 }
 
