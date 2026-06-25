@@ -83,7 +83,7 @@ const handleSelectFile = async () => {
         {{ $t("cookie.desc") }}
       </n-text>
 
-      <n-radio-group v-model:value="settingStore.cookieMode" size="small">
+      <n-radio-group v-model:value="settingStore.cookieMode" size="small" class="cookie-mode-group">
         <n-radio-button v-for="opt in cookieModeOptions" :key="opt.value" :value="opt.value">
           {{ opt.label }}
         </n-radio-button>
@@ -154,3 +154,11 @@ const handleSelectFile = async () => {
     </n-flex>
   </n-card>
 </template>
+
+<style scoped lang="scss">
+// 选项较多 / 翻译较长时换行，避免分段按钮溢出卡片
+.cookie-mode-group {
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>
