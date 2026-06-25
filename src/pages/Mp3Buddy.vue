@@ -6,6 +6,7 @@ import { useDownloadStore } from "@/stores/download";
 import { useSettingStore } from "@/stores/setting";
 import { isValidUrl } from "@/utils/validate";
 import AppHeader from "@/components/mp3buddy/AppHeader.vue";
+import SetupBanner from "@/components/mp3buddy/SetupBanner.vue";
 import DownloadList from "@/components/mp3buddy/DownloadList.vue";
 import VideoPreview from "@/components/mp3buddy/VideoPreview.vue";
 import DownloadPanel from "@/components/mp3buddy/DownloadPanel.vue";
@@ -129,6 +130,7 @@ onMounted(() => {
   <div class="mp3-page">
     <div class="mp3-card">
       <AppHeader />
+      <SetupBanner />
       <div class="mp3-body">
         <div class="mp3-left">
           <DownloadList />

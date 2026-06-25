@@ -452,7 +452,12 @@
     "idlePlaceholder": "Paste a URL to get started",
     "noFolderWarning": "No download folder selected",
     "lang": "EN",
-    "settings": "Settings"
+    "settings": "Settings",
+    "setupTitle": "Some tools need to be downloaded before you can start:",
+    "setupReady": "Everything's ready — paste a link to start!",
+    "setupDownloading": "Downloading {name}…",
+    "toolYtdlp": "yt-dlp (download engine)",
+    "toolDeno": "Deno (YouTube support)"
   },
   "window": {
     "minimize": "Minimize",

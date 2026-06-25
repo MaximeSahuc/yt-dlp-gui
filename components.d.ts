@@ -105,6 +105,7 @@ declare module 'vue' {
     Provider: typeof import('./src/components/Provider.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SetupBanner: typeof import('./src/components/mp3buddy/SetupBanner.vue')['default']
     SetupModal: typeof import('./src/components/SetupModal.vue')['default']
     SubtitleCard: typeof import('./src/components/home/SubtitleCard.vue')['default']
     TitleBar: typeof import('./src/components/TitleBar.vue')['default']

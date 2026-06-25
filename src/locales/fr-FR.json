@@ -413,7 +413,12 @@
     "idlePlaceholder": "Collez une URL pour commencer",
     "noFolderWarning": "Aucun dossier de téléchargement sélectionné",
     "lang": "FR",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "setupTitle": "Certains outils doivent être téléchargés avant de commencer :",
+    "setupReady": "Tout est prêt — collez un lien pour commencer !",
+    "setupDownloading": "Téléchargement de {name}…",
+    "toolYtdlp": "yt-dlp (moteur de téléchargement)",
+    "toolDeno": "Deno (support YouTube)"
   },
   "window": {
     "minimize": "Réduire",
