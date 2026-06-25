@@ -2,41 +2,6 @@ use std::path::PathBuf;
 use std::sync::{OnceLock, RwLock};
 use tauri::{AppHandle, Manager};
 
-#[derive(Clone, Copy)]
-enum BinaryPathResolveMode {
-    SystemPreferred,
-    AppOnly,
-}
-
-static BINARY_PATH_RESOLVE_MODE: OnceLock<RwLock<BinaryPathResolveMode>> = OnceLock::new();
-
-fn get_path_resolve_mode() -> BinaryPathResolveMode {
-    let lock = BINARY_PATH_RESOLVE_MODE
-        .get_or_init(|| RwLock::new(BinaryPathResolveMode::AppOnly));
-    lock.read()
-        .map(|v| *v)
-        .unwrap_or(BinaryPathResolveMode::AppOnly)
-}
-
-/// 设置二进制路径解析模式
-/// - app-only: 仅使用应用管理路径（默认；保证「检测更新」始终对实际使用的副本生效）
-/// - system-preferred: 优先系统安装路径，其次应用管理路径
-pub fn set_binary_path_resolve_mode(mode: &str) -> Result<(), String> {
-    let parsed = match mode {
-        "system-preferred" => BinaryPathResolveMode::SystemPreferred,
-        "app-only" => BinaryPathResolveMode::AppOnly,
-        _ => return Err(format!("err_invalid_path_mode:{}", mode)),
-    };
-
-    let lock = BINARY_PATH_RESOLVE_MODE
-        .get_or_init(|| RwLock::new(BinaryPathResolveMode::AppOnly));
-    let mut guard = lock
-        .write()
-        .map_err(|e| format!("err_set_path_mode:{}", e))?;
-    *guard = parsed;
-    Ok(())
-}
-
 // ========== YouTube extractor 参数（po_token / visitor_data）==========
 
 #[derive(Default, Clone)]
@@ -95,25 +60,6 @@ fn get_managed_executable_path(app: &AppHandle, file_name: &str) -> Result<PathB
     Ok(app_data.join(file_name))
 }
 
-/// 在系统 PATH 中查找可执行文件
-/// 使用 `which` crate 而非派生子进程，避免 Windows 控制台代码页（GBK 等）
-/// 输出非 UTF-8 时解析失败；同时自动处理 PATHEXT 等平台细节。
-fn find_system_executable(name: &str) -> Option<PathBuf> {
-    which::which(name).ok().filter(|path| path.exists())
-}
-
-/// 解析可执行文件路径
-/// - system-preferred: 优先系统安装路径，其次应用管理路径
-/// - app-only: 仅应用管理路径
-fn resolve_executable_path(managed_path: PathBuf, system_name: &str) -> PathBuf {
-    match get_path_resolve_mode() {
-        BinaryPathResolveMode::AppOnly => managed_path,
-        BinaryPathResolveMode::SystemPreferred => {
-            find_system_executable(system_name).unwrap_or(managed_path)
-        }
-    }
-}
-
 /// 获取应用管理的 yt-dlp 路径（应用数据目录）
 pub fn get_managed_ytdlp_path(app: &AppHandle) -> Result<PathBuf, String> {
     if cfg!(target_os = "windows") {
@@ -123,10 +69,9 @@ pub fn get_managed_ytdlp_path(app: &AppHandle) -> Result<PathBuf, String> {
     }
 }
 
-/// 获取 yt-dlp 可执行文件路径
+/// 获取 yt-dlp 可执行文件路径（始终使用应用数据目录下的副本）
 pub fn get_ytdlp_path(app: &AppHandle) -> Result<PathBuf, String> {
-    let managed_path = get_managed_ytdlp_path(app)?;
-    Ok(resolve_executable_path(managed_path, "yt-dlp"))
+    get_managed_ytdlp_path(app)
 }
 
 /// 获取应用管理的 Deno 路径（应用数据目录）
@@ -138,10 +83,9 @@ pub fn get_managed_deno_path(app: &AppHandle) -> Result<PathBuf, String> {
     }
 }
 
-/// 获取 Deno 可执行文件路径
+/// 获取 Deno 可执行文件路径（始终使用应用数据目录下的副本）
 pub fn get_deno_path(app: &AppHandle) -> Result<PathBuf, String> {
-    let managed_path = get_managed_deno_path(app)?;
-    Ok(resolve_executable_path(managed_path, "deno"))
+    get_managed_deno_path(app)
 }
 
 /// 获取 Cookie 文件路径（存放在应用数据目录下）

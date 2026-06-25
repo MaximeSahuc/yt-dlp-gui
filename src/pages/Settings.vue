@@ -56,17 +56,6 @@ const notifyModeOptions = computed(() => [
   { label: t("settings.all"), value: "all" },
 ]);
 
-const binaryPathResolveModeOptions = computed(() => [
-  { label: t("settings.pathModeSystemPreferred"), value: "system-preferred" },
-  { label: t("settings.pathModeAppOnly"), value: "app-only" },
-]);
-
-const applyBinaryPathResolveMode = async () => {
-  await invoke("set_binary_path_resolve_mode", {
-    mode: settingStore.binaryPathResolveMode,
-  });
-};
-
 const applyYoutubeExtractorArgs = async () => {
   await invoke("set_youtube_extractor_args", {
     poToken: settingStore.youtubePoToken,
@@ -188,7 +177,6 @@ const refreshAll = () => {
 };
 
 const navSections = computed(() => [
-  { id: "section-tools", label: t("settings.pathResolveMode") },
   { id: "section-ytdlp", label: "yt-dlp" },
   { id: "section-deno", label: t("settings.denoTitle") },
   { id: "section-youtube", label: "YouTube" },
@@ -213,18 +201,9 @@ function scrollToSection(id: string) {
 onMounted(async () => {
   platform.value = await invoke<string>("get_platform");
   appVersion.value = await getVersion();
-  await applyBinaryPathResolveMode();
   await applyYoutubeExtractorArgs();
   refreshAll();
 });
-
-watch(
-  () => settingStore.binaryPathResolveMode,
-  async () => {
-    await applyBinaryPathResolveMode();
-    refreshAll();
-  },
-);
 
 watch(
   () => [settingStore.youtubePoToken, settingStore.youtubeVisitorData],
@@ -279,25 +258,6 @@ watch(
       <!-- Right: scrollable settings cards — forced light theme so it matches the main page -->
       <n-config-provider :theme="null" abstract>
       <div class="settings-content" ref="contentEl">
-
-        <div id="section-tools">
-          <n-card size="small" class="section-card">
-            <div class="info-row">
-              <n-tooltip placement="right" :style="{ maxWidth: '320px' }">
-                <template #trigger>
-                  <span class="info-label">{{ $t("settings.pathResolveMode") }}</span>
-                </template>
-                {{ $t("settings.pathResolveModeHint") }}
-              </n-tooltip>
-              <n-select
-                v-model:value="settingStore.binaryPathResolveMode"
-                :options="binaryPathResolveModeOptions"
-                style="width: 160px"
-                size="small"
-              />
-            </div>
-          </n-card>
-        </div>
 
         <div id="section-ytdlp">
           <n-card title="yt-dlp" size="small" class="section-card">

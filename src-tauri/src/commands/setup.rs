@@ -30,12 +30,6 @@ pub fn get_platform() -> String {
     }
 }
 
-/// 设置 yt-dlp / Deno 路径解析模式
-#[tauri::command]
-pub fn set_binary_path_resolve_mode(mode: String) -> Result<(), String> {
-    utils::set_binary_path_resolve_mode(&mode)
-}
-
 /// 设置 YouTube 提取器参数（PO Token / visitor_data），用于绕过 YouTube 403 / 限流
 #[tauri::command]
 pub fn set_youtube_extractor_args(po_token: String, visitor_data: String) -> Result<(), String> {

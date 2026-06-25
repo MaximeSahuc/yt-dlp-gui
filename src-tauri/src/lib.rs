@@ -59,7 +59,6 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             reveal_browser_extension,
             commands::get_platform,
-            commands::set_binary_path_resolve_mode,
             commands::set_youtube_extractor_args,
             commands::get_ytdlp_status,
             commands::download_ytdlp,
