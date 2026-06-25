@@ -6,7 +6,6 @@ import { exit } from "@tauri-apps/plugin-process";
 import { check } from "@tauri-apps/plugin-updater";
 import { onOpenUrl, getCurrent as getCurrentDeepLink } from "@tauri-apps/plugin-deep-link";
 import IconMdiHome from "~icons/mdi/home";
-import IconMdiPlaylistPlay from "~icons/mdi/playlist-play";
 import IconMdiDownload from "~icons/mdi/download";
 import IconMdiToolbox from "~icons/mdi/toolbox";
 import type { Component } from "vue";
@@ -14,7 +13,6 @@ import { useThemeVars } from "naive-ui";
 import { useI18n } from "vue-i18n";
 import { useSettingStore } from "@/stores/setting";
 import { useDownloadStore } from "@/stores/download";
-import { usePendingStore } from "@/stores/pending";
 import { useStatusStore } from "@/stores/status";
 import { localeEntries } from "@/locales";
 import TitleBar from "@/components/TitleBar.vue";
@@ -24,11 +22,9 @@ const router = useRouter();
 const route = useRoute();
 const settingStore = useSettingStore();
 const downloadStore = useDownloadStore();
-const pendingStore = usePendingStore();
 const themeVars = useThemeVars();
 
 const navBadgeCounts = computed<Record<string, number>>(() => ({
-  pending: pendingStore.items.length,
   downloads: downloadStore.tasks.filter(
     (t) => t.status === "downloading" || t.status === "queued" || t.status === "paused",
   ).length,
@@ -61,7 +57,6 @@ const showChrome = computed(() => route.name !== "home" && route.name !== "setti
 
 const navItems: { key: string; icon: Component; labelKey: string }[] = [
   { key: "home", icon: IconMdiHome, labelKey: "nav.home" },
-  { key: "pending", icon: IconMdiPlaylistPlay, labelKey: "nav.pending" },
   { key: "downloads", icon: IconMdiDownload, labelKey: "nav.downloads" },
   { key: "toolbox", icon: IconMdiToolbox, labelKey: "nav.toolbox" },
 ];

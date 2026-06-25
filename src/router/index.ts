@@ -12,11 +12,6 @@ const router = createRouter({
       component: Mp3Buddy,
     },
     {
-      path: "/pending",
-      name: "pending",
-      component: () => import("@/pages/Pending.vue"),
-    },
-    {
       path: "/downloads",
       name: "downloads",
       component: () => import("@/pages/Downloads.vue"),
@@ -39,11 +34,6 @@ const router = createRouter({
           path: "subtitles",
           name: "toolbox-subtitles",
           component: () => import("@/pages/toolbox/Subtitles.vue"),
-        },
-        {
-          path: "livechat",
-          name: "toolbox-livechat",
-          component: () => import("@/pages/toolbox/LiveChat.vue"),
         },
         {
           path: "chapters",

@@ -10,6 +10,10 @@ const { t } = useI18n();
 const downloadStore = useDownloadStore();
 const settingStore = useSettingStore();
 
+function isActive(status: string): boolean {
+  return status === "downloading" || status === "queued" || status === "paused";
+}
+
 function statusColor(status: string): string {
   if (status === "completed") return "#18a058";
   if (status === "error") return "#d03050";
@@ -49,15 +53,22 @@ async function changeFolder() {
           </div>
         </div>
         <n-progress
-          v-if="task.status === 'downloading'"
+          v-if="isActive(task.status)"
           type="line"
           :percentage="task.percent"
+          :status="task.status === 'paused' ? 'warning' : 'default'"
+          :processing="task.status === 'downloading'"
           :show-indicator="false"
           :height="3"
           style="margin-top: 4px"
         />
-        <div v-if="task.status === 'downloading'" class="dl-item-percent">
-          {{ task.percent }}%<span v-if="task.speed"> · {{ task.speed }}</span>
+        <div v-if="isActive(task.status)" class="dl-item-percent">
+          <template v-if="task.status === 'queued'">{{ t("downloads.status.queued") }}</template>
+          <template v-else-if="task.status === 'paused'">{{ t("downloads.status.paused") }}</template>
+          <template v-else-if="task.percent > 0 || task.speed">
+            {{ task.percent }}%<span v-if="task.speed"> · {{ task.speed }}</span>
+          </template>
+          <template v-else>{{ t("mp3buddy.preparing") }}</template>
         </div>
       </div>
     </div>

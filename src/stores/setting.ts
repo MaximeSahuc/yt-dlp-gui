@@ -45,7 +45,7 @@ export const useSettingStore = defineStore(
     const maxConcurrentDownloads = ref(0);
 
     /** 下载完成通知模式 */
-    const notifyMode = ref<"none" | "app" | "system" | "all">("system");
+    const notifyMode = ref<"none" | "app" | "system" | "all">("app");
 
     /** 启动时自动检查更新 */
     const autoCheckUpdate = ref(true);

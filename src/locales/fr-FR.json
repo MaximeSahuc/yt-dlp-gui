@@ -410,6 +410,7 @@
     "noFolder": "Aucun dossier sélectionné",
     "ready": "Prêt",
     "fetching": "Chargement…",
+    "preparing": "Préparation…",
     "errorFetch": "Impossible de charger la vidéo",
     "idlePlaceholder": "Collez une URL pour commencer",
     "noFolderWarning": "Aucun dossier de téléchargement sélectionné",

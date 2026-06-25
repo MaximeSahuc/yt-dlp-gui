@@ -85,7 +85,6 @@ async function handleDownload(quality: string) {
     audioConvertFormat: "mp3",
     audioQuality: quality,
     noMerge: false,
-    recodeFormat: null,
     limitRate: null,
     ffmpegArgs: null,
     subtitles: [],
@@ -95,6 +94,8 @@ async function handleDownload(quality: string) {
     playlistItems: null,
   };
 
+  const willStart = downloadStore.canStartNow();
+
   downloadStore.addTask({
     id,
     url: url.value,
@@ -102,7 +103,7 @@ async function handleDownload(quality: string) {
     thumbnail: preview.value.thumbnail ?? "",
     uploader: preview.value.uploader,
     formatLabel: `MP3 ${quality}`,
-    status: "queued",
+    status: willStart ? "downloading" : "queued",
     percent: 0,
     speed: "",
     eta: "",
@@ -113,8 +114,13 @@ async function handleDownload(quality: string) {
     params: dlParams,
   });
 
-  if (downloadStore.canStartNow()) {
-    await invoke("start_download", { params: { id, ...dlParams } });
+  if (willStart) {
+    try {
+      await invoke("start_download", { params: { id, ...dlParams } });
+    } catch (e: unknown) {
+      window.$message?.error(e instanceof Error ? e.message : String(e));
+      downloadStore.removeTask(id);
+    }
   }
 }
 

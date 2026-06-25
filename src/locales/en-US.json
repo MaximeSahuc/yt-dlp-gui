@@ -449,6 +449,7 @@
     "noFolder": "No folder selected",
     "ready": "Ready",
     "fetching": "Loading…",
+    "preparing": "Preparing…",
     "errorFetch": "Could not load video",
     "idlePlaceholder": "Paste a URL to get started",
     "noFolderWarning": "No download folder selected",

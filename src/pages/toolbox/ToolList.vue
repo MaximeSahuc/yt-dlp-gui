@@ -2,7 +2,6 @@
 import type { Component } from "vue";
 import IconMdiImageOutline from "~icons/mdi/image-outline";
 import IconMdiSubtitlesOutline from "~icons/mdi/subtitles-outline";
-import IconMdiMessageTextOutline from "~icons/mdi/message-text-outline";
 import IconMdiFormatListNumbered from "~icons/mdi/format-list-numbered";
 import IconMdiCommentTextMultipleOutline from "~icons/mdi/comment-text-multiple-outline";
 import IconMdiPuzzleOutline from "~icons/mdi/puzzle-outline";
@@ -40,15 +39,6 @@ const tools: ToolItem[] = [
     bg: "rgba(32,128,240,0.1)",
     titleKey: "toolbox.subtitlesTitle",
     descKey: "toolbox.subtitlesDesc",
-  },
-  {
-    key: "livechat",
-    icon: IconMdiMessageTextOutline,
-    color: "#f0a020",
-    bg: "rgba(240,160,32,0.1)",
-    titleKey: "toolbox.livechatTitle",
-    descKey: "toolbox.livechatDesc",
-    tagKey: "toolbox.youtubeOnly",
   },
   {
     key: "chapters",
