@@ -1,11 +1,11 @@
 {
-  "name": "yt-dlp-gui",
+  "name": "mp3-buddy",
   "private": true,
   "version": "0.6.0",
   "description": "A modern, cross-platform desktop GUI for yt-dlp — download videos from YouTube, Bilibili, Twitter and 1000+ sites. Built with Tauri 2 + Vue 3.",
   "keywords": [
     "yt-dlp",
-    "yt-dlp-gui",
+    "mp3-buddy",
     "youtube-downloader",
     "video-downloader",
     "tauri",
@@ -17,17 +17,17 @@
     "gui"
   ],
   "author": {
-    "name": "imsyy",
-    "url": "https://github.com/imsyy"
+    "name": "Maxime Sahuc",
+    "url": "https://github.com/MaximeSahuc"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/imsyy/yt-dlp-gui"
+    "url": "https://github.com/MaximeSahuc/mp3-buddy"
   },
-  "homepage": "https://github.com/imsyy/yt-dlp-gui#readme",
+  "homepage": "https://github.com/MaximeSahuc/mp3-buddy#readme",
   "bugs": {
-    "url": "https://github.com/imsyy/yt-dlp-gui/issues"
+    "url": "https://github.com/MaximeSahuc/mp3-buddy/issues"
   },
   "engines": {
     "node": ">=22"

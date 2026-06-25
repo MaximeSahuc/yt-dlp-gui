@@ -218,7 +218,7 @@ onMounted(async () => {
             quaternary
             circle
             tag="a"
-            href="https://github.com/imsyy/yt-dlp-gui"
+            href="https://github.com/MaximeSahuc/mp3-buddy"
             target="_blank"
           >
             <template #icon>
@@ -271,18 +271,18 @@ onMounted(async () => {
             <n-button
               text
               tag="a"
-              href="https://github.com/imsyy"
+              href="https://github.com/MaximeSahuc"
               target="_blank"
               size="tiny"
               style="font-size: 12px"
             >
-              imsyy
+              MaximeSahuc
             </n-button>
             ·
             <n-button
               text
               tag="a"
-              href="https://github.com/imsyy/yt-dlp-gui"
+              href="https://github.com/MaximeSahuc/mp3-buddy"
               target="_blank"
               size="tiny"
               style="font-size: 12px"

@@ -2,7 +2,7 @@
 name = "mp3-buddy"
 version = "0.6.0"
 description = "A modern GUI for yt-dlp"
-authors = ["imsyy"]
+authors = ["Maxime Sahuc"]
 edition = "2021"
 
 [lib]

@@ -1,21 +1,11 @@
 <script setup lang="ts">
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { useOsTheme } from "naive-ui";
-import { useSettingStore } from "@/stores/setting";
 
 const win = getCurrentWindow();
-const settingStore = useSettingStore();
-const osTheme = useOsTheme();
-
-const isDark = computed(
-  () =>
-    settingStore.themeMode === "dark" ||
-    (settingStore.themeMode === "auto" && osTheme.value === "dark"),
-);
 </script>
 
 <template>
-  <div class="titlebar" :class="{ dark: isDark }" data-tauri-drag-region>
+  <div class="titlebar" data-tauri-drag-region>
     <span data-tauri-drag-region style="flex: 1" />
 <div class="titlebar-controls">
       <button class="tb-btn tb-minimize" @click.stop="win.minimize()" :title="$t('window.minimize')" />
@@ -32,12 +22,8 @@ const isDark = computed(
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
-  background: #dcdcdc;
+  background: #252525;
   flex-shrink: 0;
-
-  &.dark {
-    background: #252525;
-  }
 }
 
 .titlebar-controls {

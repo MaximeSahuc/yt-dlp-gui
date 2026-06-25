@@ -614,7 +614,7 @@ watch(
                   <n-button
                     text
                     tag="a"
-                    href="https://github.com/imsyy/yt-dlp-gui"
+                    href="https://github.com/MaximeSahuc/mp3-buddy"
                     target="_blank"
                     size="tiny"
                   >
