@@ -47,9 +47,6 @@ export const useSettingStore = defineStore(
     /** 下载完成通知模式 */
     const notifyMode = ref<"none" | "app" | "system" | "all">("system");
 
-    /** 关闭窗口时最小化到托盘 */
-    const closeToTray = ref(true);
-
     /** 启动时自动检查更新 */
     const autoCheckUpdate = ref(true);
 
@@ -79,7 +76,6 @@ export const useSettingStore = defineStore(
       noOverwrites,
       maxConcurrentDownloads,
       notifyMode,
-      closeToTray,
       autoCheckUpdate,
       binaryPathResolveMode,
       youtubePoToken,

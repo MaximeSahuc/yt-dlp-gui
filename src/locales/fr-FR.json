@@ -25,7 +25,6 @@
     "pasteSuccess": "Collé depuis le presse-papiers"
   },
   "tray": {
-    "show": "Afficher la fenêtre",
     "quit": "Quitter",
     "quitConfirmTitle": "Confirmer la sortie",
     "quitConfirmContent": "Des téléchargements sont en cours. Quitter les interrompra tous. Voulez-vous vraiment quitter ?"
@@ -119,7 +118,6 @@
     "disabled": "Désactivé",
     "maxConcurrentDownloads": "Téléchargements simultanés max",
     "unlimited": "Illimité",
-    "closeToTray": "Réduire dans la barre d'état à la fermeture",
     "autoCheckUpdate": "Vérifier les mises à jour au démarrage",
     "pathResolveMode": "Priorité du chemin des outils",
     "pathModeSystemPreferred": "Système prioritaire",

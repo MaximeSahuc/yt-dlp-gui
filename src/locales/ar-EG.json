@@ -25,7 +25,6 @@
     "pasteSuccess": "تم اللصق من الحافظة"
   },
   "tray": {
-    "show": "إظهار النافذة",
     "quit": "خروج",
     "quitConfirmTitle": "تأكيد الخروج",
     "quitConfirmContent": "هناك عمليات تنزيل نشطة. الخروج سيؤدي إلى قطع جميع التنزيلات. هل أنت متأكد من الخروج؟"
@@ -119,7 +118,6 @@
     "disabled": "معطل",
     "maxConcurrentDownloads": "أقصى عدد للتنزيلات المتزامنة",
     "unlimited": "غير محدود",
-    "closeToTray": "تصغير إلى منطقة الإشعارات عند الإغلاق",
     "autoCheckUpdate": "التحقق من التحديثات عند البدء",
     "pathResolveMode": "أولوية مسار الأدوات",
     "pathModeSystemPreferred": "تفضيل النظام",

@@ -25,7 +25,6 @@
     "pasteSuccess": "Đã dán từ bộ nhớ tạm"
   },
   "tray": {
-    "show": "Hiện cửa sổ",
     "quit": "Thoát",
     "quitConfirmTitle": "Xác nhận thoát",
     "quitConfirmContent": "Đang có tải xuống đang chạy. Thoát sẽ ngắt tất cả tải xuống. Bạn chắc chắn muốn thoát?"
@@ -119,7 +118,6 @@
     "disabled": "Tắt",
     "maxConcurrentDownloads": "Số tải xuống đồng thời tối đa",
     "unlimited": "Không giới hạn",
-    "closeToTray": "Thu nhỏ xuống khay khi đóng",
     "autoCheckUpdate": "Kiểm tra cập nhật khi khởi động",
     "pathResolveMode": "Ưu tiên đường dẫn công cụ",
     "pathModeSystemPreferred": "Ưu tiên hệ thống",

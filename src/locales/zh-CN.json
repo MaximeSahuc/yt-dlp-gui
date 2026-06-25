@@ -26,7 +26,6 @@
     "pasteSuccess": "已从剪贴板粘贴"
   },
   "tray": {
-    "show": "显示窗口",
     "quit": "退出",
     "quitConfirmTitle": "确认退出",
     "quitConfirmContent": "当前有正在进行的下载任务，退出将中断所有下载。确定要退出吗？"
@@ -126,7 +125,6 @@
     "disabled": "不启用",
     "maxConcurrentDownloads": "最大同时下载数",
     "unlimited": "不限制",
-    "closeToTray": "关闭窗口时最小化到托盘",
     "autoCheckUpdate": "启动时自动检查更新",
     "pathResolveMode": "工具路径优先级",
     "pathModeSystemPreferred": "系统优先",

@@ -25,7 +25,6 @@
     "pasteSuccess": "클립보드에서 붙여넣었습니다"
   },
   "tray": {
-    "show": "창 표시",
     "quit": "종료",
     "quitConfirmTitle": "종료 확인",
     "quitConfirmContent": "진행 중인 다운로드가 있습니다. 종료하면 모든 다운로드가 중단됩니다. 종료하시겠습니까?"
@@ -119,7 +118,6 @@
     "disabled": "비활성화",
     "maxConcurrentDownloads": "최대 동시 다운로드 수",
     "unlimited": "제한 없음",
-    "closeToTray": "닫을 때 트레이로 최소화",
     "autoCheckUpdate": "시작 시 자동 업데이트 확인",
     "pathResolveMode": "도구 경로 우선순위",
     "pathModeSystemPreferred": "시스템 우선",

@@ -25,7 +25,6 @@
     "pasteSuccess": "Aus Zwischenablage eingefügt"
   },
   "tray": {
-    "show": "Fenster anzeigen",
     "quit": "Beenden",
     "quitConfirmTitle": "Beenden bestätigen",
     "quitConfirmContent": "Es laufen aktive Downloads. Beim Beenden werden alle abgebrochen. Wirklich beenden?"
@@ -119,7 +118,6 @@
     "disabled": "Deaktiviert",
     "maxConcurrentDownloads": "Max. parallele Downloads",
     "unlimited": "Unbegrenzt",
-    "closeToTray": "Beim Schließen in Infobereich minimieren",
     "autoCheckUpdate": "Beim Start auf Updates prüfen",
     "pathResolveMode": "Tool-Pfad-Priorität",
     "pathModeSystemPreferred": "System bevorzugt",

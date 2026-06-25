@@ -34,16 +34,6 @@ const navBadgeCounts = computed<Record<string, number>>(() => ({
   ).length,
 }));
 
-/** 同步托盘菜单语言 */
-const syncTrayMenu = () => {
-  invoke("update_tray_menu", {
-    showLabel: t("tray.show"),
-    quitLabel: t("tray.quit"),
-  });
-};
-
-watch(() => settingStore.locale, syncTrayMenu);
-
 /** 处理退出请求，有下载任务时弹出确认框 */
 const handleQuitRequest = () => {
   if (downloadStore.activeCount > 0) {
@@ -79,19 +69,11 @@ const navItems: { key: string; icon: Component; labelKey: string }[] = [
 const win = getCurrentWindow();
 const isLinux = ref(false);
 
-// 关闭窗口时的行为
-win.onCloseRequested(async (event) => {
-  if (settingStore.closeToTray) {
-    event.preventDefault();
-    await win.hide();
-  } else {
-    event.preventDefault();
-    handleQuitRequest();
-  }
+// 关闭窗口时完全退出应用；有下载中任务时弹出确认
+win.onCloseRequested((event) => {
+  event.preventDefault();
+  handleQuitRequest();
 });
-
-// 监听托盘退出请求
-listen("tray-quit-requested", () => handleQuitRequest());
 
 /** 同一 URL 短时间内重复送达时去重，避免 onOpenUrl + getCurrent 同时触发 */
 let lastDeepLink = "";
@@ -144,7 +126,6 @@ onMounted(async () => {
   }
   win.show();
   win.setFocus();
-  syncTrayMenu();
   if (settingStore.autoCheckUpdate) {
     checkAppUpdate();
   }

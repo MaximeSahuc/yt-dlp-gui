@@ -25,7 +25,6 @@
     "pasteSuccess": "Colado da área de transferência"
   },
   "tray": {
-    "show": "Mostrar janela",
     "quit": "Sair",
     "quitConfirmTitle": "Confirmar saída",
     "quitConfirmContent": "Há downloads ativos. Sair interromperá todos. Deseja realmente sair?"
@@ -119,7 +118,6 @@
     "disabled": "Desativado",
     "maxConcurrentDownloads": "Máx. de downloads simultâneos",
     "unlimited": "Ilimitado",
-    "closeToTray": "Minimizar para a bandeja ao fechar",
     "autoCheckUpdate": "Verificar atualizações ao iniciar",
     "pathResolveMode": "Prioridade do caminho da ferramenta",
     "pathModeSystemPreferred": "Sistema preferido",

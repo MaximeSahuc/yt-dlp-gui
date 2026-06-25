@@ -1,16 +1,35 @@
 <script setup lang="ts">
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { exit } from "@tauri-apps/plugin-process";
+import { useI18n } from "vue-i18n";
+import { useDownloadStore } from "@/stores/download";
 
+const { t } = useI18n();
 const win = getCurrentWindow();
+const downloadStore = useDownloadStore();
+
+const handleClose = () => {
+  if (downloadStore.activeCount > 0) {
+    window.$dialog.warning({
+      title: t("tray.quitConfirmTitle"),
+      content: t("tray.quitConfirmContent"),
+      positiveText: t("common.cancel"),
+      negativeText: t("tray.quit"),
+      onNegativeClick: () => exit(0),
+    });
+  } else {
+    exit(0);
+  }
+};
 </script>
 
 <template>
   <div class="titlebar" data-tauri-drag-region>
     <span data-tauri-drag-region style="flex: 1" />
-<div class="titlebar-controls">
+    <div class="titlebar-controls">
       <button class="tb-btn tb-minimize" @click.stop="win.minimize()" :title="$t('window.minimize')" />
       <button class="tb-btn tb-maximize" @click.stop="win.toggleMaximize()" :title="$t('window.maximize')" />
-      <button class="tb-btn tb-close" @click.stop="win.close()" :title="$t('window.close')" />
+      <button class="tb-btn tb-close" @click.stop="handleClose()" :title="$t('window.close')" />
     </div>
   </div>
 </template>

@@ -25,7 +25,6 @@
     "pasteSuccess": "已從剪貼簿貼上"
   },
   "tray": {
-    "show": "顯示視窗",
     "quit": "退出",
     "quitConfirmTitle": "確認退出",
     "quitConfirmContent": "目前有正在進行的下載任務，退出將中斷所有下載。確定要退出嗎？"
@@ -119,7 +118,6 @@
     "disabled": "不啟用",
     "maxConcurrentDownloads": "最大同時下載數",
     "unlimited": "不限制",
-    "closeToTray": "關閉視窗時最小化到托盤",
     "autoCheckUpdate": "啟動時自動檢查更新",
     "pathResolveMode": "工具路徑優先級",
     "pathModeSystemPreferred": "系統優先",

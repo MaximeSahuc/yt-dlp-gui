@@ -26,7 +26,6 @@
     "pasteSuccess": "Pasted from clipboard"
   },
   "tray": {
-    "show": "Show Window",
     "quit": "Quit",
     "quitConfirmTitle": "Confirm Exit",
     "quitConfirmContent": "There are active downloads. Exiting will interrupt all downloads. Are you sure you want to exit?"
@@ -126,7 +125,6 @@
     "disabled": "Disabled",
     "maxConcurrentDownloads": "Max Concurrent Downloads",
     "unlimited": "Unlimited",
-    "closeToTray": "Minimize to tray on close",
     "autoCheckUpdate": "Check for updates on startup",
     "pathResolveMode": "Tool Path Priority",
     "pathModeSystemPreferred": "System Preferred",
