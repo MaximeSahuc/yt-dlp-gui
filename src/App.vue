@@ -241,9 +241,7 @@ onMounted(async () => {
       >
         <div style="flex: 1">
           <router-view v-slot="{ Component: RouteComponent }">
-            <Transition name="fade-slide" mode="out-in">
-              <component :is="RouteComponent" />
-            </Transition>
+            <component :is="RouteComponent" />
           </router-view>
         </div>
         <n-flex v-if="showChrome" justify="center" align="center" :size="4" class="app-footer">
