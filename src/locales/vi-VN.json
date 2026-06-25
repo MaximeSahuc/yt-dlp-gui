@@ -307,7 +307,7 @@
   "browserExt": {
     "title": "Tiện ích trình duyệt",
     "tagBeta": "Beta",
-    "intro": "Cài đặt tiện ích MP3 Buddy Helper trên trình duyệt nhân Chromium (Chrome / Edge / Brave / Vivaldi…) để gửi URL trang hiện tại và cookie cần thiết tới ứng dụng này chỉ bằng một cú nhấp — đặc biệt hữu ích cho video yêu cầu đăng nhập hoặc dành cho thành viên.",
+    "intro": "Cài đặt tiện ích MP3 Buddy Helper trên trình duyệt nhân Chromium (Chrome / Edge / Brave / Vivaldi…) để gửi URL trang hiện tại và cookie cần thiết tới ứng dụng này chỉ bằng một cú nhấp - đặc biệt hữu ích cho video yêu cầu đăng nhập hoặc dành cho thành viên.",
     "installHeading": "Cài đặt",
     "install1": "Nhấp \"Mở thư mục tiện ích\" bên dưới để mở thư mục tiện ích đi kèm ứng dụng trong trình quản lý tệp.",
     "install2": "Mở chrome://extensions (hoặc edge://extensions) và bật \"Chế độ nhà phát triển\" ở góc trên bên phải.",
@@ -318,7 +318,7 @@
     "usage2": "Nhấp vào biểu tượng MP3 Buddy, hoặc nhấp chuột phải vào trang / liên kết video và chọn \"Gửi sang MP3 Buddy\".",
     "usage3": "Ứng dụng sẽ tự động hiện lên với URL và cookie đã được điền sẵn trên trang chủ.",
     "privacyHeading": "Quyền riêng tư",
-    "privacyNote": "Cookie chỉ được xử lý cục bộ — được chuyển trực tiếp sang ứng dụng thông qua giao thức cục bộ (mp3buddy://) và không tải lên bất kỳ máy chủ nào.",
+    "privacyNote": "Cookie chỉ được xử lý cục bộ - được chuyển trực tiếp sang ứng dụng thông qua giao thức cục bộ (mp3buddy://) và không tải lên bất kỳ máy chủ nào.",
     "supportedHeading": "Trang hỗ trợ",
     "openLocalFolder": "Mở thư mục tiện ích",
     "viewSource": "Xem mã nguồn trên GitHub"

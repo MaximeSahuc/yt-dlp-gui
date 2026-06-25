@@ -2,7 +2,7 @@ export interface YtdlpStatus {
   installed: boolean;
   version: string;
   path: string;
-  /** 当前实际使用的是应用管理副本（true）还是系统安装版本（false） */
+  /** true if currently using the app-managed copy; false if using the system-installed version */
   isManaged: boolean;
 }
 
@@ -132,7 +132,7 @@ export interface VideoInfo {
   formats: VideoFormat[];
   subtitles: Record<string, { ext: string; url: string; name?: string }[]>;
   automatic_captions: Record<string, { ext: string; url: string; name?: string }[]>;
-  /** Playlist fields — present when the URL is a playlist */
+  /** Playlist fields - present when the URL is a playlist */
   _type?: string;
   entries?: PlaylistEntry[];
   playlist_count?: number;

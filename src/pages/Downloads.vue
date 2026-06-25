@@ -68,7 +68,7 @@ const logContent = (task: DownloadTask) => {
   return task.logs.join("\n") || t("downloads.noLogs");
 };
 
-// 日志自动滚动到底部
+// Auto-scroll logs to the bottom
 const logRefs = new Map<string, LogInst>();
 const setLogRef = (id: string) => (el: unknown) => {
   if (el) logRefs.set(id, el as LogInst);
@@ -260,7 +260,7 @@ const handleRemove = (task: DownloadTask) => {
         try {
           await invoke("delete_file", { path: task.outputFile });
         } catch {
-          // 文件可能已不存在，忽略
+          // file may no longer exist, ignore
         }
       }
       downloadStore.removeTask(task.id);

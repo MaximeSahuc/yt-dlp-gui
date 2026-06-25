@@ -30,7 +30,7 @@ const navBadgeCounts = computed<Record<string, number>>(() => ({
   ).length,
 }));
 
-/** 处理退出请求，有下载任务时弹出确认框 */
+/** Handle quit request; shows a confirmation dialog when downloads are active */
 const handleQuitRequest = () => {
   if (downloadStore.activeCount > 0) {
     window.$dialog.warning({
@@ -64,13 +64,13 @@ const navItems: { key: string; icon: Component; labelKey: string }[] = [
 const win = getCurrentWindow();
 const isLinux = ref(false);
 
-// 关闭窗口时完全退出应用；有下载中任务时弹出确认
+// Fully exit the app when the window is closed; prompt confirmation if downloads are active
 win.onCloseRequested((event) => {
   event.preventDefault();
   handleQuitRequest();
 });
 
-/** 同一 URL 短时间内重复送达时去重，避免 onOpenUrl + getCurrent 同时触发 */
+/** Deduplicate the same URL delivered twice within a short window (onOpenUrl + getCurrent can both fire) */
 let lastDeepLink = "";
 let lastDeepLinkAt = 0;
 const handleDeepLink = (deepLinkUrl: string) => {
@@ -89,16 +89,16 @@ const handleDeepLink = (deepLinkUrl: string) => {
         settingStore.cookieText = decodeURIComponent(atob(cookies));
         settingStore.cookieMode = "text";
       } catch {
-        // Cookie 解码失败，忽略
+        // cookie decode failed, ignore
       }
     }
     router.push({ name: "home", query: { url: videoUrl } });
   } catch {
-    // 无效的深链接 URL，忽略
+    // invalid deep-link URL, ignore
   }
 };
 
-/** 启动时自动检查应用更新 */
+/** Check for app updates on startup */
 const checkAppUpdate = async () => {
   try {
     const statusStore = useStatusStore();
@@ -109,7 +109,7 @@ const checkAppUpdate = async () => {
       statusStore.showUpdateModal = true;
     }
   } catch {
-    // 静默失败，不打扰用户
+    // silently ignore update errors
   }
 };
 
@@ -124,21 +124,21 @@ onMounted(async () => {
   if (settingStore.autoCheckUpdate) {
     checkAppUpdate();
   }
-  // 冷启动：应用是被深链接拉起的，立刻读取触发 URL 并填充
-  // （onOpenUrl 在监听器注册前到达的事件可能丢失，必须用 getCurrent 兜底）
+  // Cold start: app was launched via a deep link - read the triggering URL immediately.
+  // (events arriving before onOpenUrl registers may be lost, so getCurrent is the fallback)
   try {
     const initial = await getCurrentDeepLink();
     if (initial?.length) {
       for (const u of initial) handleDeepLink(u);
     }
   } catch {
-    // 插件不可用时静默忽略
+    // plugin unavailable, ignore silently
   }
-  // 应用运行期间收到的深链接
+  // Deep links received while the app is already running
   onOpenUrl((urls) => {
     for (const u of urls) handleDeepLink(u);
   });
-  // single-instance 转发的深链接（应用已运行时再次唤起）
+  // Deep links forwarded by the single-instance plugin (app re-activated while already running)
   listen<string>("deep-link-url", (event) => {
     handleDeepLink(event.payload);
   });

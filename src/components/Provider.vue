@@ -1,4 +1,4 @@
-<!-- 全局配置 -->
+<!-- Global config provider -->
 <template>
   <n-config-provider
     :locale="naiveLocale"
@@ -43,54 +43,45 @@ import {
 import { useI18n } from "vue-i18n";
 import { useSettingStore } from "@/stores/setting";
 
-// 设置
 const settingStore = useSettingStore();
 const { locale } = useI18n();
 
-// Naive UI 语言：中文用中文，其他一律英文
+// Naive UI locale: Chinese locales use zhCN, everything else uses enUS
 const naiveLocale = computed(() => (locale.value.startsWith("zh") ? zhCN : enUS));
 const naiveDateLocale = computed(() => (locale.value.startsWith("zh") ? dateZhCN : dateEnUS));
 
-// 操作系统主题
 const osTheme = useOsTheme();
 
-// 全局主题
 const themeOverrides = shallowRef<GlobalThemeOverrides>({
   common: {
     borderRadius: "8px",
   },
 });
 
-// 获取明暗模式
 const theme = computed(() => {
   return settingStore.themeMode === "auto"
-    ? // 跟随系统
+    ? // follow system
       osTheme.value === "dark"
       ? darkTheme
       : null
-    : // 自定义
+    : // custom
       settingStore.themeMode === "dark"
       ? darkTheme
       : null;
 });
 
-// 同步暗色 class 到 <html>，供组件 scoped 样式中的 CSS 变量切换浅/暗调色板
+// Sync the dark class to <html> so scoped CSS variables can toggle the palette
 watchEffect(() => {
   document.documentElement.classList.toggle("dark", theme.value === darkTheme);
 });
 
-// 挂载工具
+// Mount Naive UI utility providers
 const NaiveProviderContent = defineComponent({
   setup() {
-    // 进度条
     window.$loadingBar = useLoadingBar();
-    // 通知
     window.$notification = useNotification();
-    // 信息
     window.$message = useMessage();
-    // 对话框
     window.$dialog = useDialog();
-    // 模态框
     window.$modal = useModal();
   },
   render() {

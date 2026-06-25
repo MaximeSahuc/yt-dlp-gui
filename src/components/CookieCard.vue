@@ -28,7 +28,7 @@ const browserOptions = [
   { label: "Whale", value: "whale" },
 ];
 
-/** 从剪贴板粘贴 Cookie 文本 */
+/** Paste Cookie text from clipboard */
 const handlePasteCookie = async () => {
   try {
     const text = await readText();
@@ -44,7 +44,7 @@ const handlePasteCookie = async () => {
   }
 };
 
-/** 保存 Cookie 文本到应用数据目录 */
+/** Save Cookie text to the app data directory */
 const handleSaveCookieText = async () => {
   if (!settingStore.cookieText.trim()) {
     window.$message.warning(t("cookie.emptyContent"));
@@ -60,7 +60,7 @@ const handleSaveCookieText = async () => {
   }
 };
 
-/** 选择 Cookie 文件 */
+/** Select a Cookie file */
 const handleSelectFile = async () => {
   const selected = await open({
     multiple: false,

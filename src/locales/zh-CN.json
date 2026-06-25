@@ -357,7 +357,7 @@
     "usage2": "点击 MP3 Buddy 图标，或在页面 / 视频链接上右键选择「发送到 MP3 Buddy」。",
     "usage3": "本应用会自动唤起，链接和 Cookie 已自动填入首页。",
     "privacyHeading": "隐私说明",
-    "privacyNote": "Cookie 仅在本地处理 — 通过本地协议 (mp3buddy://) 直接传递给本应用，不会上传到任何服务器。",
+    "privacyNote": "Cookie 仅在本地处理 - 通过本地协议 (mp3buddy://) 直接传递给本应用，不会上传到任何服务器。",
     "supportedHeading": "支持的网站",
     "openLocalFolder": "打开扩展目录",
     "viewSource": "在 GitHub 查看源码"

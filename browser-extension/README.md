@@ -1,19 +1,19 @@
-# MP3 Buddy — Browser Extension
+# MP3 Buddy - Browser Extension
 
 A small companion extension for [MP3 Buddy](../README.md). It adds a button to your browser that
-sends the page you're viewing — together with the cookies needed to download it — straight to the
+sends the page you're viewing - together with the cookies needed to download it - straight to the
 MP3 Buddy desktop app. No copy-pasting links, no manually exporting cookies.
 
 Works in Chrome, Edge, Brave, Vivaldi, and other Chromium-based browsers.
 
 ## What it does
 
-- **One-click send** — click the toolbar icon to send the current video page to the app.
-- **Right-click menu** — send a page, a video link, or selected text containing a URL.
-- **Sends cookies too** — needed for login-required, age-restricted, or members-only videos.
+- **One-click send** - click the toolbar icon to send the current video page to the app.
+- **Right-click menu** - send a page, a video link, or selected text containing a URL.
+- **Sends cookies too** - needed for login-required, age-restricted, or members-only videos.
   Cookies are read locally and handed to the app directly; they are never uploaded anywhere.
-- **Smart badge** — the icon lights up automatically when you're on a supported video site.
-- **Auto theme** — the popup follows your system's light / dark mode.
+- **Smart badge** - the icon lights up automatically when you're on a supported video site.
+- **Auto theme** - the popup follows your system's light / dark mode.
 
 ## How it works
 
@@ -22,7 +22,7 @@ a page, your browser hands that link to MP3 Buddy, which comes to the front with
 already filled in.
 
 > [!IMPORTANT]
-> The MP3 Buddy desktop app must be **installed and running** for the extension to work — it's the
+> The MP3 Buddy desktop app must be **installed and running** for the extension to work - it's the
 > app that receives the link.
 
 ## Install
@@ -48,7 +48,7 @@ The extension is bundled with the app, so there's nothing extra to download.
 ## Supported sites
 
 The badge activates on the sites listed under `host_permissions` in
-[`manifest.json`](./manifest.json) — including YouTube, Bilibili, Twitch, Vimeo, Dailymotion,
+[`manifest.json`](./manifest.json) - including YouTube, Bilibili, Twitch, Vimeo, Dailymotion,
 Niconico, Twitter/X, Instagram, TikTok, Facebook, Reddit, SoundCloud, Bandcamp, and Crunchyroll.
 You can still send links from other sites via the right-click menu; downloading then depends on
 yt-dlp's own [supported-site list](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).

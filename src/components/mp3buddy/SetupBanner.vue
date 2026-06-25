@@ -20,15 +20,15 @@ const denoInstalled = ref(false);
 const ffmpegInstalled = ref(false);
 const platform = ref("");
 
-// ffmpeg 仅在 Windows 提供应用内下载；其他平台需用户手动安装
+// ffmpeg in-app download is only available on Windows; other platforms require manual install
 const ffmpegAutoDownload = computed(() => platform.value === "windows");
-// 需要手动安装 ffmpeg：缺失且无法应用内下载
+// ffmpeg needs manual install: missing and no in-app download available
 const ffmpegManual = computed(() => !ffmpegInstalled.value && !ffmpegAutoDownload.value);
-// 是否存在可应用内下载的缺失工具（决定是否显示下载按钮）
+// whether any missing tool can be downloaded in-app (controls whether the download button appears)
 const hasAutoDownloadable = computed(
   () => !ytdlpInstalled.value || !denoInstalled.value || (!ffmpegInstalled.value && ffmpegAutoDownload.value),
 );
-// macOS 给出 Homebrew 命令；Linux 仅给出软件包名（各发行版包管理器不同）
+// macOS: Homebrew command; Linux: package name only (package manager varies per distro)
 const ffmpegInstallCmd = computed(() => {
   if (platform.value === "macos") return "brew install ffmpeg";
   if (platform.value === "linux") return "ffmpeg";
@@ -66,7 +66,7 @@ async function checkStatus() {
     denoInstalled.value = !!deno.installed;
     ffmpegInstalled.value = !!ffmpeg.installed;
   } catch {
-    // 检测失败时按未安装处理，让用户可以重试下载
+    // treat detection failure as not installed so the user can retry
   } finally {
     checking.value = false;
   }
@@ -104,7 +104,7 @@ async function downloadMissing() {
     if (!denoInstalled.value) {
       await downloadOne("download_deno", "deno-download-progress", t("mp3buddy.toolDeno"));
     }
-    // ffmpeg 仅在支持应用内下载的平台（Windows）才自动下载
+    // ffmpeg is only auto-downloaded on platforms that support it (Windows)
     if (!ffmpegInstalled.value && ffmpegAutoDownload.value) {
       await downloadOne("download_ffmpeg", "ffmpeg-download-progress", t("mp3buddy.toolFfmpeg"));
     }
@@ -117,7 +117,7 @@ async function downloadMissing() {
   }
 }
 
-// 当一切就绪（含输出目录），短暂提示用户可以开始
+// When everything is ready (including the output folder), briefly notify the user
 watch(allReady, (now, prev) => {
   if (now && !prev) flashReady();
 });
@@ -126,7 +126,7 @@ onMounted(async () => {
   try {
     platform.value = await invoke<string>("get_platform");
   } catch {
-    // 获取平台失败时按非 Windows 处理（保守地引导手动安装）
+    // treat platform detection failure as non-Windows (safer: guides user to manual install)
   }
   await checkStatus();
   if (allReady.value) flashReady();
@@ -138,7 +138,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <!-- 缺少工具：提示 + 下载按钮 -->
+  <!-- Missing tools: prompt + download button -->
   <div v-if="!checking && !toolsReady" class="setup-banner setup-banner--warn">
     <div class="setup-banner-main">
       <n-icon size="18" color="#f0a020" class="setup-icon">
@@ -167,7 +167,7 @@ onBeforeUnmount(() => {
       </n-button>
     </div>
 
-    <!-- ffmpeg 无法应用内下载（Linux/macOS）：引导用户手动安装 -->
+    <!-- ffmpeg cannot be downloaded in-app (Linux/macOS): guide user to manual install -->
     <div v-if="ffmpegManual" class="setup-manual">
       <div class="setup-manual-title">{{ t("mp3buddy.ffmpegManualTitle") }}</div>
       <code v-if="ffmpegInstallCmd" class="setup-manual-cmd">{{ ffmpegInstallCmd }}</code>
@@ -189,7 +189,7 @@ onBeforeUnmount(() => {
     </div>
   </div>
 
-  <!-- 工具就绪但未设置输出目录 -->
+  <!-- Tools ready but no output folder set -->
   <div v-else-if="!checking && !folderSet" class="setup-banner setup-banner--warn">
     <div class="setup-banner-main">
       <n-icon size="18" color="#f0a020" class="setup-icon">
@@ -207,7 +207,7 @@ onBeforeUnmount(() => {
     </div>
   </div>
 
-  <!-- 全部就绪：短暂提示 -->
+  <!-- All ready: brief confirmation -->
   <div v-else-if="showReady" class="setup-banner setup-banner--ok">
     <n-icon size="18" color="#18a058" class="setup-icon">
       <IconMdiCheckCircle />

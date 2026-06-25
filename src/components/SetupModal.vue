@@ -12,7 +12,7 @@ const goToSettings = () => {
 </script>
 
 <template>
-  <!-- yt-dlp 未安装 -->
+  <!-- yt-dlp not installed -->
   <n-modal
     v-model:show="statusStore.showYtdlpSetupModal"
     preset="card"
@@ -41,7 +41,7 @@ const goToSettings = () => {
     </template>
   </n-modal>
 
-  <!-- Deno 未安装 -->
+  <!-- Deno not installed -->
   <n-modal
     v-model:show="statusStore.showDenoSetupModal"
     preset="card"

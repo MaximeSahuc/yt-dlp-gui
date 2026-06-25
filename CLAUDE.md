@@ -33,15 +33,15 @@ cd src-tauri && cargo check
 - **Tauri IPC**: Frontend calls Rust commands via `invoke()` from `@tauri-apps/api/core`
 
 ### Backend (`src-tauri/src/`)
-- `lib.rs` — Tauri app builder, registers all commands and plugins
-- `commands/` — Tauri command handlers,按功能域拆分:
-  - `mod.rs` — shared types (DownloadState, DownloadParams, YtdlpStatus etc.)
-  - `setup.rs` — platform info, yt-dlp/Deno installation management
-  - `video.rs` — video info fetching (`-J`), cookie management
-  - `download.rs` — download task control (start/pause/resume/cancel/check_files_exist)
-- `parser.rs` — yt-dlp `--progress-template` JSON output parsing
-- `process.rs` — OS-level process control (suspend/resume/kill via Win32 API or signals)
-- `utils.rs` — Path helpers (yt-dlp, Deno, cookie paths in app data dir), platform-specific download URLs, JS runtime args builder
+- `lib.rs` - Tauri app builder, registers all commands and plugins
+- `commands/` - Tauri command handlers,按功能域拆分:
+  - `mod.rs` - shared types (DownloadState, DownloadParams, YtdlpStatus etc.)
+  - `setup.rs` - platform info, yt-dlp/Deno installation management
+  - `video.rs` - video info fetching (`-J`), cookie management
+  - `download.rs` - download task control (start/pause/resume/cancel/check_files_exist)
+- `parser.rs` - yt-dlp `--progress-template` JSON output parsing
+- `process.rs` - OS-level process control (suspend/resume/kill via Win32 API or signals)
+- `utils.rs` - Path helpers (yt-dlp, Deno, cookie paths in app data dir), platform-specific download URLs, JS runtime args builder
 - Binaries (yt-dlp, Deno) are downloaded to the Tauri app data directory at runtime, not bundled
 - Progress events emitted to frontend via `app.emit()` (e.g., `ytdlp-download-progress`, `deno-download-progress`)
 - Download progress uses `--progress-template` (structured JSON) instead of parsing stdout text
@@ -62,7 +62,7 @@ This repo (`MaximeSahuc/mp3-buddy`) is a **fork** of `imsyy/yt-dlp-gui`. Two thi
   gh workflow run Release --ref vX.Y.Z   # dispatch on the tag so releaseName = vX.Y.Z
   ```
   After clicking the enable button once, plain tag pushes will trigger releases normally.
-- **Updater signing is fork-specific.** `tauri.conf.json` has `createUpdaterArtifacts: true`, so the release build *requires* the repo secrets `TAURI_SIGNING_PRIVATE_KEY` and `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` — without them the build fails. The `updater.pubkey` and `updater.endpoints` point to this fork (`MaximeSahuc/yt-dlp-gui`), not upstream. If the signing key is lost, existing installs can no longer validate updates.
+- **Updater signing is fork-specific.** `tauri.conf.json` has `createUpdaterArtifacts: true`, so the release build *requires* the repo secrets `TAURI_SIGNING_PRIVATE_KEY` and `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` - without them the build fails. The `updater.pubkey` and `updater.endpoints` point to this fork (`MaximeSahuc/yt-dlp-gui`), not upstream. If the signing key is lost, existing installs can no longer validate updates.
 
 Release matrix (`release.yml`) is trimmed to **Windows x64** + **Debian/Ubuntu x64** (`.msi`/`.exe`, `.deb`/`.AppImage`); macOS and Windows-arm64 targets are commented out for easy re-enabling. Releases are created as **drafts** (`releaseDraft: true`) and must be published manually from the Releases page.
 
@@ -70,5 +70,5 @@ Release matrix (`release.yml`) is trimmed to **Windows x64** + **Debian/Ubuntu x
 
 - Windows builds use `CREATE_NO_WINDOW` flag (0x08000000) on all subprocess spawns to hide console windows
 - All yt-dlp commands set `PYTHONUTF8=1` environment variable and use `--ignore-config --color never`
-- Deno is optional — used as JS runtime for yt-dlp when installed (`--js-runtimes` flag)
+- Deno is optional - used as JS runtime for yt-dlp when installed (`--js-runtimes` flag)
 - Cookie support: text (Netscape format saved to file) or direct file path

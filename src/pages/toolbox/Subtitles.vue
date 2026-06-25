@@ -45,7 +45,7 @@ const formatOptions = [
   { label: "LRC (.lrc)", value: "lrc" },
 ];
 
-/** 从字幕轨道列表中找到指定格式（或最接近的格式）的 URL */
+/** Find the URL for the requested format (or the closest available format) in a track list */
 const findTrackUrl = (tracks: SubtitleTrack[], format: string): string | null => {
   const exact = tracks.find((t) => t.ext === format);
   if (exact) return exact.url;
@@ -58,13 +58,13 @@ const findTrackUrl = (tracks: SubtitleTrack[], format: string): string | null =>
   return tracks.length > 0 ? tracks[0].url : null;
 };
 
-/** 显示的字幕列表（根据是否包含自动生成过滤） */
+/** Subtitle list shown in the UI (filtered based on whether auto-generated tracks are included) */
 const displayList = computed(() => {
   if (includeAutoSubs.value) return subtitleList.value;
   return subtitleList.value.filter((s) => !s.isAuto);
 });
 
-/** 语言选项（用于双语合成选择器） */
+/** Language options for the bilingual merge selectors */
 const langOptions = computed<SelectOption[]>(() =>
   displayList.value.map((s) => ({
     label: `${s.name || s.lang}${s.isAuto ? ` (${t("toolbox.auto")})` : ""}`,
@@ -72,7 +72,7 @@ const langOptions = computed<SelectOption[]>(() =>
   })),
 );
 
-/** 获取字幕列表 */
+/** Fetch the subtitle list for the given URL */
 const handleFetch = async () => {
   loading.value = true;
   subtitleList.value = [];
@@ -130,7 +130,7 @@ const handleFetch = async () => {
   }
 };
 
-/** 另存为单个字幕 */
+/** Save a single subtitle track to a user-chosen path */
 const handleSave = async (item: SubItem) => {
   const ext = exportFormat.value;
   const url = findTrackUrl(item.tracks, ext);
@@ -166,14 +166,14 @@ const handleSave = async (item: SubItem) => {
   }
 };
 
-/** 解析语言选择器的值 */
+/** Parse the value from the language selector */
 const findSubItem = (val: string): SubItem | undefined => {
   const [lang, type] = val.split("|");
   const isAuto = type === "auto";
   return subtitleList.value.find((s) => s.lang === lang && s.isAuto === isAuto);
 };
 
-/** 合成双语字幕并另存为 */
+/** Merge bilingual subtitles and save as a new file */
 const handleSaveBilingual = async () => {
   if (!primaryLang.value || !secondaryLang.value) {
     window.$message.warning(t("toolbox.selectBothLangs"));
@@ -184,7 +184,7 @@ const handleSaveBilingual = async () => {
     return;
   }
 
-  // 双语合成只支持 srt 和 vtt
+  // Bilingual merge only supports srt and vtt
   const mergeFormat = exportFormat.value === "vtt" ? "vtt" : "srt";
 
   const primary = findSubItem(primaryLang.value);

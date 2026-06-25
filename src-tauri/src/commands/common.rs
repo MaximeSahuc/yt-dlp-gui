@@ -1,4 +1,4 @@
-//! 命令模块共享辅助函数
+//! Shared helper functions for the commands module
 
 use crate::utils;
 use serde_json::Value;
@@ -8,10 +8,10 @@ use tauri::AppHandle;
 #[cfg(target_os = "windows")]
 use super::CREATE_NO_WINDOW;
 
-/// 默认 HTTP 请求超时时间（5 分钟）
+/// Default HTTP request timeout (5 minutes)
 const HTTP_TIMEOUT: Duration = Duration::from_secs(300);
 
-/// 向参数列表追加 Cookie 和代理相关参数
+/// Append Cookie and proxy-related arguments to the argument list
 pub fn append_cookie_proxy_args(
     args: &mut Vec<String>,
     cookie_file: Option<&str>,
@@ -38,7 +38,7 @@ pub fn append_cookie_proxy_args(
     }
 }
 
-/// 构建带可选代理和超时的 HTTP 客户端
+/// Build an HTTP client with optional proxy and timeout
 pub fn build_http_client(proxy: Option<&str>) -> Result<reqwest::Client, String> {
     let mut builder = reqwest::Client::builder().timeout(HTTP_TIMEOUT);
     if let Some(p) = proxy {
@@ -53,7 +53,7 @@ pub fn build_http_client(proxy: Option<&str>) -> Result<reqwest::Client, String>
         .map_err(|e| format!("err_create_http_client:{}", e))
 }
 
-/// 运行 yt-dlp -J 并解析 JSON 输出（用于获取视频信息、封面列表、字幕列表等）
+/// Run yt-dlp -J and parse the JSON output (used to fetch video info, thumbnail list, subtitle list, etc.)
 pub async fn run_ytdlp_json(
     app: &AppHandle,
     url: &str,
@@ -73,7 +73,7 @@ pub async fn run_ytdlp_json(
         "--color".to_string(),
         "never".to_string(),
         "--no-warnings".to_string(),
-        // 网络异常时快速失败：默认 retries=10、无 socket 超时，会卡住几分钟
+        // Fail fast on network errors: the default retries=10 with no socket timeout can stall for several minutes
         "--socket-timeout".to_string(),
         "15".to_string(),
         "--retries".to_string(),
@@ -104,7 +104,7 @@ pub async fn run_ytdlp_json(
 
     let stdout = String::from_utf8_lossy(&output.stdout);
 
-    // 优先从 stdout 解析 JSON（yt-dlp 可能在 stderr 输出警告但仍成功）
+    // Prefer parsing JSON from stdout (yt-dlp may write warnings to stderr but still succeed)
     if let Some(json_str) = stdout
         .lines()
         .find(|line| line.trim_start().starts_with('{'))
@@ -112,12 +112,12 @@ pub async fn run_ytdlp_json(
         return serde_json::from_str(json_str).map_err(|e| format!("err_parse_video_info:{}", e));
     }
 
-    // 未找到 JSON，从 stderr 提取 ERROR 行作为错误信息
+    // No JSON found; extract ERROR lines from stderr as the error message
     let stderr = String::from_utf8_lossy(&output.stderr);
     Err(extract_ytdlp_error(&stderr))
 }
 
-/// 从 yt-dlp stderr 输出中提取错误信息
+/// Extract error information from yt-dlp's stderr output
 pub fn extract_ytdlp_error(stderr: &str) -> String {
     let error_lines: Vec<&str> = stderr.lines().filter(|l| l.contains("ERROR:")).collect();
     if error_lines.is_empty() {
@@ -127,27 +127,27 @@ pub fn extract_ytdlp_error(stderr: &str) -> String {
     }
 }
 
-/// 验证文件路径安全性（防止路径遍历攻击）
-/// 确保解析后的路径位于 base_dir 之下
+/// Validate file path safety (prevent path traversal attacks)
+/// Ensure the resolved path is within base_dir
 pub fn validate_path_within(
     base_dir: &std::path::Path,
     relative_path: &str,
 ) -> Result<std::path::PathBuf, String> {
     let target = base_dir.join(relative_path);
-    // 标准化路径，消除 .. 等相对路径组件
+    // Normalize the path, eliminating .. and other relative path components
     let canonical_base = base_dir
         .canonicalize()
         .map_err(|e| format!("err_resolve_path:{}", e))?;
-    // 对于可能不存在的路径，检查其父目录
+    // For paths that may not exist, check their parent directory
     let target_for_check = if target.exists() {
         target
             .canonicalize()
             .map_err(|e| format!("err_resolve_path:{}", e))?
     } else {
-        // 如果目标不存在，检查其父目录是否在基础目录内
+        // If the target does not exist, check whether its parent directory is within the base directory
         let parent = target.parent().ok_or("err_invalid_path")?;
         if !parent.exists() {
-            // 如果父目录也不存在，至少检查路径组件中没有 ..
+            // If the parent directory also does not exist, at least verify there are no .. components in the path
             if relative_path.contains("..") {
                 return Err("err_path_traversal".to_string());
             }

@@ -1,11 +1,11 @@
-//! Tauri 命令模块
+//! Tauri command module
 //!
-//! 按功能域拆分:
-//! - common: 共享辅助函数（Cookie/代理参数、HTTP 客户端、yt-dlp JSON 执行）
-//! - setup: 平台信息、yt-dlp/Deno 安装管理
-//! - video: 视频信息获取、Cookie 管理
-//! - download: 下载任务控制
-//! - tools: 工具箱命令（封面、字幕、弹幕）
+//! Split by functional domain:
+//! - common: Shared helper functions (Cookie/proxy arguments, HTTP client, yt-dlp JSON execution)
+//! - setup: Platform info, yt-dlp/Deno installation management
+//! - video: Video info fetching, Cookie management
+//! - download: Download task control
+//! - tools: Toolbox commands (thumbnails, subtitles, comments)
 
 pub(crate) mod common;
 mod download;
@@ -13,7 +13,7 @@ mod setup;
 mod tools;
 mod video;
 
-// 使用 glob 导出：Tauri generate_handler! 宏需要访问 __cmd__ 隐藏项
+// Glob re-exports: the Tauri generate_handler! macro needs access to hidden __cmd__ items
 pub use download::*;
 pub use setup::*;
 pub use tools::*;
@@ -22,21 +22,21 @@ pub use video::*;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
-// ========== 共享类型 ==========
+// ========== Shared types ==========
 
-/// yt-dlp 安装状态
+/// yt-dlp installation status
 #[derive(serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct YtdlpStatus {
     pub installed: bool,
     pub version: String,
     pub path: String,
-    /// `true` 表示当前实际使用的是应用管理的副本；
-    /// `false` 表示用的是系统安装的版本（此时「检测更新」更新的是 managed 副本，不会生效）
+    /// `true` if the currently active binary is the app-managed copy;
+    /// `false` if using the system-installed version (in this case, "Check for updates" only updates the managed copy and has no effect on the active binary)
     pub is_managed: bool,
 }
 
-/// Deno 安装状态
+/// Deno installation status
 #[derive(serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DenoStatus {
@@ -46,34 +46,34 @@ pub struct DenoStatus {
     pub is_managed: bool,
 }
 
-/// ffmpeg 安装状态
+/// ffmpeg installation status
 #[derive(serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FfmpegStatus {
     pub installed: bool,
     pub version: String,
     pub path: String,
-    /// `true` 表示使用应用管理副本；`false` 表示使用系统 PATH 中的 ffmpeg
+    /// `true` if using the app-managed copy; `false` if using the ffmpeg found in the system PATH
     pub is_managed: bool,
 }
 
-/// 下载进程信息（运行时状态）
+/// Download process information (runtime state)
 pub struct DownloadProcessInfo {
-    /// 进程 PID
+    /// Process PID
     pub pid: u32,
-    /// 是否已被用户取消
+    /// Whether the task has been cancelled by the user
     pub cancelled: bool,
-    /// 从 stdout 解析到的输出文件路径（作为备选）
+    /// Output file path parsed from stdout (used as a fallback)
     pub output_files: Vec<String>,
-    /// 下载目录
+    /// Download directory
     pub download_dir: String,
-    /// 临时文件路径，用于存储 --print-to-file 写出的最终文件路径
+    /// Temporary file path used to store the final output path written by --print-to-file
     pub filepath_file: Option<String>,
-    /// 时间裁剪的片段时长（秒），用于计算 ffmpeg 处理进度
+    /// Duration (in seconds) of the clipped segment, used to calculate ffmpeg processing progress
     pub clip_duration: Option<f64>,
 }
 
-/// 下载状态管理（全局共享）
+/// Download state management (globally shared)
 pub struct DownloadState {
     pub processes: Arc<Mutex<HashMap<String, DownloadProcessInfo>>>,
 }
@@ -86,7 +86,7 @@ impl Default for DownloadState {
     }
 }
 
-/// 下载任务参数（从前端传入）
+/// Download task parameters (passed from the frontend)
 #[derive(serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct DownloadParams {
@@ -97,32 +97,32 @@ pub struct DownloadParams {
     pub video_format: Option<String>,
     pub audio_format: Option<String>,
     pub cookie_file: Option<String>,
-    /// 从浏览器读取 Cookie 的浏览器名称
+    /// Browser name for reading cookies from browser
     pub cookie_browser: Option<String>,
-    /// 代理地址
+    /// Proxy address
     pub proxy: Option<String>,
-    /// 文件名模板
+    /// Filename template
     pub output_template: Option<String>,
-    /// 并发分片数
+    /// Concurrent fragment count
     pub concurrent_fragments: Option<u32>,
-    /// 不覆盖已有文件
+    /// Do not overwrite existing files
     pub no_overwrites: bool,
     pub embed_subs: bool,
     pub embed_thumbnail: bool,
     pub embed_metadata: bool,
-    /// 嵌入章节标记
+    /// Embed chapter markers
     pub embed_chapters: bool,
-    /// 移除赞助片段（SponsorBlock）
+    /// Remove sponsor segments (SponsorBlock)
     pub sponsorblock_remove: bool,
-    /// 提取音频模式（-x）
+    /// Extract audio mode (-x)
     pub extract_audio: bool,
-    /// 音频转换格式（--audio-format）
+    /// Audio conversion format (--audio-format)
     pub audio_convert_format: Option<String>,
-    /// 音频码率（--audio-quality）
+    /// Audio quality/bitrate (--audio-quality)
     pub audio_quality: Option<String>,
     pub no_merge: bool,
     pub limit_rate: Option<String>,
-    /// 自定义 FFmpeg 后处理参数（--postprocessor-args）
+    /// Custom FFmpeg post-processing arguments (--postprocessor-args)
     pub ffmpeg_args: Option<String>,
     pub subtitles: Vec<String>,
     pub start_time: Option<f64>,
@@ -131,8 +131,8 @@ pub struct DownloadParams {
     pub playlist_items: Option<String>,
 }
 
-// ========== 平台常量 ==========
+// ========== Platform constants ==========
 
-/// Windows: 隐藏控制台窗口标志
+/// Windows: flag to hide the console window
 #[cfg(target_os = "windows")]
 pub(crate) const CREATE_NO_WINDOW: u32 = 0x08000000;

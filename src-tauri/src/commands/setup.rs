@@ -1,4 +1,4 @@
-//! 平台信息、yt-dlp 和 Deno 安装管理
+//! Platform info, yt-dlp and Deno installation management
 
 use crate::utils;
 use futures_util::StreamExt;
@@ -10,15 +10,15 @@ use tokio::io::AsyncBufReadExt;
 use super::common;
 use super::{DenoStatus, FfmpegStatus, YtdlpStatus};
 
-/// HTTP 下载超时时间（30 分钟，用于大文件下载）
+/// HTTP download timeout (30 minutes, for large file downloads)
 const DOWNLOAD_TIMEOUT: Duration = Duration::from_secs(1800);
 
 #[cfg(target_os = "windows")]
 use super::CREATE_NO_WINDOW;
 
-// ========== 平台信息 ==========
+// ========== Platform info ==========
 
-/// 获取当前运行平台
+/// Get the current runtime platform
 #[tauri::command]
 pub fn get_platform() -> String {
     if cfg!(target_os = "windows") {
@@ -30,15 +30,15 @@ pub fn get_platform() -> String {
     }
 }
 
-/// 设置 YouTube 提取器参数（PO Token / visitor_data），用于绕过 YouTube 403 / 限流
+/// Set YouTube extractor arguments (PO Token / visitor_data) to bypass YouTube 403 / rate limiting
 #[tauri::command]
 pub fn set_youtube_extractor_args(po_token: String, visitor_data: String) -> Result<(), String> {
     utils::set_youtube_extractor_args(&po_token, &visitor_data)
 }
 
-// ========== yt-dlp 管理 ==========
+// ========== yt-dlp management ==========
 
-/// 获取 yt-dlp 安装状态和版本
+/// Get yt-dlp installation status and version
 #[tauri::command]
 pub async fn get_ytdlp_status(app: AppHandle) -> Result<YtdlpStatus, String> {
     let ytdlp_path = utils::get_ytdlp_path(&app)?;
@@ -76,7 +76,7 @@ pub async fn get_ytdlp_status(app: AppHandle) -> Result<YtdlpStatus, String> {
     })
 }
 
-/// 下载 yt-dlp 可执行文件
+/// Download the yt-dlp executable
 #[tauri::command]
 pub async fn download_ytdlp(app: AppHandle) -> Result<(), String> {
     let ytdlp_path = utils::get_managed_ytdlp_path(&app)?;
@@ -124,7 +124,7 @@ pub async fn download_ytdlp(app: AppHandle) -> Result<(), String> {
         );
     }
 
-    // Unix: 设置可执行权限
+    // Unix: set executable permissions
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;
@@ -135,11 +135,11 @@ pub async fn download_ytdlp(app: AppHandle) -> Result<(), String> {
     Ok(())
 }
 
-/// 更新 yt-dlp 到最新版本（始终更新应用管理的副本，而非系统安装版）
+/// Update yt-dlp to the latest version (always updates the app-managed copy, not the system-installed one)
 #[tauri::command]
 pub async fn update_ytdlp(app: AppHandle) -> Result<String, String> {
-    // 系统安装的 yt-dlp 通常在受保护目录，`-U` 自更新会因权限失败；
-    // 这里只更新应用数据目录下的副本，与 download_ytdlp 保持一致。
+    // System-installed yt-dlp is typically in a protected directory, so `-U` self-update fails due to permissions;
+    // only the copy in the app data directory is updated here, consistent with download_ytdlp.
     let ytdlp_path = utils::get_managed_ytdlp_path(&app)?;
     if !ytdlp_path.exists() {
         return Err("err_ytdlp_not_installed".to_string());
@@ -200,20 +200,20 @@ pub async fn update_ytdlp(app: AppHandle) -> Result<String, String> {
     }
 }
 
-// ========== yt-dlp 插件管理 ==========
+// ========== yt-dlp plugin management ==========
 
-/// 检查插件是否已安装（通过相对路径判断文件是否存在）
+/// Check whether a plugin is installed (by checking if the file exists at the relative path)
 #[tauri::command]
 pub async fn check_plugin_installed(app: AppHandle, file_path: String) -> Result<bool, String> {
     let plugin_dir = utils::get_plugin_dir(&app)?;
     Ok(plugin_dir.join(&file_path).exists())
 }
 
-/// 卸载 yt-dlp 插件（删除指定文件）
+/// Uninstall a yt-dlp plugin (delete the specified file)
 #[tauri::command]
 pub async fn uninstall_plugin(app: AppHandle, file_path: String) -> Result<(), String> {
     let plugin_dir = utils::get_plugin_dir(&app)?;
-    // 路径安全验证：确保目标文件在插件目录内，防止路径遍历攻击
+    // Path safety check: ensure the target file is within the plugin directory to prevent path traversal attacks
     let target = common::validate_path_within(&plugin_dir, &file_path)?;
     if target.exists() {
         tokio::fs::remove_file(&target)
@@ -223,7 +223,7 @@ pub async fn uninstall_plugin(app: AppHandle, file_path: String) -> Result<(), S
     Ok(())
 }
 
-/// 下载并安装 yt-dlp 插件（zip 格式，自动解压到插件目录）
+/// Download and install a yt-dlp plugin (zip format, automatically extracted to the plugin directory)
 #[tauri::command]
 pub async fn install_plugin(app: AppHandle, url: String) -> Result<(), String> {
     let plugin_dir = utils::get_plugin_dir(&app)?;
@@ -243,7 +243,7 @@ pub async fn install_plugin(app: AppHandle, url: String) -> Result<(), String> {
         .await
         .map_err(|e| format!("err_download_error:{}", e))?;
 
-    // 解压 zip，保留 yt_dlp_plugins/ 内的目录结构
+    // Extract the zip, preserving the directory structure under yt_dlp_plugins/
     let plugin_dir_clone = plugin_dir.clone();
     tokio::task::spawn_blocking(move || {
         let cursor = std::io::Cursor::new(bytes);
@@ -256,7 +256,7 @@ pub async fn install_plugin(app: AppHandle, url: String) -> Result<(), String> {
                 .map_err(|e| format!("err_read_zip_entry:{}", e))?;
             let name = entry.name().to_string();
 
-            // 只提取 yt_dlp_plugins/ 下的 .py 文件，保留子目录结构
+            // Only extract .py files under yt_dlp_plugins/, preserving the subdirectory structure
             if let Some(rel) = name.strip_prefix("yt_dlp_plugins/") {
                 if !rel.is_empty() && !entry.is_dir() {
                     let out_path = plugin_dir_clone.join("yt_dlp_plugins").join(rel);
@@ -279,9 +279,9 @@ pub async fn install_plugin(app: AppHandle, url: String) -> Result<(), String> {
     Ok(())
 }
 
-// ========== Deno 管理 ==========
+// ========== Deno management ==========
 
-/// 获取 Deno 安装状态和版本
+/// Get Deno installation status and version
 #[tauri::command]
 pub async fn get_deno_status(app: AppHandle) -> Result<DenoStatus, String> {
     let deno_path = utils::get_deno_path(&app)?;
@@ -330,7 +330,7 @@ pub async fn get_deno_status(app: AppHandle) -> Result<DenoStatus, String> {
     }
 }
 
-/// 下载 Deno 可执行文件（从 zip 解压）
+/// Download the Deno executable (extracted from a zip archive)
 #[tauri::command]
 pub async fn download_deno(app: AppHandle) -> Result<(), String> {
     let deno_path = utils::get_managed_deno_path(&app)?;
@@ -349,7 +349,7 @@ pub async fn download_deno(app: AppHandle) -> Result<(), String> {
     let total_size = response.content_length().unwrap_or(0);
     let mut downloaded: u64 = 0;
 
-    // 下载 zip 到临时文件
+    // Download the zip to a temporary file
     let zip_path = deno_path.with_extension("zip");
     let mut file = tokio::fs::File::create(&zip_path)
         .await
@@ -378,13 +378,13 @@ pub async fn download_deno(app: AppHandle) -> Result<(), String> {
         );
     }
 
-    // 确保文件写入完成
+    // Ensure the file is fully flushed to disk
     tokio::io::AsyncWriteExt::shutdown(&mut file)
         .await
         .map_err(|e| format!("err_flush_file:{}", e))?;
     drop(file);
 
-    // 解压 deno 可执行文件
+    // Extract the deno executable
     let zip_path_clone = zip_path.clone();
     let deno_path_clone = deno_path.clone();
     let deno_bin_name = if cfg!(target_os = "windows") {
@@ -416,7 +416,7 @@ pub async fn download_deno(app: AppHandle) -> Result<(), String> {
     .await
     .map_err(|e| format!("err_task:{}", e))??;
 
-    // Unix: 设置可执行权限
+    // Unix: set executable permissions
     #[cfg(unix)]
     {
         use std::os::unix::fs::PermissionsExt;
@@ -424,16 +424,16 @@ pub async fn download_deno(app: AppHandle) -> Result<(), String> {
             .map_err(|e| format!("err_set_permissions:{}", e))?;
     }
 
-    // 清理 zip 文件
+    // Clean up the zip file
     let _ = tokio::fs::remove_file(&zip_path).await;
 
     Ok(())
 }
 
-// ========== ffmpeg 管理 ==========
+// ========== ffmpeg management ==========
 
-/// 获取 ffmpeg 安装状态和版本。
-/// 优先检测应用管理副本，其次回退到系统 PATH 中的 ffmpeg。
+/// Get ffmpeg installation status and version.
+/// Prefers the app-managed copy, falling back to ffmpeg found in the system PATH.
 #[tauri::command]
 pub async fn get_ffmpeg_status(app: AppHandle) -> Result<FfmpegStatus, String> {
     let managed_path = utils::get_managed_ffmpeg_path(&app)?;
@@ -478,8 +478,8 @@ pub async fn get_ffmpeg_status(app: AppHandle) -> Result<FfmpegStatus, String> {
     })
 }
 
-/// 下载 ffmpeg（从 zip 解压 ffmpeg 与 ffprobe 到应用数据目录）。
-/// 仅 Windows 提供应用内下载；其他平台请通过系统包管理器安装。
+/// Download ffmpeg (extract ffmpeg and ffprobe from a zip archive to the app data directory).
+/// In-app download is only available on Windows; for other platforms, install via the system package manager.
 #[tauri::command]
 pub async fn download_ffmpeg(app: AppHandle) -> Result<(), String> {
     let url = utils::get_ffmpeg_download_url().ok_or("err_ffmpeg_no_managed_build")?;
@@ -502,7 +502,7 @@ pub async fn download_ffmpeg(app: AppHandle) -> Result<(), String> {
     let total_size = response.content_length().unwrap_or(0);
     let mut downloaded: u64 = 0;
 
-    // 下载 zip 到临时文件
+    // Download the zip to a temporary file
     let zip_path = ffmpeg_path.with_extension("zip");
     let mut file = tokio::fs::File::create(&zip_path)
         .await
@@ -536,7 +536,7 @@ pub async fn download_ffmpeg(app: AppHandle) -> Result<(), String> {
         .map_err(|e| format!("err_flush_file:{}", e))?;
     drop(file);
 
-    // 解压 ffmpeg / ffprobe 可执行文件（zip 内位于 .../bin/ 子目录）
+    // Extract ffmpeg / ffprobe executables (located in the .../bin/ subdirectory within the zip)
     let zip_path_clone = zip_path.clone();
     tokio::task::spawn_blocking(move || {
         let file =

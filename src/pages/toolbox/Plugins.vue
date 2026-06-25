@@ -8,9 +8,9 @@ interface PluginInfo {
   id: string;
   name: string;
   desc: string;
-  /** 用于检测是否已安装的文件相对路径（相对于插件目录） */
+  /** Relative path used to detect whether the plugin is installed (relative to the plugin directory) */
   checkFile: string;
-  /** 插件 zip 下载地址 */
+  /** Plugin zip download URL */
   downloadUrl: string;
   installed: boolean;
   installing: boolean;
@@ -31,7 +31,7 @@ const plugins = ref<PluginInfo[]>([
   },
 ]);
 
-/** 检查所有插件的安装状态 */
+/** Check installation status for all plugins */
 const checkAllStatus = async () => {
   for (const plugin of plugins.value) {
     try {
@@ -44,7 +44,7 @@ const checkAllStatus = async () => {
   }
 };
 
-/** 安装插件 */
+/** Install a plugin */
 const handleInstall = async (plugin: PluginInfo) => {
   plugin.installing = true;
   try {
@@ -58,7 +58,7 @@ const handleInstall = async (plugin: PluginInfo) => {
   }
 };
 
-/** 卸载插件 */
+/** Uninstall a plugin */
 const handleUninstall = async (plugin: PluginInfo) => {
   plugin.uninstalling = true;
   try {

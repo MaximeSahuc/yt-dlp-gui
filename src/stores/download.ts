@@ -34,10 +34,10 @@ export const useDownloadStore = defineStore("download", () => {
   let listenersSetup = false;
   let saveTimer: ReturnType<typeof setTimeout> | null = null;
 
-  /** 当前正在下载的任务数 */
+  /** Number of currently active download tasks */
   const activeCount = computed(() => tasks.value.filter((t) => t.status === "downloading").length);
 
-  /** 尝试启动队列中的下一个任务 */
+  /** Try to start the next queued task */
   const tryStartNext = async () => {
     const settingStore = useSettingStore();
     const max = settingStore.maxConcurrentDownloads;
@@ -57,7 +57,7 @@ export const useDownloadStore = defineStore("download", () => {
     }
   };
 
-  /** 判断是否需要排队，返回 true 表示可以直接下载 */
+  /** Determine whether a new download can start immediately; returns true if no queuing is needed */
   const canStartNow = (): boolean => {
     const settingStore = useSettingStore();
     const max = settingStore.maxConcurrentDownloads;
@@ -85,7 +85,7 @@ export const useDownloadStore = defineStore("download", () => {
     }
   };
 
-  /** 防抖保存任务列表到 IndexedDB */
+  /** Debounced save of the task list to IndexedDB */
   const saveTasks = () => {
     if (!loaded.value) return;
     if (saveTimer) clearTimeout(saveTimer);
@@ -94,7 +94,7 @@ export const useDownloadStore = defineStore("download", () => {
     }, 500);
   };
 
-  /** 从 IndexedDB 恢复任务列表，将之前未完成的任务标记为中断，移除文件已不存在的已完成任务 */
+  /** Restore the task list from IndexedDB; mark previously unfinished tasks as interrupted and remove completed tasks whose output files no longer exist */
   const loadTasks = async () => {
     const saved = await storage.getItem<DownloadTask[]>(STORAGE_KEY);
     if (saved && Array.isArray(saved)) {
@@ -136,7 +136,7 @@ export const useDownloadStore = defineStore("download", () => {
 
   watch(tasks, saveTasks, { deep: true });
 
-  /** 更新任务栏进度条 */
+  /** Update the taskbar progress bar */
   const updateTaskbarProgress = () => {
     const settingStore = useSettingStore();
     const appWindow = getCurrentWindow();
@@ -162,7 +162,7 @@ export const useDownloadStore = defineStore("download", () => {
     }
   };
 
-  /** 注册 Tauri 后端事件监听，仅初始化一次 */
+  /** Register Tauri backend event listeners, initialized only once */
   const setupListeners = async () => {
     if (listenersSetup) return;
     listenersSetup = true;
@@ -238,12 +238,12 @@ export const useDownloadStore = defineStore("download", () => {
   loadTasks();
   setupListeners();
 
-  /** 添加新的下载任务到列表顶部 */
+  /** Add a new download task to the top of the list */
   const addTask = (task: DownloadTask) => {
     tasks.value.unshift(task);
   };
 
-  /** 暂停指定下载任务，通过 Tauri 命令挂起后端进程 */
+  /** Pause a download task by suspending the backend process via a Tauri command */
   const pauseTask = async (id: string) => {
     await invoke("pause_download", { id });
     const task = tasks.value.find((t) => t.id === id);
@@ -254,7 +254,7 @@ export const useDownloadStore = defineStore("download", () => {
     updateTaskbarProgress();
   };
 
-  /** 恢复指定已暂停的下载任务 */
+  /** Resume a previously paused download task */
   const resumeTask = async (id: string) => {
     await invoke("resume_download", { id });
     const task = tasks.value.find((t) => t.id === id);
@@ -264,7 +264,7 @@ export const useDownloadStore = defineStore("download", () => {
     updateTaskbarProgress();
   };
 
-  /** 取消下载任务并删除已下载的文件 */
+  /** Cancel a download task and delete any already-downloaded files */
   const cancelTask = async (id: string) => {
     const task = tasks.value.find((t) => t.id === id);
     if (!task) return;
@@ -284,7 +284,7 @@ export const useDownloadStore = defineStore("download", () => {
     tryStartNext();
   };
 
-  /** 重新下载失败或已取消的任务，生成新 ID 并重置状态 */
+  /** Retry a failed or cancelled task, generating a new ID and resetting state */
   const retryTask = async (id: string) => {
     const task = tasks.value.find((t) => t.id === id);
     if (!task) return;
@@ -309,13 +309,13 @@ export const useDownloadStore = defineStore("download", () => {
     }
   };
 
-  /** 从列表中移除指定任务 */
+  /** Remove the specified task from the list */
   const removeTask = (id: string) => {
     const idx = tasks.value.findIndex((t) => t.id === id);
     if (idx !== -1) tasks.value.splice(idx, 1);
   };
 
-  /** 清空所有已完成、失败、已取消的任务 */
+  /** Clear all completed, failed, and cancelled tasks */
   const clearFinished = () => {
     tasks.value = tasks.value.filter(
       (t) => t.status !== "completed" && t.status !== "error" && t.status !== "cancelled",

@@ -1,11 +1,11 @@
-/** 字幕解析与双语合成工具 */
+/** Subtitle parsing and bilingual merge utilities */
 
 interface SubBlock {
   timing: string;
   text: string;
 }
 
-/** 解析 SRT 格式字幕为块列表 */
+/** Parse an SRT subtitle file into a list of blocks */
 export const parseSrtBlocks = (content: string): SubBlock[] => {
   const blocks: SubBlock[] = [];
   const normalized = content.replace(/\r/g, "");
@@ -14,7 +14,7 @@ export const parseSrtBlocks = (content: string): SubBlock[] => {
   for (const part of parts) {
     const lines = part.trim().split("\n");
     if (lines.length >= 3) {
-      // 第1行是序号，第2行是时间轴，剩余是文本
+      // line 1 is the index, line 2 is the timecode, rest is text
       blocks.push({ timing: lines[1], text: lines.slice(2).join("\n") });
     }
   }
@@ -22,7 +22,7 @@ export const parseSrtBlocks = (content: string): SubBlock[] => {
   return blocks;
 };
 
-/** 解析 VTT 格式字幕为块列表 */
+/** Parse a VTT subtitle file into a list of blocks */
 export const parseVttBlocks = (content: string): SubBlock[] => {
   const blocks: SubBlock[] = [];
   const normalized = content.replace(/\r/g, "");
@@ -32,7 +32,7 @@ export const parseVttBlocks = (content: string): SubBlock[] => {
     const lines = part.trim().split("\n");
     if (!lines.length) continue;
 
-    // 找到包含 --> 的时间行
+    // find the line containing -->
     const timingIdx = lines.findIndex((l) => l.includes("-->"));
     if (timingIdx >= 0 && timingIdx + 1 < lines.length) {
       blocks.push({
@@ -45,7 +45,7 @@ export const parseVttBlocks = (content: string): SubBlock[] => {
   return blocks;
 };
 
-/** 合并两份 SRT 字幕为双语字幕 */
+/** Merge two SRT subtitle tracks into a bilingual subtitle */
 export const mergeBilingualSrt = (primary: string, secondary: string): string => {
   const pBlocks = parseSrtBlocks(primary);
   const sBlocks = parseSrtBlocks(secondary);
@@ -65,13 +65,13 @@ export const mergeBilingualSrt = (primary: string, secondary: string): string =>
       lines.push(sb.timing);
       lines.push(sb.text);
     }
-    lines.push(""); // 空行分隔
+    lines.push(""); // blank line separator
   }
 
   return lines.join("\r\n");
 };
 
-/** 合并两份 VTT 字幕为双语字幕 */
+/** Merge two VTT subtitle tracks into a bilingual subtitle */
 export const mergeBilingualVtt = (primary: string, secondary: string): string => {
   const pBlocks = parseVttBlocks(primary);
   const sBlocks = parseVttBlocks(secondary);
@@ -90,7 +90,7 @@ export const mergeBilingualVtt = (primary: string, secondary: string): string =>
       lines.push(sb.timing);
       lines.push(sb.text);
     }
-    lines.push(""); // 空行分隔
+    lines.push(""); // blank line separator
   }
 
   return lines.join("\r\n");

@@ -1,9 +1,9 @@
-//! 操作系统级进程控制模块（挂起/恢复/终止）
+//! OS-level process control (suspend / resume / kill)
 
 #[cfg(target_os = "windows")]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
 
-// ========== Windows 进程控制 ==========
+// ========== Windows process control ==========
 
 #[cfg(target_os = "windows")]
 mod win32 {
@@ -53,16 +53,16 @@ mod win32 {
     }
 }
 
-/// 递归收集指定 PID 及其所有子进程的 PID
+/// Recursively collect the PID of a given process and all its descendants
 #[cfg(target_os = "windows")]
 fn collect_process_tree(root_pid: u32) -> std::collections::HashSet<u32> {
     let mut pid_set = std::collections::HashSet::new();
     pid_set.insert(root_pid);
 
-    // SAFETY: 调用 Win32 API CreateToolhelp32Snapshot + Process32FirstW/NextW 遍历系统进程表。
-    // - snapshot 句柄已检查有效性（!= -1），使用后通过 CloseHandle 释放。
-    // - PROCESSENTRY32W 以 zeroed 初始化并正确设置 dw_size，满足 API 前置条件。
-    // - 所有指针均指向栈上有效内存，生命周期覆盖整个 unsafe 块。
+    // SAFETY: calls Win32 CreateToolhelp32Snapshot + Process32FirstW/NextW to enumerate processes.
+    // - snapshot handle is validated (!= -1) and released via CloseHandle.
+    // - PROCESSENTRY32W is zero-initialized and dw_size is set correctly before use.
+    // - All pointers point to stack-allocated memory that lives for the entire unsafe block.
     unsafe {
         use win32::*;
         let snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
@@ -72,7 +72,7 @@ fn collect_process_tree(root_pid: u32) -> std::collections::HashSet<u32> {
         let mut entry = std::mem::zeroed::<PROCESSENTRY32W>();
         entry.dw_size = std::mem::size_of::<PROCESSENTRY32W>() as u32;
 
-        // 收集所有进程的 (pid, parent_pid)
+        // collect (pid, parent_pid) for every process
         let mut all_procs = Vec::new();
         if Process32FirstW(snapshot, &mut entry) != 0 {
             loop {
@@ -84,7 +84,7 @@ fn collect_process_tree(root_pid: u32) -> std::collections::HashSet<u32> {
         }
         CloseHandle(snapshot);
 
-        // BFS 收集整棵进程树
+        // BFS to collect the entire process subtree
         let mut queue = vec![root_pid];
         let mut i = 0;
         while i < queue.len() {
@@ -100,16 +100,16 @@ fn collect_process_tree(root_pid: u32) -> std::collections::HashSet<u32> {
     pid_set
 }
 
-/// 挂起指定 PID 的进程及其所有子进程（暂停所有线程）
+/// Suspend a process and all its descendants (pause every thread)
 #[cfg(target_os = "windows")]
 pub fn suspend_process(pid: u32) -> Result<(), String> {
     let pids = collect_process_tree(pid);
 
-    // SAFETY: 调用 Win32 API CreateToolhelp32Snapshot + Thread32First/Next 遍历系统线程表。
-    // - snapshot 句柄已检查有效性（!= -1），使用后通过 CloseHandle 释放。
-    // - THREADENTRY32 以 zeroed 初始化并正确设置 dw_size，满足 API 前置条件。
-    // - OpenThread 返回的线程句柄已检查有效性（!= 0），使用后通过 CloseHandle 释放。
-    // - SuspendThread 仅挂起目标进程树中的线程，不影响其他进程。
+    // SAFETY: calls Win32 CreateToolhelp32Snapshot + Thread32First/Next to enumerate threads.
+    // - snapshot handle is validated (!= -1) and released via CloseHandle.
+    // - THREADENTRY32 is zero-initialized and dw_size is set correctly before use.
+    // - OpenThread handles are validated (!= 0) and released via CloseHandle.
+    // - SuspendThread only touches threads belonging to the target process subtree.
     unsafe {
         use win32::*;
         let snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
@@ -146,13 +146,13 @@ pub fn suspend_process(pid: u32) -> Result<(), String> {
     Ok(())
 }
 
-/// 恢复指定 PID 的进程及其所有子进程（恢复所有线程）
+/// Resume a process and all its descendants (unpause every thread)
 #[cfg(target_os = "windows")]
 pub fn resume_process(pid: u32) -> Result<(), String> {
     let pids = collect_process_tree(pid);
 
-    // SAFETY: 同 suspend_process，遍历线程表并恢复目标进程树中的所有线程。
-    // 所有句柄均经过有效性检查并在使用后关闭。
+    // SAFETY: same as suspend_process - enumerates threads and resumes those in the target subtree.
+    // All handles are validated and closed after use.
     unsafe {
         use win32::*;
         let snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
@@ -189,7 +189,7 @@ pub fn resume_process(pid: u32) -> Result<(), String> {
     Ok(())
 }
 
-/// 终止指定 PID 的进程及其子进程
+/// Kill a process and all its descendants
 #[cfg(target_os = "windows")]
 pub fn kill_process(pid: u32) -> Result<(), String> {
     use std::os::windows::process::CommandExt;

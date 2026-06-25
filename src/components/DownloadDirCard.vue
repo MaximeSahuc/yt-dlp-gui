@@ -6,7 +6,7 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 const settingStore = useSettingStore();
 
-/** 打开文件夹选择对话框 */
+/** Open a folder selection dialog */
 const handleSelectDir = async () => {
   const selected = await open({
     directory: true,

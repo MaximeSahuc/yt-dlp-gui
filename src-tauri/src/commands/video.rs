@@ -1,4 +1,4 @@
-//! 视频信息获取与 Cookie 管理
+//! Video info fetching and Cookie management
 
 use crate::utils;
 use serde_json::Value;
@@ -6,9 +6,9 @@ use tauri::AppHandle;
 
 use super::common;
 
-// ========== Cookie 管理 ==========
+// ========== Cookie management ==========
 
-/// 保存 Cookie 文本（Netscape 格式）到应用数据目录
+/// Save Cookie text (Netscape format) to the app data directory
 #[tauri::command]
 pub async fn save_cookie_text(app: AppHandle, text: String) -> Result<String, String> {
     let cookie_path = utils::get_cookie_path(&app)?;
@@ -18,9 +18,9 @@ pub async fn save_cookie_text(app: AppHandle, text: String) -> Result<String, St
     Ok(cookie_path.to_string_lossy().to_string())
 }
 
-// ========== 视频信息 ==========
+// ========== Video info ==========
 
-/// 使用 yt-dlp -J 获取视频元信息（标题、格式列表、字幕等）
+/// Fetch video metadata using yt-dlp -J (title, format list, subtitles, etc.)
 #[tauri::command]
 pub async fn fetch_video_info(
     app: AppHandle,

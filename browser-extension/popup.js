@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // Navigating the popup itself triggers the OS protocol handler. The popup
       // closes when the OS handler takes over. If the popup is still here a
-      // moment later, the handler probably didn't fire — show the install hint.
+      // moment later, the handler probably didn't fire - show the install hint.
       window.location.href = deepLink;
 
       btnText.textContent = t("popupSent");

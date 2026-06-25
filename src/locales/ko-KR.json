@@ -318,7 +318,7 @@
     "usage2": "MP3 Buddy 아이콘을 클릭하거나 페이지/영상 링크를 우클릭하고 \"MP3 Buddy로 보내기\"를 선택합니다.",
     "usage3": "이 앱이 자동으로 앞으로 나오며 홈 화면에 URL과 쿠키가 미리 채워집니다.",
     "privacyHeading": "개인정보",
-    "privacyNote": "쿠키는 로컬에서만 처리됩니다 — 로컬 프로토콜(mp3buddy://)을 통해 이 앱으로 바로 전달되며 어떤 서버에도 업로드되지 않습니다.",
+    "privacyNote": "쿠키는 로컬에서만 처리됩니다 - 로컬 프로토콜(mp3buddy://)을 통해 이 앱으로 바로 전달되며 어떤 서버에도 업로드되지 않습니다.",
     "supportedHeading": "지원 사이트",
     "openLocalFolder": "확장 프로그램 폴더 열기",
     "viewSource": "GitHub에서 소스 보기"

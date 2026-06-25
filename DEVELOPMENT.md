@@ -13,7 +13,7 @@ For what the app does and how to install it, see the [main README](./README.md).
 | UI library | [Naive UI](https://www.naiveui.com/) (auto-imported) |
 | State | [Pinia](https://pinia.vuejs.org/) with localStorage persistence |
 | Build tool | [Vite](https://vitejs.dev/) |
-| i18n | [Vue I18n](https://vue-i18n.intlify.dev/) — 12 languages |
+| i18n | [Vue I18n](https://vue-i18n.intlify.dev/) - 12 languages |
 | Download engine | [yt-dlp](https://github.com/yt-dlp/yt-dlp) (downloaded at runtime, not bundled) |
 | Optional JS runtime | [Deno](https://deno.com/) (used by yt-dlp for full YouTube support) |
 
@@ -22,7 +22,7 @@ For what the app does and how to install it, see the [main README](./README.md).
 - [Node.js](https://nodejs.org/) **>= 22**
 - [pnpm](https://pnpm.io/)
 - [Rust](https://www.rust-lang.org/tools/install) (stable toolchain)
-- Platform build dependencies for Tauri — see the
+- Platform build dependencies for Tauri - see the
   [Tauri prerequisites guide](https://tauri.app/start/prerequisites/)
 
 ## Quick start
@@ -39,7 +39,7 @@ pnpm install
 pnpm tauri:dev
 ```
 
-That's it — a development build of the app window opens. The yt-dlp and Deno binaries are
+That's it - a development build of the app window opens. The yt-dlp and Deno binaries are
 downloaded into the app's data directory on first use, so nothing extra to set up.
 
 ## Commands
@@ -88,7 +88,7 @@ mp3-buddy/
 - Real-time download progress is pushed from Rust to the UI via Tauri's event system
   (`app.emit(...)`), e.g. `ytdlp-download-progress`.
 - Shared data shapes live in `src/types/index.ts` and mirror the Rust structs in
-  `src-tauri/src/commands/mod.rs` — keep the two in sync when you change either.
+  `src-tauri/src/commands/mod.rs` - keep the two in sync when you change either.
 
 ## Notes & conventions
 

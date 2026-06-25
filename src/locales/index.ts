@@ -12,22 +12,22 @@ import frFR from "./fr-FR.json";
 import ptBR from "./pt-BR.json";
 import viVN from "./vi-VN.json";
 
-// ==================== 语言注册表（新增语言只改这里 + 创建翻译文件） ====================
+// ==================== Locale registry (add a new language here + create its translation file) ====================
 
 export interface LocaleEntry {
-  /** 语言代码 */
+  /** BCP 47 language code */
   code: string;
-  /** 国旗 emoji */
+  /** Flag emoji */
   flag: string;
-  /** 原生显示名称 */
+  /** Native display name */
   label: string;
-  /** navigator.language 前缀匹配规则 */
+  /** Matching rule against navigator.language prefix */
   match: (lang: string) => boolean;
-  /** 是否为从右向左书写的语言 */
+  /** Whether the language is written right-to-left */
   rtl?: boolean;
 }
 
-// 顺序按 ISO 639-1 语言代码字母序（世界通用顺序）；中文按地区代码细分
+// Ordered by ISO 639-1 code (alphabetical); Chinese variants are differentiated by region code
 export const localeEntries: LocaleEntry[] = [
   {
     code: "ar-EG",
@@ -54,19 +54,19 @@ export const localeEntries: LocaleEntry[] = [
   { code: "zh-TW", flag: "🇭🇰", label: "繁體中文", match: (lang) => lang.startsWith("zh") },
 ];
 
-/** locale code → entry 快速查找 */
+/** Fast locale code → entry lookup */
 const localeMap = new Map(localeEntries.map((e) => [e.code, e]));
 
-// ==================== 工具函数 ====================
+// ==================== Utilities ====================
 
-/** 根据系统语言返回最匹配的 locale code；未匹配时 fallback 到英文 */
+/** Return the best-matching locale code for the current system language; falls back to en-US */
 const getSystemLocale = (): string => {
   const lang = navigator.language;
   const matched = localeEntries.find((e) => e.match(lang));
   return matched ? matched.code : "en-US";
 };
 
-/** 从 localStorage 读取用户的语言偏好 */
+/** Read the user's locale preference from localStorage */
 const getSavedLocale = (): string | null => {
   try {
     const setting = localStorage.getItem("setting");
@@ -80,13 +80,13 @@ const getSavedLocale = (): string | null => {
   return null;
 };
 
-/** 将 locale 值解析为实际 code */
+/** Resolve a locale value to a valid locale code */
 export const resolveLocale = (locale: string): string => {
   if (!locale) return getSystemLocale();
   return localeMap.has(locale) ? locale : getSystemLocale();
 };
 
-// ==================== i18n 实例 ====================
+// ==================== i18n instance ====================
 
 const savedLocale = getSavedLocale();
 const defaultLocale = resolveLocale(savedLocale ?? "auto");
@@ -111,10 +111,10 @@ const i18n = createI18n({
   },
 });
 
-/** 根据 locale code 返回文档书写方向 */
+/** Return the document writing direction for a locale code */
 const getDirection = (code: string): "rtl" | "ltr" => (localeMap.get(code)?.rtl ? "rtl" : "ltr");
 
-/** 切换语言（供 settings store 调用） */
+/** Switch the active locale (called by the settings store) */
 export const setI18nLocale = (locale: string) => {
   const resolved = resolveLocale(locale);
   (i18n.global.locale as unknown as { value: string }).value = resolved;
@@ -122,7 +122,7 @@ export const setI18nLocale = (locale: string) => {
   document.documentElement.dir = getDirection(resolved);
 };
 
-// 初始化时同步 html lang 和 dir
+// Sync html lang and dir on initialisation
 document.documentElement.lang = defaultLocale;
 document.documentElement.dir = getDirection(defaultLocale);
 

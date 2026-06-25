@@ -307,7 +307,7 @@
   "browserExt": {
     "title": "Extensão do navegador",
     "tagBeta": "Beta",
-    "intro": "Instale a extensão MP3 Buddy Helper em navegadores baseados em Chromium (Chrome / Edge / Brave / Vivaldi etc.) para enviar a URL da página atual e os cookies necessários a este aplicativo com um clique — especialmente útil para vídeos que exigem login ou são restritos a membros.",
+    "intro": "Instale a extensão MP3 Buddy Helper em navegadores baseados em Chromium (Chrome / Edge / Brave / Vivaldi etc.) para enviar a URL da página atual e os cookies necessários a este aplicativo com um clique - especialmente útil para vídeos que exigem login ou são restritos a membros.",
     "installHeading": "Instalação",
     "install1": "Clique em \"Abrir pasta da extensão\" abaixo para abrir a pasta da extensão incluída no app no gerenciador de arquivos.",
     "install2": "Abra chrome://extensions (ou edge://extensions) e ative o \"Modo do desenvolvedor\" no canto superior direito.",
@@ -318,7 +318,7 @@
     "usage2": "Clique no ícone do MP3 Buddy ou clique com o botão direito na página / em um link e escolha \"Enviar para o MP3 Buddy\".",
     "usage3": "O app aparecerá automaticamente em primeiro plano com a URL e os cookies já preenchidos na página inicial.",
     "privacyHeading": "Privacidade",
-    "privacyNote": "Os cookies são processados apenas localmente — são entregues diretamente a este aplicativo via um protocolo local (mp3buddy://) e não são enviados a nenhum servidor.",
+    "privacyNote": "Os cookies são processados apenas localmente - são entregues diretamente a este aplicativo via um protocolo local (mp3buddy://) e não são enviados a nenhum servidor.",
     "supportedHeading": "Sites suportados",
     "openLocalFolder": "Abrir pasta da extensão",
     "viewSource": "Ver código-fonte no GitHub"

@@ -4,59 +4,59 @@ import { setI18nLocale, resolveLocale } from "@/locales";
 export const useSettingStore = defineStore(
   "setting",
   () => {
-    /** 界面语言 */
+    /** UI language */
     const locale = ref(resolveLocale(""));
 
     watch(locale, (val) => {
       setI18nLocale(val);
     });
 
-    /** 主题模式 */
+    /** Theme mode */
     const themeMode = ref<"auto" | "light" | "dark">("light");
 
-    /** 下载目录 */
+    /** Download directory */
     const downloadDir = ref("");
 
-    /** Cookie 模式 */
+    /** Cookie mode */
     const cookieMode = ref<"none" | "text" | "file" | "browser">("none");
 
-    /** Cookie 文本内容（Netscape 格式） */
+    /** Cookie text content (Netscape format) */
     const cookieText = ref("");
 
-    /** Cookie 文件路径 */
+    /** Cookie file path */
     const cookieFile = ref("");
 
-    /** 从浏览器读取 Cookie 的浏览器名称 */
+    /** Browser name for reading cookies from browser */
     const cookieBrowser = ref("chrome");
 
-    /** 代理地址 */
+    /** Proxy address */
     const proxy = ref("");
 
-    /** 文件名输出模板 */
+    /** Filename output template */
     const outputTemplate = ref("%(title).200s [%(id)s].%(ext)s");
 
-    /** 并发分片数，0 = 不启用 */
+    /** Concurrent fragment count, 0 = disabled */
     const concurrentFragments = ref(0);
 
-    /** 文件已存在时不覆盖 */
+    /** Do not overwrite existing files */
     const noOverwrites = ref(false);
 
-    /** 最大同时下载数，0 = 不限制 */
+    /** Maximum concurrent downloads, 0 = unlimited */
     const maxConcurrentDownloads = ref(0);
 
-    /** 下载完成通知模式 */
+    /** Download completion notification mode */
     const notifyMode = ref<"none" | "app" | "system" | "all">("app");
 
-    /** 启动时自动检查更新 */
+    /** Automatically check for updates on startup */
     const autoCheckUpdate = ref(true);
 
-    /** YouTube PO Token（用于绕过 403 / 限流） */
+    /** YouTube PO Token (used to bypass 403 / rate limiting) */
     const youtubePoToken = ref("");
 
-    /** YouTube visitor_data（与 PO Token 配套） */
+    /** YouTube visitor_data (paired with PO Token) */
     const youtubeVisitorData = ref("");
 
-    /** 在任务栏显示下载进度 */
+    /** Show download progress in the taskbar */
     const showTaskbarProgress = ref(true);
 
     return {

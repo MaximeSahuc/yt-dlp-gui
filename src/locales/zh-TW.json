@@ -318,7 +318,7 @@
     "usage2": "點擊 MP3 Buddy 圖示，或在頁面／影片連結上按右鍵並選擇「傳送到 MP3 Buddy」。",
     "usage3": "本應用程式會自動喚起，連結與 Cookie 已自動填入首頁。",
     "privacyHeading": "隱私",
-    "privacyNote": "Cookie 僅在本機處理 — 透過本機通訊協定 (mp3buddy://) 直接傳給本應用程式，不會上傳到任何伺服器。",
+    "privacyNote": "Cookie 僅在本機處理 - 透過本機通訊協定 (mp3buddy://) 直接傳給本應用程式，不會上傳到任何伺服器。",
     "supportedHeading": "支援的網站",
     "openLocalFolder": "開啟擴充功能資料夾",
     "viewSource": "在 GitHub 查看原始碼"

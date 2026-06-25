@@ -13,7 +13,7 @@ import type {
 
 type SubtitleMap = NonNullable<PlaylistEntry["subtitles"]>;
 
-/** 聚合 playlist 各 entry 的字幕到一个并集；同语言取首个出现的 entry 的 tracks */
+/** Aggregate subtitles from all playlist entries into a union; for each language, take the tracks from the first entry that has them */
 const aggregateSubtitleMap = (
   entries: PlaylistEntry[],
   field: "subtitles" | "automatic_captions",
@@ -32,7 +32,7 @@ const aggregateSubtitleMap = (
 export const useVideoStore = defineStore("video", () => {
   const fetching = ref(false);
 
-  /** 获取当前有效的 Cookie 参数 */
+  /** Get the currently active Cookie parameters */
   const getCookieArgs = async (): Promise<{
     cookieFile: string | null;
     cookieBrowser: string | null;
@@ -52,7 +52,7 @@ export const useVideoStore = defineStore("video", () => {
     return { cookieFile: null, cookieBrowser: null };
   };
 
-  /** 解析视频信息，成功返回结构化结果，失败返回 null */
+  /** Fetch video info; returns a structured result on success, or null on failure */
   const fetchVideoInfo = async (targetUrl: string): Promise<FetchedVideoData | null> => {
     const settingStore = useSettingStore();
     fetching.value = true;
@@ -79,8 +79,8 @@ export const useVideoStore = defineStore("video", () => {
         }));
         const firstEntry = info.entries[0];
         const formats: VideoFormat[] = firstEntry?.formats || info.formats || [];
-        // 合集字幕：yt-dlp -J 对 playlist 不会在 root 暴露 subtitles，
-        // 必须从各 entry 聚合。同语言的 tracks 取首个出现该语言的 entry。
+        // Playlist subtitles: yt-dlp -J does not expose subtitles at the root level for playlists,
+        // they must be aggregated from each entry. For each language, use the tracks from the first entry that has them.
         videoInfo = {
           ...info,
           title: info.title || firstEntry?.title || "",
@@ -102,7 +102,7 @@ export const useVideoStore = defineStore("video", () => {
         .filter((f) => f.acodec && f.acodec !== "none" && (!f.vcodec || f.vcodec === "none"))
         .sort((a, b) => (b.abr || 0) - (a.abr || 0));
 
-      // YouTube URL 且 Deno 未安装时提示
+      // Show Deno setup prompt if the URL is a YouTube link and Deno is not installed
       if (/youtube\.com|youtu\.be/i.test(targetUrl)) {
         try {
           const denoStatus = await invoke<DenoStatus>("get_deno_status");

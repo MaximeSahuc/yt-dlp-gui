@@ -318,7 +318,7 @@
     "usage2": "MP3 Buddy アイコンをクリック、またはページや動画リンクを右クリックして「MP3 Buddy に送信」を選択します。",
     "usage3": "本アプリが自動的に前面に表示され、ホーム画面に URL と Cookie が入力済みになります。",
     "privacyHeading": "プライバシー",
-    "privacyNote": "Cookie はローカルでのみ処理されます — ローカルプロトコル (mp3buddy://) を介して本アプリに直接渡され、外部サーバーには一切送信されません。",
+    "privacyNote": "Cookie はローカルでのみ処理されます - ローカルプロトコル (mp3buddy://) を介して本アプリに直接渡され、外部サーバーには一切送信されません。",
     "supportedHeading": "対応サイト",
     "openLocalFolder": "拡張機能フォルダを開く",
     "viewSource": "GitHub でソースを見る"

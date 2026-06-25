@@ -19,7 +19,7 @@ interface ToolItem {
   titleKey: string;
   descKey: string;
   tagKey?: string;
-  /** "route" 跳转工具子页（默认）；"modal" 在当前页弹出说明 */
+  /** "route" navigates to a tool sub-page (default); "modal" shows an info dialog in place */
   kind?: "route" | "modal";
 }
 

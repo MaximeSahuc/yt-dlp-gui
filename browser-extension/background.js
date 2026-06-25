@@ -69,7 +69,7 @@ function buildDeepLink(videoUrl, cookieText) {
 
 /**
  * Open a deep link without disrupting the user's active tab. We open it in a
- * background tab and close that tab shortly after — the OS protocol handler
+ * background tab and close that tab shortly after - the OS protocol handler
  * intercepts the navigation, so the tab content never actually loads.
  */
 async function dispatchDeepLink(deepLink) {
@@ -142,7 +142,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
   if (info.menuItemId === "ydl-send-selection") {
     const text = (info.selectionText || "").trim();
-    // selection might wrap http(s) URL with whitespace — use first token.
+    // selection might wrap http(s) URL with whitespace - use first token.
     const candidate = text.split(/\s+/).find((s) => /^https?:\/\//i.test(s));
     if (candidate) sendToApp(candidate);
     else notify("notifyUnsupported");

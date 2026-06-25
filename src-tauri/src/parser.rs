@@ -1,6 +1,6 @@
-//! yt-dlp 输出解析模块
+//! yt-dlp output parsing
 
-/// 进度信息
+/// Download progress snapshot
 pub struct ProgressInfo {
     pub percent: f64,
     pub speed: String,
@@ -9,13 +9,13 @@ pub struct ProgressInfo {
     pub total: String,
 }
 
-/// 解析 --progress-template 输出的 JSON 进度行
-/// 格式: PROGRESS_JSON:{"percent":" 45.2%","speed":"2.50MiB/s","eta":"00:11","downloaded":"22.68MiB","total":"50.35MiB"}
+/// Parse a JSON progress line produced by --progress-template
+/// Format: PROGRESS_JSON:{"percent":" 45.2%","speed":"2.50MiB/s","eta":"00:11","downloaded":"22.68MiB","total":"50.35MiB"}
 pub fn parse_progress_json(line: &str) -> Option<ProgressInfo> {
     let json_str = line.strip_prefix("PROGRESS_JSON:")?;
     let v: serde_json::Value = serde_json::from_str(json_str).ok()?;
 
-    // _percent_str 格式为 " 45.2%" 或 "100%"，去掉 % 和空格后解析为数字
+    // percent_str is " 45.2%" or "100%"; strip whitespace and % before parsing
     let percent_str = v["percent"].as_str().unwrap_or("0%");
     let percent: f64 = percent_str
         .trim()
@@ -37,13 +37,13 @@ pub fn parse_progress_json(line: &str) -> Option<ProgressInfo> {
     })
 }
 
-/// 解析 ffmpeg 输出中的 time= 字段，返回已处理的秒数
-/// 格式: frame= 1234 fps=128 ... time=00:02:29.65 ...
+/// Parse the time= field from ffmpeg progress output and return elapsed seconds
+/// Format: frame= 1234 fps=128 ... time=00:02:29.65 ...
 pub fn parse_ffmpeg_time(line: &str) -> Option<f64> {
     let time_start = line.find("time=")?;
     let after = &line[time_start + 5..];
     let time_str = after.split_whitespace().next()?;
-    // 格式: HH:MM:SS.xx 或 -HH:MM:SS.xx (负值表示尚未开始)
+    // format: HH:MM:SS.xx or -HH:MM:SS.xx (negative means processing hasn't started yet)
     if time_str.starts_with('-') || time_str == "N/A" {
         return None;
     }
@@ -57,7 +57,7 @@ pub fn parse_ffmpeg_time(line: &str) -> Option<f64> {
     Some(h * 3600.0 + m * 60.0 + s)
 }
 
-/// 清理 yt-dlp 输出字段：移除 NA/Unknown 等无效值
+/// Sanitize a yt-dlp output field - returns an empty string for NA/Unknown/N/A values
 fn clean_field(s: Option<&str>) -> String {
     match s {
         Some(v) => {

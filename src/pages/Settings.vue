@@ -184,13 +184,13 @@ const navSections = computed(() => [
   { id: "section-about", label: t("settings.about") },
 ]);
 
-/** 「高级」折叠面板的展开状态，默认关闭 */
+/** Expansion state of the "Advanced" collapse panel, closed by default */
 const advancedExpanded = ref<string[]>([]);
 
 const contentEl = ref<HTMLElement | null>(null);
 
 function scrollToSection(id: string) {
-  // 点击「高级」时先展开折叠面板，待内容撑开后再滚动定位
+  // When "Advanced" is clicked, first expand the collapse panel, then scroll to it after the content is rendered
   if (id === "section-advanced" && !advancedExpanded.value.includes("advanced")) {
     advancedExpanded.value = ["advanced"];
   }
@@ -260,7 +260,7 @@ watch(
         </div>
       </div>
 
-      <!-- Right: scrollable settings cards — follows the global theme -->
+      <!-- Right: scrollable settings cards - follows the global theme -->
       <div class="settings-content" ref="contentEl">
 
         <div id="section-appearance">
@@ -300,7 +300,7 @@ watch(
           <CookieCard class="section-card" />
         </div>
 
-        <!-- 高级：默认折叠 -->
+        <!-- Advanced: collapsed by default -->
         <div id="section-advanced">
           <n-collapse v-model:expanded-names="advancedExpanded" class="advanced-collapse">
             <n-collapse-item :title="$t('settings.advanced')" name="advanced">
@@ -357,12 +357,12 @@ watch(
                       <div class="info-list">
                         <div class="info-row">
                           <span class="info-label">{{ $t("settings.version") }}</span>
-                          <n-text code>{{ ytdlpStatus?.version || "—" }}</n-text>
+                          <n-text code>{{ ytdlpStatus?.version || "-" }}</n-text>
                         </div>
                         <div class="info-row">
                           <span class="info-label">{{ $t("settings.path") }}</span>
                           <n-ellipsis :line-clamp="1" :tooltip="{ width: 360 }">
-                            {{ ytdlpStatus?.path || "—" }}
+                            {{ ytdlpStatus?.path || "-" }}
                           </n-ellipsis>
                         </div>
                       </div>
@@ -415,12 +415,12 @@ watch(
                       <div class="info-list">
                         <div class="info-row">
                           <span class="info-label">{{ $t("settings.version") }}</span>
-                          <n-text code>{{ denoStatus?.version || "—" }}</n-text>
+                          <n-text code>{{ denoStatus?.version || "-" }}</n-text>
                         </div>
                         <div class="info-row">
                           <span class="info-label">{{ $t("settings.path") }}</span>
                           <n-ellipsis :line-clamp="1" :tooltip="{ width: 360 }">
-                            {{ denoStatus?.path || "—" }}
+                            {{ denoStatus?.path || "-" }}
                           </n-ellipsis>
                         </div>
                       </div>
@@ -721,7 +721,7 @@ watch(
 .advanced-collapse {
   margin-bottom: 12px;
 
-  // 折叠面板内的卡片去掉外间距，最后一张不留多余空白
+  // Cards inside the collapse panel have no bottom margin; the last card leaves no extra whitespace
   :deep(.section-card) {
     margin-bottom: 12px;
 

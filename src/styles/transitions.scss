@@ -1,6 +1,6 @@
-// ========== 全局过渡动画 ==========
+// ========== Global transitions ==========
 
-// 淡入淡出
+// Fade
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.25s ease;
@@ -11,7 +11,7 @@
   opacity: 0;
 }
 
-// 淡入 + 水平滑动（路由切换）
+// Fade + horizontal slide (route transition)
 .fade-slide-enter-active,
 .fade-slide-leave-active {
   transition: all 0.08s ease;
@@ -27,7 +27,7 @@
   transform: translateX(-5px);
 }
 
-// 淡入 + 垂直滑动（提示文本轮播）
+// Fade + vertical slide (hint text carousel)
 .tip-fade-enter-active,
 .tip-fade-leave-active {
   transition: all 0.4s ease;
@@ -43,7 +43,7 @@
   transform: translateY(-8px);
 }
 
-// 底部栏滑入
+// Bottom bar slide-in
 .bottom-bar-enter-active,
 .bottom-bar-leave-active {
   transition: all 0.25s ease;

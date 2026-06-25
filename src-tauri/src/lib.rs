@@ -35,7 +35,7 @@ pub fn run() {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_single_instance::init(|app, args, _cwd| {
-            // 将深链接 URL 转发到前端
+            // forward deep-link URLs to the frontend
             for arg in &args {
                 if arg.starts_with("mp3buddy://") {
                     let _ = app.emit("deep-link-url", arg.clone());

@@ -1,4 +1,4 @@
-//! 下载任务控制：启动、暂停、继续、取消、文件检查
+//! Download task control: start, pause, resume, cancel, file check
 
 use crate::parser;
 use crate::process;
@@ -14,9 +14,9 @@ use super::{DownloadParams, DownloadProcessInfo, DownloadState};
 #[cfg(target_os = "windows")]
 use super::CREATE_NO_WINDOW;
 
-// ========== 辅助函数 ==========
+// ========== Helper functions ==========
 
-/// 将秒数格式化为 HH:MM:SS
+/// Format a duration in seconds as HH:MM:SS
 fn format_duration(secs: f64) -> String {
     let total = secs as u64;
     let h = total / 3600;
@@ -29,16 +29,16 @@ fn format_duration(secs: f64) -> String {
     }
 }
 
-// ========== 输出处理 ==========
+// ========== Output processing ==========
 
-/// 处理 yt-dlp 的一行输出：解析进度并发送事件到前端
+/// Process a single line of yt-dlp output: parse progress and emit events to the frontend
 fn process_output_line(
     app: &AppHandle,
     task_id: &str,
     processes: &Arc<Mutex<HashMap<String, DownloadProcessInfo>>>,
     line: &str,
 ) {
-    // 解析 --progress-template 输出的 JSON 进度
+    // Parse the JSON progress output from --progress-template
     if let Some(info) = parser::parse_progress_json(line) {
         let _ = app.emit(
             "download-progress",
@@ -51,10 +51,10 @@ fn process_output_line(
                 "total": info.total,
             }),
         );
-        return; // 进度行不需要转发到日志
+        return; // Progress lines do not need to be forwarded to the log
     }
 
-    // 解析 ffmpeg 输出中的 time= 字段（用于时间裁剪场景的进度）
+    // Parse the time= field from ffmpeg output (used for progress in time-clip mode)
     if line.contains("time=") && line.contains("frame=") {
         if let Some(current_secs) = parser::parse_ffmpeg_time(line) {
             let clip_dur = processes
@@ -76,10 +76,10 @@ fn process_output_line(
                 );
             }
         }
-        return; // ffmpeg 帧进度不转发到日志
+        return; // ffmpeg frame progress is not forwarded to the log
     }
 
-    // 跟踪输出文件路径（从 [download] Destination 等行解析，作为备选方案）
+    // Track the output file path (parsed from lines like [download] Destination, used as a fallback)
     if let Some(dest) = parse_destination(line) {
         if let Ok(mut map) = processes.lock() {
             if let Some(info) = map.get_mut(task_id) {
@@ -88,14 +88,14 @@ fn process_output_line(
         }
     }
 
-    // 转发日志到前端（不含进度 JSON 行，保持日志清晰）
+    // Forward log lines to the frontend (excluding progress JSON lines, to keep the log clean)
     let _ = app.emit(
         "download-log",
         serde_json::json!({ "id": task_id, "line": line }),
     );
 }
 
-/// 从 yt-dlp 输出行中解析目标文件路径（备选方案，可能有编码问题）
+/// Parse the destination file path from a yt-dlp output line (fallback; may have encoding issues)
 fn parse_destination(line: &str) -> Option<String> {
     let trimmed = line.trim();
     // [download] Destination: /path/to/file.ext
@@ -123,8 +123,8 @@ fn parse_destination(line: &str) -> Option<String> {
     None
 }
 
-/// 从临时文件中读取 yt-dlp --print-to-file 写出的最终文件路径
-/// 返回最后一行（播放列表可能有多行）
+/// Read the final output file path written by yt-dlp's --print-to-file from a temporary file
+/// Returns the last line (playlists may produce multiple lines)
 fn read_filepath_from_file(filepath_file: &str) -> Option<String> {
     let content = std::fs::read_to_string(filepath_file).ok()?;
     let last_line = content.trim().lines().last()?.trim().to_string();
@@ -135,9 +135,9 @@ fn read_filepath_from_file(filepath_file: &str) -> Option<String> {
     }
 }
 
-// ========== 下载命令 ==========
+// ========== Download commands ==========
 
-/// 启动下载任务
+/// Start a download task
 #[tauri::command]
 pub async fn start_download(
     app: AppHandle,
@@ -151,7 +151,7 @@ pub async fn start_download(
 
     let args = build_download_args(&app, &params)?;
 
-    // 生成临时文件路径，用于 --print-to-file 输出最终文件路径
+    // Generate a temporary file path for --print-to-file to write the final output path
     let app_data = app
         .path()
         .app_data_dir()
@@ -161,13 +161,13 @@ pub async fn start_download(
         .to_string_lossy()
         .to_string();
 
-    // 拼接完整参数：基础参数 + --print-to-file
+    // Assemble full arguments: base args + --print-to-file
     let mut full_args = args;
     full_args.push("--print-to-file".to_string());
     full_args.push("after_move:filepath".to_string());
     full_args.push(filepath_file.clone());
 
-    // 启动 yt-dlp 子进程
+    // Launch the yt-dlp subprocess
     let mut cmd = tokio::process::Command::new(&ytdlp_path);
     cmd.args(&full_args)
         .env("PYTHONUTF8", "1")
@@ -183,14 +183,14 @@ pub async fn start_download(
     let pid = child.id().ok_or("err_get_pid")?;
     let task_id = params.id.clone();
 
-    // 计算裁剪片段时长（用于 ffmpeg 进度计算）
+    // Calculate the clip segment duration (used for ffmpeg progress calculation)
     let clip_duration = match (params.start_time, params.end_time) {
         (Some(s), Some(e)) => Some(e - s),
         (None, Some(e)) => Some(e),
         _ => None,
     };
 
-    // 记录进程信息
+    // Record process info
     let processes = state.processes.clone();
     {
         let mut map = processes.lock().map_err(|e| e.to_string())?;
@@ -210,37 +210,37 @@ pub async fn start_download(
     let stdout = child.stdout.take().ok_or("err_capture_stdout")?;
     let stderr = child.stderr.take().ok_or("err_capture_stderr")?;
 
-    // 读取 stdout（原始字节，lossy 解码以应对 Windows GBK 编码）
+    // Read stdout (raw bytes, lossy-decoded to handle Windows GBK encoding)
     spawn_output_reader(app.clone(), task_id.clone(), processes.clone(), stdout);
-    // 读取 stderr
+    // Read stderr
     spawn_output_reader(app.clone(), task_id.clone(), processes.clone(), stderr);
 
-    // 等待进程完成并处理结果
+    // Wait for the process to finish and handle the result
     spawn_completion_handler(app.clone(), task_id, processes.clone(), child);
 
     Ok(())
 }
 
-/// 构建 yt-dlp 下载参数
+/// Build yt-dlp download arguments
 fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<String>, String> {
     let mut args: Vec<String> = vec![
         "--newline".to_string(),
-        "--ignore-config".to_string(),  // 忽略用户系统配置，防止干扰 GUI
-        "--color".to_string(), "never".to_string(),  // 禁用 ANSI 颜色转义序列
-        // 使用 --progress-template 输出结构化进度（官方推荐方式，避免解析 stdout 常规输出）
+        "--ignore-config".to_string(),  // Ignore user system config to prevent interfering with the GUI
+        "--color".to_string(), "never".to_string(),  // Disable ANSI color escape sequences
+        // Use --progress-template for structured progress output (the recommended approach, avoids parsing regular stdout)
         "--progress-template".to_string(),
         r#"download:PROGRESS_JSON:{"percent":"%(progress._percent_str|0%)s","speed":"%(progress._speed_str|)s","eta":"%(progress._eta_str|)s","downloaded":"%(progress._downloaded_bytes_str|)s","total":"%(progress._total_bytes_str|)s"}"#.to_string(),
     ];
 
-    // JS 运行时（Deno）
+    // JS runtime (Deno)
     args.extend(utils::build_js_runtime_args(app));
     args.extend(utils::build_plugin_args(app));
-    // 应用管理的 ffmpeg（如已安装），确保音频转码可用
+    // App-managed ffmpeg (if installed), to ensure audio transcoding is available
     args.extend(utils::build_ffmpeg_location_args(app));
-    // YouTube PO Token / visitor_data（如设置）
+    // YouTube PO Token / visitor_data (if configured)
     args.extend(utils::build_youtube_extractor_args());
 
-    // 格式选择
+    // Format selection
     match params.download_mode.as_str() {
         "video" => {
             if let Some(ref vf) = params.video_format {
@@ -279,7 +279,7 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
         }
     }
 
-    // 代理
+    // Proxy
     if let Some(ref proxy) = params.proxy {
         if !proxy.is_empty() {
             args.push("--proxy".to_string());
@@ -287,7 +287,7 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
         }
     }
 
-    // 输出路径模板
+    // Output path template
     let template = params
         .output_template
         .as_deref()
@@ -301,12 +301,12 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
     args.push(output_template);
     args.push("--windows-filenames".to_string());
 
-    // 不覆盖已有文件
+    // Do not overwrite existing files
     if params.no_overwrites {
         args.push("--no-overwrites".to_string());
     }
 
-    // 并发分片下载
+    // Concurrent fragment download
     if let Some(n) = params.concurrent_fragments {
         if n > 1 {
             args.push("--concurrent-fragments".to_string());
@@ -314,15 +314,15 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
         }
     }
 
-    // Cookie 和浏览器 Cookie
+    // Cookie and browser Cookie
     append_cookie_proxy_args(
         &mut args,
         params.cookie_file.as_deref(),
         params.cookie_browser.as_deref(),
-        None, // 代理在上方已单独处理
+        None, // proxy is handled separately above
     );
 
-    // 额外选项
+    // Additional options
     if params.embed_subs {
         args.push("--embed-subs".to_string());
     }
@@ -332,16 +332,16 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
     if params.embed_metadata {
         args.push("--embed-metadata".to_string());
     }
-    // 嵌入章节标记
+    // Embed chapter markers
     if params.embed_chapters {
         args.push("--embed-chapters".to_string());
     }
-    // SponsorBlock：移除赞助片段
+    // SponsorBlock: remove sponsor segments
     if params.sponsorblock_remove {
         args.push("--sponsorblock-remove".to_string());
         args.push("all".to_string());
     }
-    // 提取音频模式
+    // Extract audio mode
     if params.extract_audio {
         args.push("-x".to_string());
         if let Some(ref fmt) = params.audio_convert_format {
@@ -366,7 +366,7 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
             args.push(rate.clone());
         }
     }
-    // 自定义 FFmpeg 后处理参数
+    // Custom FFmpeg post-processing arguments
     if let Some(ref ffmpeg_args) = params.ffmpeg_args {
         if !ffmpeg_args.is_empty() {
             args.push("--postprocessor-args".to_string());
@@ -374,15 +374,15 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
         }
     }
 
-    // 字幕
+    // Subtitles
     if !params.subtitles.is_empty() {
         args.push("--write-subs".to_string());
         args.push("--sub-langs".to_string());
         args.push(params.subtitles.join(","));
     }
 
-    // 时间范围裁剪（仅在有实际裁剪范围时添加，避免 *0-inf 触发不必要的 ffmpeg 处理）
-    // 前端已将 time picker 值转换为秒数
+    // Time range clipping (only added when there is an actual clip range, to avoid *0-inf triggering unnecessary ffmpeg processing)
+    // The frontend has already converted time picker values to seconds
     let has_start = params.start_time.is_some_and(|t| t > 0.0);
     let has_end = params.end_time.is_some();
     if has_start || has_end {
@@ -395,7 +395,7 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
         args.push(format!("*{}-{}", start, end_str));
     }
 
-    // 播放列表
+    // Playlist
     if params.no_playlist {
         args.push("--no-playlist".to_string());
     } else if let Some(ref items) = params.playlist_items {
@@ -405,14 +405,14 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
         }
     }
 
-    // URL（必须放在最后）
+    // URL (must be placed last)
     args.push(params.url.clone());
 
     Ok(args)
 }
 
-/// 启动异步任务读取子进程输出流
-/// 同时处理 \n 和 \r 作为行分隔符（ffmpeg 进度输出使用 \r）
+/// Spawn an async task to read the subprocess output stream
+/// Handles both \n and \r as line separators (ffmpeg progress output uses \r)
 fn spawn_output_reader<R: tokio::io::AsyncRead + Unpin + Send + 'static>(
     app: AppHandle,
     task_id: String,
@@ -429,7 +429,7 @@ fn spawn_output_reader<R: tokio::io::AsyncRead + Unpin + Send + 'static>(
         loop {
             match buf_reader.read(&mut byte_buf).await {
                 Ok(0) => {
-                    // EOF：处理缓冲区中剩余的内容
+                    // EOF: process any remaining content in the buffer
                     if !line_buf.is_empty() {
                         let line = String::from_utf8_lossy(&line_buf).trim().to_string();
                         if !line.is_empty() {
@@ -457,7 +457,7 @@ fn spawn_output_reader<R: tokio::io::AsyncRead + Unpin + Send + 'static>(
     });
 }
 
-/// 启动异步任务等待子进程完成并发送结果事件
+/// Spawn an async task to wait for the subprocess to finish and emit a result event
 fn spawn_completion_handler(
     app: AppHandle,
     task_id: String,
@@ -473,8 +473,8 @@ fn spawn_completion_handler(
             .and_then(|map| map.get(&task_id).map(|info| info.cancelled))
             .unwrap_or(false);
 
-        // 仅以 yt-dlp 退出码判定成功；不能用「日志里见过 Destination 行」做兜底，
-        // 因为 yt-dlp 在开始写字节前就会先打印目标路径，下载半路超时也会留下这一行。
+        // Use only the yt-dlp exit code to determine success; do not fall back on seeing a Destination line in the log,
+        // because yt-dlp prints the destination path before writing any bytes, so a mid-download timeout also leaves this line.
         let success = matches!(&status, Ok(s) if s.success());
 
         if success {
@@ -484,7 +484,7 @@ fn spawn_completion_handler(
                 serde_json::json!({ "id": task_id, "outputFile": output_file }),
             );
         } else if !was_cancelled {
-            // 失败时仍清理 --print-to-file 临时文件，避免遗留
+            // On failure, still clean up the --print-to-file temporary file to avoid leftover files
             let _ = resolve_output_file(&processes, &task_id);
             let error_msg = status
                 .as_ref()
@@ -499,15 +499,15 @@ fn spawn_completion_handler(
             );
         }
 
-        // 清理进程记录
+        // Remove the process record
         if let Ok(mut map) = processes.lock() {
             map.remove(&task_id);
         }
     });
 }
 
-/// 解析最终输出文件路径
-/// 优先从 --print-to-file 临时文件读取（UTF-8 可靠），回退到 stdout 解析结果
+/// Resolve the final output file path
+/// Prefers reading from the --print-to-file temporary file (reliable UTF-8), falls back to the stdout-parsed path
 fn resolve_output_file(
     processes: &Arc<Mutex<HashMap<String, DownloadProcessInfo>>>,
     task_id: &str,
@@ -520,19 +520,19 @@ fn resolve_output_file(
                 .map(|info| {
                     let mut file = String::new();
 
-                    // 优先从临时文件读取（避免 Windows stdout GBK 编码乱码问题）
+                    // Prefer reading from the temporary file (avoids Windows stdout GBK encoding garbled text issues)
                     if let Some(ref fp_file) = info.filepath_file {
                         if let Some(path) = read_filepath_from_file(fp_file) {
                             file = path;
                         }
-                        // 清理临时文件
+                        // Clean up the temporary file
                         let _ = std::fs::remove_file(fp_file);
                     }
 
-                    // 回退：从 stdout 解析的路径
+                    // Fallback: path parsed from stdout
                     if file.is_empty() {
                         file = info.output_files.last().cloned().unwrap_or_default();
-                        // 相对路径补全为绝对路径
+                        // Resolve relative paths to absolute paths
                         if !file.is_empty() && !std::path::Path::new(&file).is_absolute() {
                             file = std::path::PathBuf::from(&info.download_dir)
                                 .join(&file)
@@ -549,9 +549,9 @@ fn resolve_output_file(
         .unwrap_or_default()
 }
 
-// ========== 下载控制命令 ==========
+// ========== Download control commands ==========
 
-/// 暂停下载任务（挂起子进程）
+/// Pause a download task (suspend the subprocess)
 #[tauri::command]
 pub async fn pause_download(
     state: tauri::State<'_, DownloadState>,
@@ -562,7 +562,7 @@ pub async fn pause_download(
     process::suspend_process(info.pid)
 }
 
-/// 继续下载任务（恢复子进程）
+/// Resume a download task (resume the subprocess)
 #[tauri::command]
 pub async fn resume_download(
     state: tauri::State<'_, DownloadState>,
@@ -573,7 +573,7 @@ pub async fn resume_download(
     process::resume_process(info.pid)
 }
 
-/// 取消下载任务并可选删除已下载文件
+/// Cancel a download task and optionally delete already-downloaded files
 #[tauri::command]
 pub async fn cancel_download(
     state: tauri::State<'_, DownloadState>,
@@ -599,9 +599,9 @@ pub async fn cancel_download(
     Ok(())
 }
 
-// ========== 文件检查 ==========
+// ========== File checking ==========
 
-/// 批量检查文件是否存在
+/// Check whether multiple files exist in batch
 #[tauri::command]
 pub fn check_files_exist(paths: Vec<String>) -> Vec<bool> {
     paths
@@ -610,7 +610,7 @@ pub fn check_files_exist(paths: Vec<String>) -> Vec<bool> {
         .collect()
 }
 
-/// 删除指定文件
+/// Delete the specified file
 #[tauri::command]
 pub fn delete_file(path: String) -> Result<(), String> {
     let p = std::path::Path::new(&path);

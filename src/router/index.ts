@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-// 主界面与设置页静态导入：两者频繁互相切换，懒加载会在首次打开时出现白屏闪烁
+// Home and Settings pages are statically imported: they are frequently switched between, and lazy loading would cause a white-screen flash on first open
 import Mp3Buddy from "@/pages/Mp3Buddy.vue";
 import Settings from "@/pages/Settings.vue";
 

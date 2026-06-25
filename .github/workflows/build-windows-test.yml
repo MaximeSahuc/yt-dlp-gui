@@ -40,7 +40,7 @@ jobs:
       - name: Install frontend dependencies
         run: pnpm install
 
-      - name: Build (no bundle — no signing key needed)
+      - name: Build (no bundle - no signing key needed)
         run: pnpm tauri build --target x86_64-pc-windows-msvc --no-bundle
 
       - name: Upload .exe

@@ -47,7 +47,7 @@ Download the latest version for your system from the
 ## Browser extension
 
 MP3 Buddy ships with a companion browser extension (Chrome / Edge / Brave / Vivaldi). It adds a
-button that sends the current page — and the cookies needed to download it — straight to the app.
+button that sends the current page - and the cookies needed to download it - straight to the app.
 
 👉 **Full setup and usage instructions:** [`browser-extension/README.md`](./browser-extension/README.md)
 

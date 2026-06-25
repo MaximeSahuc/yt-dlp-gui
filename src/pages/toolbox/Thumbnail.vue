@@ -22,7 +22,7 @@ const savingId = ref<string | null>(null);
 
 const urlValid = computed(() => isValidUrl(toolUrl.value.trim()));
 
-/** 获取缩略图文件扩展名 */
+/** Get the file extension of a thumbnail URL */
 const getExtFromUrl = (url: string): string => {
   try {
     const pathname = new URL(url).pathname;
@@ -34,14 +34,14 @@ const getExtFromUrl = (url: string): string => {
   return "jpg";
 };
 
-/** 获取分辨率显示文本 */
+/** Build a human-readable resolution label */
 const getResolutionLabel = (thumb: ThumbnailInfo): string => {
   if (thumb.width && thumb.height) return `${thumb.width} x ${thumb.height}`;
   if (thumb.resolution) return thumb.resolution;
   return t("common.unknown");
 };
 
-/** 获取视频信息并提取封面列表 */
+/** Fetch video info and extract the thumbnail list */
 const handleFetch = async () => {
   loading.value = true;
   thumbnails.value = [];
@@ -87,7 +87,7 @@ const handleFetch = async () => {
   }
 };
 
-/** 另存为 */
+/** Save thumbnail to a user-chosen path */
 const handleSave = async (thumb: ThumbnailInfo) => {
   const ext = getExtFromUrl(thumb.url);
   const defaultName = videoTitle.value

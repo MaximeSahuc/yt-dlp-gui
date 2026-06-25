@@ -1,4 +1,4 @@
-/** 检查字符串是否为有效的 URL */
+/** Check whether a string is a valid URL */
 export const isValidUrl = (str: string): boolean => {
   try {
     const url = new URL(str);

@@ -12,7 +12,7 @@ import router from "./router";
 import "@/styles/main.scss";
 import "@/styles/transitions.scss";
 
-// 挂载
+// Mount
 const app = createApp(App);
 // i18n
 app.use(i18n);

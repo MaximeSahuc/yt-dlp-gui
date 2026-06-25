@@ -1,4 +1,4 @@
-//! 工具箱命令：封面下载、字幕下载、直播弹幕获取
+//! Toolbox commands: thumbnail download, subtitle download, live chat/comments fetching
 
 use crate::utils;
 use serde_json::Value;
@@ -9,7 +9,7 @@ use super::common::{self, append_cookie_proxy_args, build_http_client, extract_y
 #[cfg(target_os = "windows")]
 use super::CREATE_NO_WINDOW;
 
-/// 通用工具命令执行器（--skip-download 模式，不下载视频本身）
+/// Generic tool command runner (--skip-download mode, does not download the video itself)
 async fn run_ytdlp_tool(
     app: &AppHandle,
     url: &str,
@@ -73,7 +73,7 @@ async fn run_ytdlp_tool(
     }
 }
 
-/// 轻量获取视频封面列表（跳过格式检查，速度更快）
+/// Lightweight fetch of the video thumbnail list (skips format checks, faster)
 #[tauri::command]
 pub async fn tool_fetch_thumbnails(
     app: AppHandle,
@@ -93,7 +93,7 @@ pub async fn tool_fetch_thumbnails(
     .await
 }
 
-/// 将指定 URL 的图片下载到指定文件路径（另存为）
+/// Download an image from the specified URL and save it to the specified file path
 #[tauri::command]
 pub async fn tool_save_thumbnail(
     url: String,
@@ -130,7 +130,7 @@ pub async fn tool_save_thumbnail(
     Ok(())
 }
 
-/// 下载视频封面图
+/// Download the video thumbnail
 #[tauri::command]
 pub async fn tool_download_thumbnail(
     app: AppHandle,
@@ -156,7 +156,7 @@ pub async fn tool_download_thumbnail(
     .await
 }
 
-/// 获取视频章节信息（chapters 字段）
+/// Fetch video chapter information (chapters field)
 #[tauri::command]
 pub async fn tool_fetch_chapters(
     app: AppHandle,
@@ -182,8 +182,8 @@ pub async fn tool_fetch_chapters(
     }))
 }
 
-/// 获取视频可用字幕列表（返回 subtitles + automatic_captions）
-/// 支持单视频和合集：合集 URL 时聚合所有 entry 的字幕（同语言取首个出现的 entry）。
+/// Fetch the list of available subtitles for a video (returns subtitles + automatic_captions)
+/// Supports single videos and playlists: for playlist URLs, aggregates subtitles from all entries (for each language, uses the first entry that has it).
 #[tauri::command]
 pub async fn tool_fetch_subtitles(
     app: AppHandle,
@@ -213,7 +213,7 @@ pub async fn tool_fetch_subtitles(
         }
     }
 
-    // 单视频：直接取 root 字段
+    // Single video: read directly from the root fields
     Ok(serde_json::json!({
         "title": info.get("title").cloned().unwrap_or(Value::Null),
         "subtitles": info.get("subtitles").cloned().unwrap_or(Value::Object(Default::default())),
@@ -221,7 +221,7 @@ pub async fn tool_fetch_subtitles(
     }))
 }
 
-/// 聚合 playlist 各 entry 的字幕到一个并集；同语言取首个出现的 entry 的 tracks。
+/// Aggregate subtitles from all playlist entries into a union; for each language, use the tracks from the first entry that has them.
 fn aggregate_subtitle_map(entries: &[Value], field: &str) -> Value {
     let mut merged = serde_json::Map::new();
     for entry in entries {
@@ -241,7 +241,7 @@ fn aggregate_subtitle_map(entries: &[Value], field: &str) -> Value {
     Value::Object(merged)
 }
 
-/// 下载单个字幕文件并另存为
+/// Download a single subtitle file and save it as a new file
 #[tauri::command]
 pub async fn tool_save_subtitle(
     url: String,
@@ -278,7 +278,7 @@ pub async fn tool_save_subtitle(
     Ok(())
 }
 
-/// 下载 URL 文本内容并返回（用于前端获取字幕文本做合并处理）
+/// Download the text content from a URL and return it (used by the frontend to fetch subtitle text for merging)
 #[tauri::command]
 pub async fn tool_download_text(url: String, proxy: Option<String>) -> Result<String, String> {
     let client = build_http_client(proxy.as_deref())?;
@@ -299,10 +299,10 @@ pub async fn tool_download_text(url: String, proxy: Option<String>) -> Result<St
         .map_err(|e| format!("err_read_text:{}", e))
 }
 
-/// 将文本内容保存到指定文件路径
+/// Save text content to the specified file path
 #[tauri::command]
 pub async fn tool_save_text_to_file(content: String, file_path: String) -> Result<(), String> {
-    // 路径安全检查：阻止写入系统关键路径
+    // Path safety check: prevent writing to critical system paths
     let path = std::path::Path::new(&file_path);
     if file_path.contains("..") {
         return Err("err_path_traversal".to_string());
@@ -321,7 +321,7 @@ pub async fn tool_save_text_to_file(content: String, file_path: String) -> Resul
     Ok(())
 }
 
-/// 下载视频字幕文件
+/// Download video subtitle files
 #[tauri::command]
 #[allow(clippy::too_many_arguments)]
 pub async fn tool_download_subtitles(
@@ -354,23 +354,23 @@ pub async fn tool_download_subtitles(
     .await
 }
 
-/// 视频评论
+/// Video comment
 #[derive(serde::Serialize, Clone)]
 pub struct VideoComment {
     pub id: String,
-    /// 父评论 ID（顶级评论为 "root"）
+    /// Parent comment ID ("root" for top-level comments)
     pub parent: String,
     pub author: String,
     pub author_id: String,
     pub text: String,
-    /// Unix 时间戳（秒）
+    /// Unix timestamp (seconds)
     pub timestamp: i64,
     pub like_count: i64,
     pub is_favorited: bool,
     pub author_is_uploader: bool,
 }
 
-/// 评论排序方式
+/// Comment sort order
 fn comment_sort_value(sort: &str) -> &'static str {
     match sort {
         "top" => "top",
@@ -378,7 +378,7 @@ fn comment_sort_value(sort: &str) -> &'static str {
     }
 }
 
-/// 获取视频评论（仅支持 YouTube；其他站点可能没有 comments 字段）
+/// Fetch video comments (YouTube only; other sites may not have a comments field)
 #[tauri::command]
 pub async fn tool_fetch_comments(
     app: AppHandle,

@@ -318,7 +318,7 @@
     "usage2": "Pulsa el icono de MP3 Buddy o haz clic derecho en la página o un enlace y elige «Enviar a MP3 Buddy».",
     "usage3": "Esta aplicación pasará a primer plano automáticamente con la URL y las cookies ya rellenadas en la página de inicio.",
     "privacyHeading": "Privacidad",
-    "privacyNote": "Las cookies se procesan solo localmente — se entregan directamente a esta aplicación mediante un protocolo local (mp3buddy://) y no se suben a ningún servidor.",
+    "privacyNote": "Las cookies se procesan solo localmente - se entregan directamente a esta aplicación mediante un protocolo local (mp3buddy://) y no se suben a ningún servidor.",
     "supportedHeading": "Sitios compatibles",
     "openLocalFolder": "Abrir carpeta de la extensión",
     "viewSource": "Ver código fuente en GitHub"

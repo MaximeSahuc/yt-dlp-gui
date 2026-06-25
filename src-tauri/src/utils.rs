@@ -2,7 +2,7 @@ use std::path::PathBuf;
 use std::sync::{OnceLock, RwLock};
 use tauri::{AppHandle, Manager};
 
-// ========== YouTube extractor 参数（po_token / visitor_data）==========
+// ========== YouTube extractor args (po_token / visitor_data) ==========
 
 #[derive(Default, Clone)]
 struct YoutubeExtractorArgs {
@@ -16,8 +16,8 @@ fn youtube_args_lock() -> &'static RwLock<YoutubeExtractorArgs> {
     YOUTUBE_EXTRACTOR_ARGS.get_or_init(|| RwLock::new(YoutubeExtractorArgs::default()))
 }
 
-/// 设置 YouTube PO Token / visitor_data；空字符串表示清除。
-/// 用于绕过 YouTube 403 / 限流（详见 yt-dlp wiki: Extractors > YouTube）。
+/// Set YouTube PO Token / visitor_data; an empty string clears the value.
+/// Used to bypass YouTube 403 / rate limiting (see yt-dlp wiki: Extractors > YouTube).
 pub fn set_youtube_extractor_args(po_token: &str, visitor_data: &str) -> Result<(), String> {
     let mut guard = youtube_args_lock()
         .write()
@@ -27,8 +27,8 @@ pub fn set_youtube_extractor_args(po_token: &str, visitor_data: &str) -> Result<
     Ok(())
 }
 
-/// 根据当前 PO Token / visitor_data 构建 yt-dlp `--extractor-args` 参数；
-/// 两个值都为空时返回空 vec（不追加参数）。
+/// Build yt-dlp `--extractor-args` from the current PO Token / visitor_data;
+/// Returns an empty vec if both values are empty (no arguments appended).
 pub fn build_youtube_extractor_args() -> Vec<String> {
     let guard = match youtube_args_lock().read() {
         Ok(g) => g,
@@ -50,7 +50,7 @@ pub fn build_youtube_extractor_args() -> Vec<String> {
     ]
 }
 
-/// 构建应用数据目录下的可执行文件路径
+/// Build the executable path within the app data directory
 fn get_managed_executable_path(app: &AppHandle, file_name: &str) -> Result<PathBuf, String> {
     let app_data = app
         .path()
@@ -60,7 +60,7 @@ fn get_managed_executable_path(app: &AppHandle, file_name: &str) -> Result<PathB
     Ok(app_data.join(file_name))
 }
 
-/// 获取应用管理的 yt-dlp 路径（应用数据目录）
+/// Get the app-managed yt-dlp path (app data directory)
 pub fn get_managed_ytdlp_path(app: &AppHandle) -> Result<PathBuf, String> {
     if cfg!(target_os = "windows") {
         get_managed_executable_path(app, "yt-dlp.exe")
@@ -69,12 +69,12 @@ pub fn get_managed_ytdlp_path(app: &AppHandle) -> Result<PathBuf, String> {
     }
 }
 
-/// 获取 yt-dlp 可执行文件路径（始终使用应用数据目录下的副本）
+/// Get the yt-dlp executable path (always uses the app-managed copy in the app data directory)
 pub fn get_ytdlp_path(app: &AppHandle) -> Result<PathBuf, String> {
     get_managed_ytdlp_path(app)
 }
 
-/// 获取应用管理的 ffmpeg 路径（应用数据目录）
+/// Get the app-managed ffmpeg path (app data directory)
 pub fn get_managed_ffmpeg_path(app: &AppHandle) -> Result<PathBuf, String> {
     if cfg!(target_os = "windows") {
         get_managed_executable_path(app, "ffmpeg.exe")
@@ -83,9 +83,9 @@ pub fn get_managed_ffmpeg_path(app: &AppHandle) -> Result<PathBuf, String> {
     }
 }
 
-/// 如果存在应用管理的 ffmpeg，返回 yt-dlp 的 `--ffmpeg-location` 参数。
-/// 指向 ffmpeg 可执行文件本身，yt-dlp 会在同目录寻找 ffprobe。
-/// 未安装应用管理副本时返回空 vec，让 yt-dlp 回退到系统 PATH 中的 ffmpeg。
+/// If an app-managed ffmpeg exists, return the yt-dlp `--ffmpeg-location` argument.
+/// Points to the ffmpeg executable itself; yt-dlp will look for ffprobe in the same directory.
+/// Returns an empty vec when no app-managed copy is installed, letting yt-dlp fall back to the system PATH ffmpeg.
 pub fn build_ffmpeg_location_args(app: &AppHandle) -> Vec<String> {
     if let Ok(path) = get_managed_ffmpeg_path(app) {
         if path.exists() {
@@ -98,8 +98,8 @@ pub fn build_ffmpeg_location_args(app: &AppHandle) -> Vec<String> {
     vec![]
 }
 
-/// 获取 ffmpeg 下载地址。仅 Windows 提供应用内下载（BtbN 构建的 zip 包）；
-/// 其他平台返回 None，建议用户通过系统包管理器安装。
+/// Get the ffmpeg download URL. In-app download is only available on Windows (BtbN zip build);
+/// Other platforms return None; users should install ffmpeg via the system package manager.
 pub fn get_ffmpeg_download_url() -> Option<&'static str> {
     if cfg!(target_os = "windows") {
         Some("https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip")
@@ -108,7 +108,7 @@ pub fn get_ffmpeg_download_url() -> Option<&'static str> {
     }
 }
 
-/// 获取应用管理的 Deno 路径（应用数据目录）
+/// Get the app-managed Deno path (app data directory)
 pub fn get_managed_deno_path(app: &AppHandle) -> Result<PathBuf, String> {
     if cfg!(target_os = "windows") {
         get_managed_executable_path(app, "deno.exe")
@@ -117,12 +117,12 @@ pub fn get_managed_deno_path(app: &AppHandle) -> Result<PathBuf, String> {
     }
 }
 
-/// 获取 Deno 可执行文件路径（始终使用应用数据目录下的副本）
+/// Get the Deno executable path (always uses the app-managed copy in the app data directory)
 pub fn get_deno_path(app: &AppHandle) -> Result<PathBuf, String> {
     get_managed_deno_path(app)
 }
 
-/// 获取 Cookie 文件路径（存放在应用数据目录下）
+/// Get the Cookie file path (stored in the app data directory)
 pub fn get_cookie_path(app: &AppHandle) -> Result<PathBuf, String> {
     let app_data = app
         .path()
@@ -131,7 +131,7 @@ pub fn get_cookie_path(app: &AppHandle) -> Result<PathBuf, String> {
     Ok(app_data.join("cookies.txt"))
 }
 
-/// 获取 yt-dlp 下载地址（根据平台）
+/// Get the yt-dlp download URL (per platform)
 pub fn get_ytdlp_download_url() -> &'static str {
     if cfg!(target_os = "windows") {
         "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe"
@@ -142,7 +142,7 @@ pub fn get_ytdlp_download_url() -> &'static str {
     }
 }
 
-/// 获取 yt-dlp 插件目录路径
+/// Get the yt-dlp plugin directory path
 pub fn get_plugin_dir(app: &AppHandle) -> Result<PathBuf, String> {
     let app_data = app
         .path()
@@ -151,7 +151,7 @@ pub fn get_plugin_dir(app: &AppHandle) -> Result<PathBuf, String> {
     Ok(app_data.join("yt-dlp-plugins"))
 }
 
-/// 如果插件目录存在，返回 --plugin-dirs 参数
+/// If the plugin directory exists, return the --plugin-dirs argument
 pub fn build_plugin_args(app: &AppHandle) -> Vec<String> {
     if let Ok(plugin_dir) = get_plugin_dir(app) {
         if plugin_dir.exists() {
@@ -164,7 +164,7 @@ pub fn build_plugin_args(app: &AppHandle) -> Vec<String> {
     vec![]
 }
 
-/// 如果 Deno 已安装，返回 JS 运行时参数
+/// If Deno is installed, return JS runtime arguments
 pub fn build_js_runtime_args(app: &AppHandle) -> Vec<String> {
     if let Ok(deno_path) = get_deno_path(app) {
         if deno_path.exists() {
@@ -177,7 +177,7 @@ pub fn build_js_runtime_args(app: &AppHandle) -> Vec<String> {
     vec![]
 }
 
-/// 获取 Deno 下载地址（根据平台和架构）
+/// Get the Deno download URL (per platform and architecture)
 pub fn get_deno_download_url() -> &'static str {
     if cfg!(target_os = "windows") {
         "https://github.com/denoland/deno/releases/latest/download/deno-x86_64-pc-windows-msvc.zip"
