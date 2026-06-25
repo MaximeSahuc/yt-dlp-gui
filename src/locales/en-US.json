@@ -455,6 +455,8 @@
     "lang": "EN",
     "settings": "Settings",
     "setupTitle": "Some tools need to be downloaded before you can start:",
+    "setupNoFolder": "Choose a folder where your downloads will be saved:",
+    "setupChooseFolder": "Choose folder",
     "setupReady": "Everything's ready — paste a link to start!",
     "setupDownloading": "Downloading {name}…",
     "toolYtdlp": "yt-dlp (download engine)",

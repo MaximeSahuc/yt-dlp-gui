@@ -2,12 +2,17 @@
 import { useI18n } from "vue-i18n";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
+import { open } from "@tauri-apps/plugin-dialog";
 import IconMdiAlertCircle from "~icons/mdi/alert-circle";
+import IconMdiFolderAlertOutline from "~icons/mdi/folder-alert-outline";
 import IconMdiCheckCircle from "~icons/mdi/check-circle";
 import IconMdiDownload from "~icons/mdi/download";
+import IconMdiFolderOpenOutline from "~icons/mdi/folder-open-outline";
+import { useSettingStore } from "@/stores/setting";
 import type { YtdlpStatus, DenoStatus, DownloadProgress } from "@/types";
 
 const { t } = useI18n();
+const settingStore = useSettingStore();
 
 const checking = ref(true);
 const ytdlpInstalled = ref(false);
@@ -20,7 +25,16 @@ const downloadPercent = ref(0);
 const showReady = ref(false);
 let readyTimer: ReturnType<typeof setTimeout> | null = null;
 
-const allReady = computed(() => ytdlpInstalled.value && denoInstalled.value);
+const toolsReady = computed(() => ytdlpInstalled.value && denoInstalled.value);
+const folderSet = computed(() => !!settingStore.downloadDir);
+const allReady = computed(() => toolsReady.value && folderSet.value);
+
+async function chooseFolder() {
+  const result = await open({ directory: true, multiple: false });
+  if (typeof result === "string" && result) {
+    settingStore.downloadDir = result;
+  }
+}
 
 async function checkStatus() {
   try {
@@ -78,6 +92,11 @@ async function downloadMissing() {
   }
 }
 
+// 当一切就绪（含输出目录），短暂提示用户可以开始
+watch(allReady, (now, prev) => {
+  if (now && !prev) flashReady();
+});
+
 onMounted(async () => {
   await checkStatus();
   if (allReady.value) flashReady();
@@ -90,7 +109,7 @@ onBeforeUnmount(() => {
 
 <template>
   <!-- 缺少工具：提示 + 下载按钮 -->
-  <div v-if="!checking && !allReady" class="setup-banner setup-banner--warn">
+  <div v-if="!checking && !toolsReady" class="setup-banner setup-banner--warn">
     <div class="setup-banner-main">
       <n-icon size="18" color="#f0a020" class="setup-icon">
         <IconMdiAlertCircle />
@@ -126,6 +145,24 @@ onBeforeUnmount(() => {
         :height="4"
         :processing="true"
       />
+    </div>
+  </div>
+
+  <!-- 工具就绪但未设置输出目录 -->
+  <div v-else-if="!checking && !folderSet" class="setup-banner setup-banner--warn">
+    <div class="setup-banner-main">
+      <n-icon size="18" color="#f0a020" class="setup-icon">
+        <IconMdiFolderAlertOutline />
+      </n-icon>
+      <div class="setup-text">
+        <div class="setup-title">{{ t("mp3buddy.setupNoFolder") }}</div>
+      </div>
+      <n-button type="primary" size="small" @click="chooseFolder">
+        <template #icon>
+          <n-icon><IconMdiFolderOpenOutline /></n-icon>
+        </template>
+        {{ t("mp3buddy.setupChooseFolder") }}
+      </n-button>
     </div>
   </div>
 

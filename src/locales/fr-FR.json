@@ -416,6 +416,8 @@
     "lang": "FR",
     "settings": "Paramètres",
     "setupTitle": "Certains outils doivent être téléchargés avant de commencer :",
+    "setupNoFolder": "Choisissez un dossier où vos téléchargements seront enregistrés :",
+    "setupChooseFolder": "Choisir un dossier",
     "setupReady": "Tout est prêt — collez un lien pour commencer !",
     "setupDownloading": "Téléchargement de {name}…",
     "toolYtdlp": "yt-dlp (moteur de téléchargement)",
