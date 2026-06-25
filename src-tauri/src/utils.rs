@@ -74,6 +74,40 @@ pub fn get_ytdlp_path(app: &AppHandle) -> Result<PathBuf, String> {
     get_managed_ytdlp_path(app)
 }
 
+/// 获取应用管理的 ffmpeg 路径（应用数据目录）
+pub fn get_managed_ffmpeg_path(app: &AppHandle) -> Result<PathBuf, String> {
+    if cfg!(target_os = "windows") {
+        get_managed_executable_path(app, "ffmpeg.exe")
+    } else {
+        get_managed_executable_path(app, "ffmpeg")
+    }
+}
+
+/// 如果存在应用管理的 ffmpeg，返回 yt-dlp 的 `--ffmpeg-location` 参数。
+/// 指向 ffmpeg 可执行文件本身，yt-dlp 会在同目录寻找 ffprobe。
+/// 未安装应用管理副本时返回空 vec，让 yt-dlp 回退到系统 PATH 中的 ffmpeg。
+pub fn build_ffmpeg_location_args(app: &AppHandle) -> Vec<String> {
+    if let Ok(path) = get_managed_ffmpeg_path(app) {
+        if path.exists() {
+            return vec![
+                "--ffmpeg-location".to_string(),
+                path.to_string_lossy().to_string(),
+            ];
+        }
+    }
+    vec![]
+}
+
+/// 获取 ffmpeg 下载地址。仅 Windows 提供应用内下载（BtbN 构建的 zip 包）；
+/// 其他平台返回 None，建议用户通过系统包管理器安装。
+pub fn get_ffmpeg_download_url() -> Option<&'static str> {
+    if cfg!(target_os = "windows") {
+        Some("https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip")
+    } else {
+        None
+    }
+}
+
 /// 获取应用管理的 Deno 路径（应用数据目录）
 pub fn get_managed_deno_path(app: &AppHandle) -> Result<PathBuf, String> {
     if cfg!(target_os = "windows") {

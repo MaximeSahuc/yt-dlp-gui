@@ -423,7 +423,10 @@
     "setupReady": "Tout est prêt — collez un lien pour commencer !",
     "setupDownloading": "Téléchargement de {name}…",
     "toolYtdlp": "yt-dlp (moteur de téléchargement)",
-    "toolDeno": "Deno (support YouTube)"
+    "toolDeno": "Deno (support YouTube)",
+    "toolFfmpeg": "FFmpeg (conversion audio)",
+    "ffmpegManualTitle": "FFmpeg est requis pour la conversion audio. Installez-le avec votre gestionnaire de paquets :",
+    "ffmpegManualLink": "Page de téléchargement officielle"
   },
   "window": {
     "minimize": "Réduire",

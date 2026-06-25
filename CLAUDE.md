@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-yt-dlp-gui is a desktop application for downloading videos via yt-dlp. Built with **Tauri 2** (Rust backend) + **Vue 3** (TypeScript frontend). The UI is in Chinese.
+MP3 Buddy is a simple desktop app for downloading music from the web. Built with **Tauri 2** (Rust backend) + **Vue 3** (TypeScript frontend).
 
 ## Development Commands
 
@@ -54,7 +54,7 @@ cd src-tauri && cargo check
 
 ## Releases & CI (fork constraints)
 
-This repo (`MaximeSahuc/yt-dlp-gui`) is a **fork** of `imsyy/yt-dlp-gui`. Two things follow from that:
+This repo (`MaximeSahuc/mp3-buddy`) is a **fork** of `imsyy/yt-dlp-gui`. Two things follow from that:
 
 - **Forks suppress automatic Actions triggers.** Pushing a `v*` tag will *not* auto-run `.github/workflows/release.yml` until the one-time "enable workflows" button is clicked in the repo's **Actions** tab on github.com. Until then, dispatch manually against the tag ref:
   ```bash

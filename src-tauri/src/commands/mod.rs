@@ -46,6 +46,17 @@ pub struct DenoStatus {
     pub is_managed: bool,
 }
 
+/// ffmpeg 安装状态
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FfmpegStatus {
+    pub installed: bool,
+    pub version: String,
+    pub path: String,
+    /// `true` 表示使用应用管理副本；`false` 表示使用系统 PATH 中的 ffmpeg
+    pub is_managed: bool,
+}
+
 /// 下载进程信息（运行时状态）
 pub struct DownloadProcessInfo {
     /// 进程 PID

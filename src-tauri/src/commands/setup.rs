@@ -8,7 +8,7 @@ use tauri::{AppHandle, Emitter};
 use tokio::io::AsyncBufReadExt;
 
 use super::common;
-use super::{DenoStatus, YtdlpStatus};
+use super::{DenoStatus, FfmpegStatus, YtdlpStatus};
 
 /// HTTP 下载超时时间（30 分钟，用于大文件下载）
 const DOWNLOAD_TIMEOUT: Duration = Duration::from_secs(1800);
@@ -425,6 +425,156 @@ pub async fn download_deno(app: AppHandle) -> Result<(), String> {
     }
 
     // 清理 zip 文件
+    let _ = tokio::fs::remove_file(&zip_path).await;
+
+    Ok(())
+}
+
+// ========== ffmpeg 管理 ==========
+
+/// 获取 ffmpeg 安装状态和版本。
+/// 优先检测应用管理副本，其次回退到系统 PATH 中的 ffmpeg。
+#[tauri::command]
+pub async fn get_ffmpeg_status(app: AppHandle) -> Result<FfmpegStatus, String> {
+    let managed_path = utils::get_managed_ffmpeg_path(&app)?;
+
+    let (ffmpeg_path, is_managed) = if managed_path.exists() {
+        (managed_path, true)
+    } else if let Ok(system_path) = which::which("ffmpeg") {
+        (system_path, false)
+    } else {
+        return Ok(FfmpegStatus {
+            installed: false,
+            version: String::new(),
+            path: managed_path.to_string_lossy().to_string(),
+            is_managed: true,
+        });
+    };
+
+    let mut cmd = tokio::process::Command::new(&ffmpeg_path);
+    cmd.arg("-version");
+    #[cfg(target_os = "windows")]
+    cmd.creation_flags(CREATE_NO_WINDOW);
+
+    let output = cmd.output().await;
+    let version = match output {
+        Ok(out) if out.status.success() => String::from_utf8_lossy(&out.stdout)
+            .lines()
+            .next()
+            .unwrap_or("")
+            .trim_start_matches("ffmpeg version ")
+            .split_whitespace()
+            .next()
+            .unwrap_or("")
+            .to_string(),
+        _ => String::new(),
+    };
+
+    Ok(FfmpegStatus {
+        installed: true,
+        version,
+        path: ffmpeg_path.to_string_lossy().to_string(),
+        is_managed,
+    })
+}
+
+/// 下载 ffmpeg（从 zip 解压 ffmpeg 与 ffprobe 到应用数据目录）。
+/// 仅 Windows 提供应用内下载；其他平台请通过系统包管理器安装。
+#[tauri::command]
+pub async fn download_ffmpeg(app: AppHandle) -> Result<(), String> {
+    let url = utils::get_ffmpeg_download_url().ok_or("err_ffmpeg_no_managed_build")?;
+    let ffmpeg_path = utils::get_managed_ffmpeg_path(&app)?;
+    let dest_dir = ffmpeg_path
+        .parent()
+        .ok_or("err_app_data_dir")?
+        .to_path_buf();
+
+    let client = reqwest::Client::builder()
+        .timeout(DOWNLOAD_TIMEOUT)
+        .build()
+        .map_err(|e| format!("err_create_http_client:{}", e))?;
+    let response = client
+        .get(url)
+        .send()
+        .await
+        .map_err(|e| format!("err_download_failed:{}", e))?;
+
+    let total_size = response.content_length().unwrap_or(0);
+    let mut downloaded: u64 = 0;
+
+    // 下载 zip 到临时文件
+    let zip_path = ffmpeg_path.with_extension("zip");
+    let mut file = tokio::fs::File::create(&zip_path)
+        .await
+        .map_err(|e| format!("err_create_file:{}", e))?;
+
+    let mut stream = response.bytes_stream();
+    while let Some(chunk) = stream.next().await {
+        let chunk = chunk.map_err(|e| format!("err_download_error:{}", e))?;
+        tokio::io::AsyncWriteExt::write_all(&mut file, &chunk)
+            .await
+            .map_err(|e| format!("err_write_error:{}", e))?;
+
+        downloaded += chunk.len() as u64;
+        let percent = if total_size > 0 {
+            (downloaded as f64 / total_size as f64) * 100.0
+        } else {
+            0.0
+        };
+        let _ = app.emit(
+            "ffmpeg-download-progress",
+            serde_json::json!({
+                "percent": percent,
+                "downloaded": downloaded,
+                "total": total_size,
+            }),
+        );
+    }
+
+    tokio::io::AsyncWriteExt::shutdown(&mut file)
+        .await
+        .map_err(|e| format!("err_flush_file:{}", e))?;
+    drop(file);
+
+    // 解压 ffmpeg / ffprobe 可执行文件（zip 内位于 .../bin/ 子目录）
+    let zip_path_clone = zip_path.clone();
+    tokio::task::spawn_blocking(move || {
+        let file =
+            std::fs::File::open(&zip_path_clone).map_err(|e| format!("err_open_zip:{}", e))?;
+        let mut archive = zip::ZipArchive::new(file).map_err(|e| format!("err_read_zip:{}", e))?;
+
+        let wanted = ["ffmpeg.exe", "ffprobe.exe"];
+        let mut found_ffmpeg = false;
+
+        for i in 0..archive.len() {
+            let mut entry = archive
+                .by_index(i)
+                .map_err(|e| format!("err_read_zip_entry:{}", e))?;
+            if entry.is_dir() {
+                continue;
+            }
+            let name = entry.name().replace('\\', "/");
+            let base = name.rsplit('/').next().unwrap_or("").to_lowercase();
+            if wanted.contains(&base.as_str()) {
+                let out_path = dest_dir.join(&base);
+                let mut outfile = std::fs::File::create(&out_path)
+                    .map_err(|e| format!("err_create_file:{}", e))?;
+                std::io::copy(&mut entry, &mut outfile)
+                    .map_err(|e| format!("err_write_error:{}", e))?;
+                if base == "ffmpeg.exe" {
+                    found_ffmpeg = true;
+                }
+            }
+        }
+
+        if !found_ffmpeg {
+            return Err("err_not_found_in_zip:ffmpeg".to_string());
+        }
+        Ok::<(), String>(())
+    })
+    .await
+    .map_err(|e| format!("err_task:{}", e))??;
+
     let _ = tokio::fs::remove_file(&zip_path).await;
 
     Ok(())

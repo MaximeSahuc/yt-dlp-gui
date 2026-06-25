@@ -235,6 +235,8 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
     // JS 运行时（Deno）
     args.extend(utils::build_js_runtime_args(app));
     args.extend(utils::build_plugin_args(app));
+    // 应用管理的 ffmpeg（如已安装），确保音频转码可用
+    args.extend(utils::build_ffmpeg_location_args(app));
     // YouTube PO Token / visitor_data（如设置）
     args.extend(utils::build_youtube_extractor_args());
 

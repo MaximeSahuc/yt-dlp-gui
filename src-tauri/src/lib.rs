@@ -65,6 +65,8 @@ pub fn run() {
             commands::update_ytdlp,
             commands::get_deno_status,
             commands::download_deno,
+            commands::get_ffmpeg_status,
+            commands::download_ffmpeg,
             commands::check_plugin_installed,
             commands::install_plugin,
             commands::uninstall_plugin,

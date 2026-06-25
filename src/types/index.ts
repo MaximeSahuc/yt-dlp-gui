@@ -13,6 +13,13 @@ export interface DenoStatus {
   isManaged: boolean;
 }
 
+export interface FfmpegStatus {
+  installed: boolean;
+  version: string;
+  path: string;
+  isManaged: boolean;
+}
+
 export interface DownloadProgress {
   percent: number;
   downloaded: number;

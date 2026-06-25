@@ -55,7 +55,7 @@ async function fetchInfo(targetUrl: string) {
   }
 }
 
-async function handleDownload(quality: string) {
+async function handleDownload({ quality, format }: { quality: string; format: string }) {
   if (!settingStore.downloadDir) {
     window.$message?.warning(t("mp3buddy.noFolderWarning"));
     return;
@@ -82,7 +82,7 @@ async function handleDownload(quality: string) {
     embedChapters: false,
     sponsorblockRemove: false,
     extractAudio: true,
-    audioConvertFormat: "mp3",
+    audioConvertFormat: format,
     audioQuality: quality,
     noMerge: false,
     limitRate: null,
@@ -102,7 +102,7 @@ async function handleDownload(quality: string) {
     title: preview.value.title,
     thumbnail: preview.value.thumbnail ?? "",
     uploader: preview.value.uploader,
-    formatLabel: `MP3 ${quality}`,
+    formatLabel: `${format.toUpperCase()} ${quality}`,
     status: willStart ? "downloading" : "queued",
     percent: 0,
     speed: "",

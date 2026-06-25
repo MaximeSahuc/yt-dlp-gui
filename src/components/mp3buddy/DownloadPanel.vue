@@ -13,11 +13,12 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   "update:modelValue": [value: string];
-  download: [quality: string];
+  download: [payload: { quality: string; format: string }];
 }>();
 
 const { t } = useI18n();
 const quality = ref("320K");
+const format = ref("mp3");
 
 const qualityOptions = computed(() => [
   { label: t("mp3buddy.quality320"), value: "320K" },
@@ -25,6 +26,16 @@ const qualityOptions = computed(() => [
   { label: t("mp3buddy.quality192"), value: "192K" },
   { label: t("mp3buddy.quality128"), value: "128K" },
 ]);
+
+const formatOptions = [
+  { label: "MP3", value: "mp3" },
+  { label: "WAV", value: "wav" },
+  { label: "Opus", value: "opus" },
+];
+
+function startDownload() {
+  emit("download", { quality: quality.value, format: format.value });
+}
 
 async function handlePaste() {
   try {
@@ -55,7 +66,7 @@ function onInput(e: Event) {
         :value="props.modelValue"
         :placeholder="t('mp3buddy.urlPlaceholder')"
         @input="onInput"
-        @keydown.enter="emit('download', quality)"
+        @keydown.enter="startDownload"
       />
       <button class="paste-btn" type="button" @click="handlePaste">
         <NIcon size="14"><IconMdiClipboardOutline /></NIcon>
@@ -63,7 +74,7 @@ function onInput(e: Event) {
       </button>
     </div>
 
-    <!-- Row 2: Quality select + Download button -->
+    <!-- Row 2: Quality select + Format select + Download button -->
     <div class="action-row">
       <n-select
         v-model:value="quality"
@@ -71,11 +82,17 @@ function onInput(e: Event) {
         :consistent-menu-width="false"
         class="quality-select"
       />
+      <n-select
+        v-model:value="format"
+        :options="formatOptions"
+        :consistent-menu-width="false"
+        class="format-select"
+      />
       <NButton
         type="primary"
         :disabled="props.state !== 'ready'"
         class="dl-btn"
-        @click="emit('download', quality)"
+        @click="startDownload"
       >
         <template #icon>
           <NIcon><IconMdiDownload /></NIcon>
@@ -155,6 +172,11 @@ function onInput(e: Event) {
 
 .quality-select {
   flex: 1;
+}
+
+.format-select {
+  width: 110px;
+  flex-shrink: 0;
 }
 
 .dl-btn {

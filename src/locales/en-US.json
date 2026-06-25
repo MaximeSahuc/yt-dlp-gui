@@ -462,7 +462,10 @@
     "setupReady": "Everything's ready — paste a link to start!",
     "setupDownloading": "Downloading {name}…",
     "toolYtdlp": "yt-dlp (download engine)",
-    "toolDeno": "Deno (YouTube support)"
+    "toolDeno": "Deno (YouTube support)",
+    "toolFfmpeg": "FFmpeg (audio conversion)",
+    "ffmpegManualTitle": "FFmpeg is required for audio conversion. Install it with your package manager:",
+    "ffmpegManualLink": "Official download page"
   },
   "window": {
     "minimize": "Minimize",
