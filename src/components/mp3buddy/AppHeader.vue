@@ -4,14 +4,18 @@ import IconMdiHeadphones from "~icons/mdi/headphones";
 import IconMdiWeb from "~icons/mdi/web";
 import IconMdiCog from "~icons/mdi/cog";
 import { useSettingStore } from "@/stores/setting";
+import { localeEntries, resolveLocale } from "@/locales";
 
 const { t } = useI18n();
 const router = useRouter();
 const settingStore = useSettingStore();
 
-function toggleLocale() {
-  settingStore.locale = settingStore.locale === "fr-FR" ? "en-US" : "fr-FR";
-}
+const localeOptions = localeEntries.map((e) => ({ label: `${e.flag} ${e.label}`, value: e.code }));
+
+const currentFlag = computed(() => {
+  const code = resolveLocale(settingStore.locale);
+  return localeEntries.find((e) => e.code === code)?.flag ?? "🌐";
+});
 </script>
 
 <template>
@@ -23,12 +27,14 @@ function toggleLocale() {
       <span class="mp3-header-title">{{ t("mp3buddy.title") }}</span>
     </div>
     <div class="mp3-header-right">
-      <n-button quaternary size="small" @click="toggleLocale" class="mp3-btn">
-        <template #icon>
-          <n-icon color="rgba(255,255,255,0.8)"><IconMdiWeb /></n-icon>
-        </template>
-        <span class="mp3-lang">{{ settingStore.locale === "fr-FR" ? "FR" : "EN" }}</span>
-      </n-button>
+      <n-popselect v-model:value="settingStore.locale" :options="localeOptions" trigger="click" scrollable>
+        <n-button quaternary size="small" class="mp3-btn">
+          <template #icon>
+            <n-icon color="rgba(255,255,255,0.8)"><IconMdiWeb /></n-icon>
+          </template>
+          <span class="mp3-lang">{{ currentFlag }}</span>
+        </n-button>
+      </n-popselect>
       <n-button quaternary size="small" @click="router.push({ name: 'settings' })" class="mp3-btn">
         <template #icon>
           <n-icon color="rgba(255,255,255,0.8)"><IconMdiCog /></n-icon>
