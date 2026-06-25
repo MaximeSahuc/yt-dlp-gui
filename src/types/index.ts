@@ -68,6 +68,7 @@ export interface DownloadTaskParams {
   sponsorblockRemove: boolean;
   extractAudio: boolean;
   audioConvertFormat: string | null;
+  audioQuality?: string | null;
   noMerge: boolean;
   recodeFormat: string | null;
   limitRate: string | null;
@@ -92,6 +93,7 @@ export interface DownloadTask {
   downloaded: string;
   total: string;
   logs: string[];
+  uploader?: string;
   error?: string;
   outputFile?: string;
   createdAt: number;

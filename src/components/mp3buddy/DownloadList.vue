@@ -1,0 +1,206 @@
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
+import IconMdiCircle from "~icons/mdi/circle";
+import { open } from "@tauri-apps/plugin-dialog";
+import { useDownloadStore } from "@/stores/download";
+import { useSettingStore } from "@/stores/setting";
+
+const { t } = useI18n();
+const downloadStore = useDownloadStore();
+const settingStore = useSettingStore();
+
+function statusColor(status: string): string {
+  if (status === "completed") return "#18a058";
+  if (status === "error") return "#d03050";
+  return "#f0a020";
+}
+
+function truncatePath(p: string): string {
+  if (!p) return "";
+  if (p.length <= 28) return p;
+  return "…" + p.slice(-25);
+}
+
+async function changeFolder() {
+  const result = await open({ directory: true, multiple: false });
+  if (typeof result === "string" && result) {
+    settingStore.downloadDir = result;
+  }
+}
+</script>
+
+<template>
+  <div class="dl-list">
+    <div class="dl-list-title">{{ t("mp3buddy.downloadsTitle") }}</div>
+    <div class="dl-items">
+      <div v-if="downloadStore.tasks.length === 0" class="dl-empty">
+        <span class="dl-empty-text">–</span>
+      </div>
+      <div v-for="task in downloadStore.tasks" :key="task.id" class="dl-item">
+        <div class="dl-item-row">
+          <n-icon size="10" :color="statusColor(task.status)" style="flex-shrink:0; margin-top:2px">
+            <IconMdiCircle />
+          </n-icon>
+          <div class="dl-item-info">
+            <div class="dl-item-title">{{ task.title }}</div>
+            <div v-if="task.uploader" class="dl-item-uploader">{{ task.uploader }}</div>
+            <div class="dl-item-label">{{ task.formatLabel }}</div>
+          </div>
+        </div>
+        <n-progress
+          v-if="task.status === 'downloading'"
+          type="line"
+          :percentage="task.percent"
+          :show-indicator="false"
+          :height="3"
+          style="margin-top: 4px"
+        />
+        <div v-if="task.status === 'downloading'" class="dl-item-percent">
+          {{ task.percent }}%<span v-if="task.speed"> · {{ task.speed }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="dl-footer">
+      <div class="dl-folder-row">
+        <svg class="folder-icon" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span class="dl-folder-path" :title="settingStore.downloadDir || ''">
+          {{ settingStore.downloadDir ? truncatePath(settingStore.downloadDir) : t("mp3buddy.noFolder") }}
+        </span>
+      </div>
+      <button class="folder-btn" type="button" @click="changeFolder">
+        {{ t("mp3buddy.changeFolder") }}
+      </button>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.dl-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.dl-list-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #6b7280;
+  padding: 8px 10px 4px;
+  border-bottom: 1px solid #e4e7ec;
+  flex-shrink: 0;
+}
+
+.dl-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.dl-empty {
+  padding: 20px 10px;
+  text-align: center;
+}
+
+.dl-empty-text {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.dl-item {
+  padding: 5px 10px;
+  border-bottom: 1px solid #f0f1f3;
+}
+
+.dl-item-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.dl-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.dl-item-title {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1a1a2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dl-item-uploader {
+  font-size: 10px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dl-item-label {
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+.dl-item-percent {
+  font-size: 10px;
+  color: #9ca3af;
+  margin-top: 1px;
+}
+
+.dl-footer {
+  flex-shrink: 0;
+  padding: 8px 10px;
+  border-top: 1px solid #e4e7ec;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dl-folder-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.folder-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.dl-folder-path {
+  font-size: 10px;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.folder-btn {
+  width: 100%;
+  height: 26px;
+  border: 1px solid #d0d5dd;
+  border-radius: 5px;
+  background: #f9fafb;
+  font-size: 11px;
+  color: #344054;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background 0.15s, border-color 0.15s;
+
+  &:hover {
+    background: #e9eaec;
+    border-color: #b0b7c3;
+  }
+}
+</style>

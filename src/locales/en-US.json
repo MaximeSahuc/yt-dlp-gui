@@ -434,5 +434,26 @@
     "denoHint": "Deno is a JavaScript runtime required by yt-dlp to parse YouTube video info. Installing it enables the full format list, including higher quality options.",
     "goToSettings": "Go to Settings",
     "later": "Later"
+  },
+  "mp3buddy": {
+    "title": "MP3 Buddy",
+    "downloadsTitle": "Downloads",
+    "urlPlaceholder": "Paste a YouTube URL…",
+    "paste": "Paste",
+    "download": "Download",
+    "quality": "Quality",
+    "quality320": "Best quality (320 kbps)",
+    "quality256": "High quality (256 kbps)",
+    "quality192": "Good quality (192 kbps)",
+    "quality128": "Less space (128 kbps)",
+    "changeFolder": "Change folder",
+    "noFolder": "No folder selected",
+    "ready": "Ready",
+    "fetching": "Loading…",
+    "errorFetch": "Could not load video",
+    "idlePlaceholder": "Paste a URL to get started",
+    "noFolderWarning": "No download folder selected",
+    "lang": "EN",
+    "settings": "Settings"
   }
 }

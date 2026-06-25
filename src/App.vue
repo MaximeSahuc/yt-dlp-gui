@@ -165,7 +165,7 @@ onMounted(async () => {
     <UpdateModal />
     <SetupModal />
     <n-layout style="height: 100vh">
-      <n-layout-header bordered class="app-header">
+      <n-layout-header v-if="route.name !== 'home'" bordered class="app-header">
         <div class="header-side">
           <div class="logo" @click="router.push({ name: 'home' })">
             <img src="/app-icon.svg" alt="" class="logo-img" />
@@ -243,8 +243,8 @@ onMounted(async () => {
       </n-layout-header>
       <n-layout
         position="absolute"
-        style="top: 56px"
-        content-style="padding: 16px; display: flex; flex-direction: column; min-height: 100%;"
+        :style="{ top: route.name !== 'home' ? '56px' : '0' }"
+        :content-style="route.name !== 'home' ? 'padding: 16px; display: flex; flex-direction: column; min-height: 100%;' : 'height: 100%; padding: 0;'"
         :native-scrollbar="false"
       >
         <div style="flex: 1">
@@ -254,7 +254,7 @@ onMounted(async () => {
             </Transition>
           </router-view>
         </div>
-        <n-flex justify="center" align="center" :size="4" class="app-footer">
+        <n-flex v-if="route.name !== 'home'" justify="center" align="center" :size="4" class="app-footer">
           <n-text depth="3" style="font-size: 12px">
             © {{ new Date().getFullYear() }}
             <n-button

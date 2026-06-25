@@ -11,12 +11,15 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppHeader: typeof import('./src/components/mp3buddy/AppHeader.vue')['default']
     BrowserExtensionModal: typeof import('./src/components/BrowserExtensionModal.vue')['default']
     CookieCard: typeof import('./src/components/CookieCard.vue')['default']
     CookieModal: typeof import('./src/components/CookieModal.vue')['default']
     DownloadBar: typeof import('./src/components/home/DownloadBar.vue')['default']
     DownloadDirCard: typeof import('./src/components/DownloadDirCard.vue')['default']
+    DownloadList: typeof import('./src/components/mp3buddy/DownloadList.vue')['default']
     DownloadOptionsCard: typeof import('./src/components/home/DownloadOptionsCard.vue')['default']
+    DownloadPanel: typeof import('./src/components/mp3buddy/DownloadPanel.vue')['default']
     ExtraOptionsCard: typeof import('./src/components/home/ExtraOptionsCard.vue')['default']
     IconMdiAccount: typeof import('~icons/mdi/account')['default']
     IconMdiArrowLeft: typeof import('~icons/mdi/arrow-left')['default']
@@ -24,7 +27,6 @@ declare module 'vue' {
     IconMdiCheckCircleOutline: typeof import('~icons/mdi/check-circle-outline')['default']
     IconMdiChevronRight: typeof import('~icons/mdi/chevron-right')['default']
     IconMdiChevronUp: typeof import('~icons/mdi/chevron-up')['default']
-    IconMdiClose: typeof import('~icons/mdi/close')['default']
     IconMdiCloseCircleOutline: typeof import('~icons/mdi/close-circle-outline')['default']
     IconMdiCog: typeof import('~icons/mdi/cog')['default']
     IconMdiCommentTextMultipleOutline: typeof import('~icons/mdi/comment-text-multiple-outline')['default']
@@ -42,7 +44,6 @@ declare module 'vue' {
     IconMdiFolderOpenOutline: typeof import('~icons/mdi/folder-open-outline')['default']
     IconMdiFormatListNumbered: typeof import('~icons/mdi/format-list-numbered')['default']
     IconMdiGithub: typeof import('~icons/mdi/github')['default']
-    IconMdiHistory: typeof import('~icons/mdi/history')['default']
     IconMdiImageBrokenVariant: typeof import('~icons/mdi/image-broken-variant')['default']
     IconMdiImageSearch: typeof import('~icons/mdi/image-search')['default']
     IconMdiMagnify: typeof import('~icons/mdi/magnify')['default']
@@ -67,8 +68,6 @@ declare module 'vue' {
     NDataTable: typeof import('naive-ui')['NDataTable']
     NDialogProvider: typeof import('naive-ui')['NDialogProvider']
     NDivider: typeof import('naive-ui')['NDivider']
-    NDrawer: typeof import('naive-ui')['NDrawer']
-    NDrawerContent: typeof import('naive-ui')['NDrawerContent']
     NEllipsis: typeof import('naive-ui')['NEllipsis']
     NEmpty: typeof import('naive-ui')['NEmpty']
     NFlex: typeof import('naive-ui')['NFlex']
@@ -110,5 +109,6 @@ declare module 'vue' {
     SubtitleCard: typeof import('./src/components/home/SubtitleCard.vue')['default']
     UpdateModal: typeof import('./src/components/UpdateModal.vue')['default']
     VideoInfoCard: typeof import('./src/components/home/VideoInfoCard.vue')['default']
+    VideoPreview: typeof import('./src/components/mp3buddy/VideoPreview.vue')['default']
   }
 }

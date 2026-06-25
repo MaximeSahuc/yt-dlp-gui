@@ -208,6 +208,23 @@ export const useDownloadStore = defineStore("download", () => {
         task.status = "error";
         task.error = event.payload.error;
         task.speed = "";
+        // Wait briefly for remaining log lines to arrive, then show a dialog
+        setTimeout(() => {
+          const logText = task.logs.slice(-60).join("\n").trim() || event.payload.error;
+          window.$dialog?.error({
+            title: i18n.global.t("errors.dialogTitle"),
+            content: () =>
+              h(
+                "pre",
+                {
+                  style:
+                    "white-space:pre-wrap;word-break:break-all;font-size:12px;max-height:360px;overflow-y:auto;background:#f5f5f5;padding:8px;border-radius:4px;margin:0",
+                },
+                logText,
+              ),
+            positiveText: i18n.global.t("errors.dialogOk"),
+          });
+        }, 400);
       }
       updateTaskbarProgress();
       tryStartNext();

@@ -348,6 +348,12 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
                 args.push(fmt.clone());
             }
         }
+        if let Some(ref q) = params.audio_quality {
+            if !q.is_empty() {
+                args.push("--audio-quality".to_string());
+                args.push(q.clone());
+            }
+        }
     }
     if params.no_merge {
         args.push("--no-merge-output".to_string());
