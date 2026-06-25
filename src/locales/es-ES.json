@@ -382,6 +382,7 @@
     "err_kill_process": "No se pudo terminar el proceso",
     "dialogTitle": "Error",
     "dialogOk": "Aceptar",
+    "dialogRetry": "Reintentar",
     "showDetail": "Ver detalles"
   },
   "setup": {

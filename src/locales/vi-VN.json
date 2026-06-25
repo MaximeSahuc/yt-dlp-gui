@@ -382,6 +382,7 @@
     "err_kill_process": "Kết thúc tiến trình thất bại",
     "dialogTitle": "Lỗi",
     "dialogOk": "OK",
+    "dialogRetry": "Thử lại",
     "showDetail": "Hiện chi tiết"
   },
   "setup": {

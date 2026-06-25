@@ -422,6 +422,7 @@
     "err_kill_process": "Failed to kill process",
     "dialogTitle": "Error",
     "dialogOk": "OK",
+    "dialogRetry": "Retry",
     "showDetail": "Show details"
   },
   "setup": {

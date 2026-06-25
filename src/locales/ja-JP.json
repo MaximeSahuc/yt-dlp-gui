@@ -382,6 +382,7 @@
     "err_kill_process": "プロセスの終了に失敗しました",
     "dialogTitle": "エラー",
     "dialogOk": "OK",
+    "dialogRetry": "再試行",
     "showDetail": "詳細を表示"
   },
   "setup": {

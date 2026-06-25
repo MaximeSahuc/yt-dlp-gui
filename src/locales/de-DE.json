@@ -382,6 +382,7 @@
     "err_kill_process": "Prozess konnte nicht beendet werden",
     "dialogTitle": "Fehler",
     "dialogOk": "OK",
+    "dialogRetry": "Erneut versuchen",
     "showDetail": "Details anzeigen"
   },
   "setup": {

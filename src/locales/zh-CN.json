@@ -421,6 +421,7 @@
     "err_kill_process": "终止进程失败",
     "dialogTitle": "出错了",
     "dialogOk": "确定",
+    "dialogRetry": "重试",
     "showDetail": "查看详情"
   },
   "setup": {

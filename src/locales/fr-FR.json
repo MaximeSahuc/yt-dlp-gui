@@ -383,6 +383,7 @@
     "err_kill_process": "Échec de l'arrêt du processus",
     "dialogTitle": "Erreur",
     "dialogOk": "OK",
+    "dialogRetry": "Réessayer",
     "showDetail": "Afficher les détails"
   },
   "setup": {

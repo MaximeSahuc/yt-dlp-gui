@@ -382,6 +382,7 @@
     "err_kill_process": "فشل إنهاء العملية",
     "dialogTitle": "خطأ",
     "dialogOk": "موافق",
+    "dialogRetry": "إعادة المحاولة",
     "showDetail": "إظهار التفاصيل"
   },
   "setup": {

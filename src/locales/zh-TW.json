@@ -382,6 +382,7 @@
     "err_kill_process": "終止處理程序失敗",
     "dialogTitle": "發生錯誤",
     "dialogOk": "確定",
+    "dialogRetry": "重試",
     "showDetail": "查看詳情"
   },
   "setup": {

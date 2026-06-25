@@ -222,7 +222,11 @@ export const useDownloadStore = defineStore("download", () => {
                 },
                 logText,
               ),
-            positiveText: i18n.global.t("errors.dialogOk"),
+            positiveText: i18n.global.t("errors.dialogRetry"),
+            negativeText: i18n.global.t("errors.dialogOk"),
+            onPositiveClick: () => {
+              retryTask(task.id);
+            },
           });
         }, 400);
       }

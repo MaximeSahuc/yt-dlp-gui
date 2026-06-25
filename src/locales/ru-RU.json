@@ -382,6 +382,7 @@
     "err_kill_process": "Не удалось завершить процесс",
     "dialogTitle": "Ошибка",
     "dialogOk": "ОК",
+    "dialogRetry": "Повторить",
     "showDetail": "Подробнее"
   },
   "setup": {

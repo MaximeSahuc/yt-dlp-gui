@@ -12,7 +12,7 @@ export const useSettingStore = defineStore(
     });
 
     /** 主题模式 */
-    const themeMode = ref<"auto" | "light" | "dark">("auto");
+    const themeMode = ref<"auto" | "light" | "dark">("light");
 
     /** 下载目录 */
     const downloadDir = ref("");

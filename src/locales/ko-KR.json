@@ -382,6 +382,7 @@
     "err_kill_process": "프로세스 종료에 실패했습니다",
     "dialogTitle": "오류",
     "dialogOk": "확인",
+    "dialogRetry": "다시 시도",
     "showDetail": "자세히 보기"
   },
   "setup": {

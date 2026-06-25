@@ -382,6 +382,7 @@
     "err_kill_process": "Falha ao encerrar o processo",
     "dialogTitle": "Erro",
     "dialogOk": "OK",
+    "dialogRetry": "Tentar novamente",
     "showDetail": "Mostrar detalhes"
   },
   "setup": {
