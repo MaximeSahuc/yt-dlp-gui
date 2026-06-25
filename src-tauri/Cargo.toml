@@ -1,6 +1,6 @@
 [package]
 name = "mp3-buddy"
-version = "0.6.0"
+version = "0.7.0"
 description = "A modern GUI for yt-dlp"
 authors = ["Maxime Sahuc"]
 edition = "2021"
