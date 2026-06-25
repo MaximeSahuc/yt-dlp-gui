@@ -12,9 +12,9 @@ const settingStore = useSettingStore();
 
 const localeOptions = localeEntries.map((e) => ({ label: `${e.flag} ${e.label}`, value: e.code }));
 
-const currentFlag = computed(() => {
+const currentLangCode = computed(() => {
   const code = resolveLocale(settingStore.locale);
-  return localeEntries.find((e) => e.code === code)?.flag ?? "🌐";
+  return code.split("-")[0].toUpperCase();
 });
 </script>
 
@@ -32,7 +32,7 @@ const currentFlag = computed(() => {
           <template #icon>
             <n-icon color="rgba(255,255,255,0.8)"><IconMdiWeb /></n-icon>
           </template>
-          <span class="mp3-lang">{{ currentFlag }}</span>
+          <span class="mp3-lang">{{ currentLangCode }}</span>
         </n-button>
       </n-popselect>
       <n-button quaternary size="small" @click="router.push({ name: 'settings' })" class="mp3-btn">
