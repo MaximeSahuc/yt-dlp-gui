@@ -178,8 +178,8 @@ const refreshAll = () => {
 
 const navSections = computed(() => [
   { id: "section-appearance", label: t("settings.appearance") },
-  { id: "section-cookies", label: "Cookies" },
   { id: "section-dir", label: t("downloadDir.title") },
+  { id: "section-cookies", label: "Cookies" },
   { id: "section-advanced", label: t("settings.advanced") },
   { id: "section-about", label: t("settings.about") },
 ]);
@@ -260,8 +260,7 @@ watch(
         </div>
       </div>
 
-      <!-- Right: scrollable settings cards — forced light theme so it matches the main page -->
-      <n-config-provider :theme="null" abstract>
+      <!-- Right: scrollable settings cards — follows the global theme -->
       <div class="settings-content" ref="contentEl">
 
         <div id="section-appearance">
@@ -293,12 +292,12 @@ watch(
           </n-card>
         </div>
 
-        <div id="section-cookies">
-          <CookieCard class="section-card" />
-        </div>
-
         <div id="section-dir">
           <DownloadDirCard class="section-card" />
+        </div>
+
+        <div id="section-cookies">
+          <CookieCard class="section-card" />
         </div>
 
         <!-- 高级：默认折叠 -->
@@ -595,7 +594,6 @@ watch(
         </div>
 
       </div>
-      </n-config-provider>
     </div>
   </div>
 </template>
@@ -661,8 +659,8 @@ watch(
   width: 195px;
   min-width: 195px;
   flex-shrink: 0;
-  border-right: 1px solid rgba(0, 0, 0, 0.09);
-  background: #f5f6f8;
+  border-right: 1px solid var(--mp3-divider);
+  background: var(--mp3-surface-2);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -673,9 +671,9 @@ watch(
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: #6b7280;
+  color: var(--mp3-text-3);
   padding: 8px 10px 4px;
-  border-bottom: 1px solid #e4e7ec;
+  border-bottom: 1px solid var(--mp3-border);
   flex-shrink: 0;
 }
 
@@ -692,7 +690,7 @@ watch(
   width: 100%;
   padding: 7px 14px;
   font-size: 12px;
-  color: #344054;
+  color: var(--mp3-text-2);
   background: transparent;
   border: none;
   text-align: left;
@@ -703,8 +701,8 @@ watch(
   transition: background 0.12s, color 0.12s;
 
   &:hover {
-    background: #e4e7ec;
-    color: #1a4f9e;
+    background: var(--mp3-hover);
+    color: var(--mp3-accent);
   }
 }
 
@@ -713,7 +711,7 @@ watch(
   min-width: 0;
   overflow-y: auto;
   padding: 14px;
-  background: #fff;
+  background: var(--mp3-surface);
 }
 
 .section-card {
