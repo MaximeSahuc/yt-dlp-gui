@@ -107,8 +107,10 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SetupModal: typeof import('./src/components/SetupModal.vue')['default']
     SubtitleCard: typeof import('./src/components/home/SubtitleCard.vue')['default']
+    TitleBar: typeof import('./src/components/TitleBar.vue')['default']
     UpdateModal: typeof import('./src/components/UpdateModal.vue')['default']
     VideoInfoCard: typeof import('./src/components/home/VideoInfoCard.vue')['default']
     VideoPreview: typeof import('./src/components/mp3buddy/VideoPreview.vue')['default']
+    WindowControls: typeof import('./src/components/WindowControls.vue')['default']
   }
 }

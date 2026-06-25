@@ -17,6 +17,7 @@ import { useDownloadStore } from "@/stores/download";
 import { usePendingStore } from "@/stores/pending";
 import { useStatusStore } from "@/stores/status";
 import { localeEntries } from "@/locales";
+import TitleBar from "@/components/TitleBar.vue";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -76,6 +77,7 @@ const navItems: { key: string; icon: Component; labelKey: string }[] = [
 ];
 
 const win = getCurrentWindow();
+const isLinux = ref(false);
 
 // 关闭窗口时的行为
 win.onCloseRequested(async (event) => {
@@ -135,7 +137,13 @@ const checkAppUpdate = async () => {
 };
 
 onMounted(async () => {
+  const platform = await invoke<string>("get_platform");
+  if (platform === "linux") {
+    isLinux.value = true;
+    document.documentElement.style.setProperty("--titlebar-height", "32px");
+  }
   win.show();
+  win.setFocus();
   syncTrayMenu();
   if (settingStore.autoCheckUpdate) {
     checkAppUpdate();
@@ -167,6 +175,7 @@ onMounted(async () => {
     <UpdateModal />
     <SetupModal />
     <n-layout style="height: 100vh">
+      <TitleBar v-if="isLinux" />
       <n-layout-header v-if="showChrome" bordered class="app-header">
         <div class="header-side">
           <div class="logo" @click="router.push({ name: 'home' })">
@@ -245,7 +254,7 @@ onMounted(async () => {
       </n-layout-header>
       <n-layout
         position="absolute"
-        :style="{ top: showChrome ? '56px' : '0' }"
+        :style="{ top: showChrome ? 'calc(var(--titlebar-height) + 56px)' : 'var(--titlebar-height)' }"
         :content-style="showChrome ? 'padding: 16px; display: flex; flex-direction: column; min-height: 100%;' : 'height: 100%; padding: 0;'"
         :native-scrollbar="false"
       >
@@ -295,7 +304,7 @@ onMounted(async () => {
   padding: 0 16px;
 
   .header-side {
-    width: 120px;
+    min-width: 120px;
     flex-shrink: 0;
     display: flex;
     align-items: center;

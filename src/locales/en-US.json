@@ -455,5 +455,10 @@
     "noFolderWarning": "No download folder selected",
     "lang": "EN",
     "settings": "Settings"
+  },
+  "window": {
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "close": "Close"
   }
 }

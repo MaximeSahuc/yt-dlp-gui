@@ -416,5 +416,10 @@
     "noFolderWarning": "Aucun dossier de téléchargement sélectionné",
     "lang": "FR",
     "settings": "Paramètres"
+  },
+  "window": {
+    "minimize": "Réduire",
+    "maximize": "Agrandir",
+    "close": "Fermer"
   }
 }

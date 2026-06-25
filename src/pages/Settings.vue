@@ -635,7 +635,7 @@ watch(
 <style scoped lang="scss">
 .settings-page {
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - var(--titlebar-height));
   display: flex;
   flex-direction: column;
   overflow: hidden;

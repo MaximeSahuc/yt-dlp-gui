@@ -145,7 +145,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .mp3-page {
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - var(--titlebar-height));
   display: flex;
   flex-direction: column;
   overflow: hidden;
