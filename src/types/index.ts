@@ -35,20 +35,6 @@ export interface VideoFormat {
   abr: number | null;
 }
 
-export interface ExtraOptions {
-  embedSubs: boolean;
-  embedThumbnail: boolean;
-  embedMetadata: boolean;
-  embedChapters: boolean;
-  sponsorblockRemove: boolean;
-  extractAudio: boolean;
-  audioConvertFormat: string;
-  noMerge: boolean;
-  recodeFormat: string;
-  limitRate: string;
-  ffmpegArgs: string;
-}
-
 export interface DownloadTaskParams {
   url: string;
   downloadDir: string;
@@ -68,8 +54,8 @@ export interface DownloadTaskParams {
   sponsorblockRemove: boolean;
   extractAudio: boolean;
   audioConvertFormat: string | null;
+  audioQuality?: string | null;
   noMerge: boolean;
-  recodeFormat: string | null;
   limitRate: string | null;
   ffmpegArgs: string | null;
   subtitles: string[];
@@ -92,6 +78,7 @@ export interface DownloadTask {
   downloaded: string;
   total: string;
   logs: string[];
+  uploader?: string;
   error?: string;
   outputFile?: string;
   createdAt: number;
@@ -105,29 +92,6 @@ export interface FetchedVideoData {
   audioFormats: VideoFormat[];
   isPlaylist: boolean;
   playlistEntries: PlaylistEntry[];
-}
-
-export interface PendingItem extends FetchedVideoData {
-  id: string;
-  createdAt: number;
-  selectedPlaylistItems: number[];
-  downloadMode: "default" | "video" | "audio";
-  selectedVideoFormat: string;
-  selectedAudioFormat: string;
-  startTime: number | null;
-  endTime: number | null;
-  embedSubs: boolean;
-  embedThumbnail: boolean;
-  embedMetadata: boolean;
-  embedChapters: boolean;
-  sponsorblockRemove: boolean;
-  extractAudio: boolean;
-  audioConvertFormat: string;
-  noMerge: boolean;
-  recodeFormat: string;
-  limitRate: string;
-  ffmpegArgs: string;
-  selectedSubtitles: string[];
 }
 
 export interface PlaylistEntry {
@@ -195,17 +159,6 @@ export interface CommentsInfo {
   title: string;
   comment_count: number | null;
   comments: VideoComment[];
-}
-
-export interface LiveChatMessage {
-  idx: number;
-  time: string;
-  timestamp_usec: number;
-  author: string;
-  channel_id: string;
-  message: string;
-  msg_type: string;
-  amount: string;
 }
 
 export interface SubtitleTrack {

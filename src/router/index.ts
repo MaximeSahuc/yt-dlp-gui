@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
+// 主界面与设置页静态导入：两者频繁互相切换，懒加载会在首次打开时出现白屏闪烁
+import Mp3Buddy from "@/pages/Mp3Buddy.vue";
+import Settings from "@/pages/Settings.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -6,12 +9,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: () => import("@/pages/Home.vue"),
-    },
-    {
-      path: "/pending",
-      name: "pending",
-      component: () => import("@/pages/Pending.vue"),
+      component: Mp3Buddy,
     },
     {
       path: "/downloads",
@@ -38,11 +36,6 @@ const router = createRouter({
           component: () => import("@/pages/toolbox/Subtitles.vue"),
         },
         {
-          path: "livechat",
-          name: "toolbox-livechat",
-          component: () => import("@/pages/toolbox/LiveChat.vue"),
-        },
-        {
           path: "chapters",
           name: "toolbox-chapters",
           component: () => import("@/pages/toolbox/Chapters.vue"),
@@ -62,7 +55,7 @@ const router = createRouter({
     {
       path: "/settings",
       name: "settings",
-      component: () => import("@/pages/Settings.vue"),
+      component: Settings,
     },
   ],
 });

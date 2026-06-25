@@ -25,7 +25,6 @@
     "pasteSuccess": "Aus Zwischenablage eingefügt"
   },
   "tray": {
-    "show": "Fenster anzeigen",
     "quit": "Beenden",
     "quitConfirmTitle": "Beenden bestätigen",
     "quitConfirmContent": "Es laufen aktive Downloads. Beim Beenden werden alle abgebrochen. Wirklich beenden?"
@@ -119,7 +118,6 @@
     "disabled": "Deaktiviert",
     "maxConcurrentDownloads": "Max. parallele Downloads",
     "unlimited": "Unbegrenzt",
-    "closeToTray": "Beim Schließen in Infobereich minimieren",
     "autoCheckUpdate": "Beim Start auf Updates prüfen",
     "pathResolveMode": "Tool-Pfad-Priorität",
     "pathModeSystemPreferred": "System bevorzugt",
@@ -309,18 +307,18 @@
   "browserExt": {
     "title": "Browser-Erweiterung",
     "tagBeta": "Beta",
-    "intro": "Installiere die YDL GUI Helper-Erweiterung in einem Chromium-basierten Browser (Chrome / Edge / Brave / Vivaldi usw.), um die URL der aktuellen Seite und benötigte Cookies mit einem Klick an diese App zu senden — besonders nützlich für Videos, die einen Login erfordern oder nur Mitgliedern vorbehalten sind.",
+    "intro": "Installiere die MP3 Buddy Helper-Erweiterung in einem Chromium-basierten Browser (Chrome / Edge / Brave / Vivaldi usw.), um die URL der aktuellen Seite und benötigte Cookies mit einem Klick an diese App zu senden — besonders nützlich für Videos, die einen Login erfordern oder nur Mitgliedern vorbehalten sind.",
     "installHeading": "Installation",
     "install1": "Klicke unten auf „Erweiterungsordner öffnen“, um den mit der App ausgelieferten Erweiterungsordner im Datei-Explorer anzuzeigen.",
     "install2": "Öffne chrome://extensions (oder edge://extensions) und aktiviere oben rechts den „Entwicklermodus“.",
     "install3": "Klicke auf „Entpackte Erweiterung laden“ und wähle den Ordner browser-extension/ aus.",
-    "install4": "Befestige das YDL GUI Helper-Icon neben der Adressleiste für schnellen Zugriff.",
+    "install4": "Befestige das MP3 Buddy Helper-Icon neben der Adressleiste für schnellen Zugriff.",
     "usageHeading": "Nutzung",
     "usage1": "Öffne eine unterstützte Videoseite im Browser.",
-    "usage2": "Klicke auf das YDL GUI-Icon oder rechtsklicke auf die Seite bzw. einen Videolink und wähle „An YDL GUI senden“.",
+    "usage2": "Klicke auf das MP3 Buddy-Icon oder rechtsklicke auf die Seite bzw. einen Videolink und wähle „An MP3 Buddy senden“.",
     "usage3": "Diese App wird automatisch in den Vordergrund gebracht; URL und Cookies sind auf der Startseite bereits ausgefüllt.",
     "privacyHeading": "Datenschutz",
-    "privacyNote": "Cookies werden ausschließlich lokal verarbeitet — sie werden über ein lokales Protokoll (ytdlp-gui://) direkt an diese App übergeben und an keinen Server hochgeladen.",
+    "privacyNote": "Cookies werden ausschließlich lokal verarbeitet — sie werden über ein lokales Protokoll (mp3buddy://) direkt an diese App übergeben und an keinen Server hochgeladen.",
     "supportedHeading": "Unterstützte Seiten",
     "openLocalFolder": "Erweiterungsordner öffnen",
     "viewSource": "Quellcode auf GitHub ansehen"
@@ -384,6 +382,7 @@
     "err_kill_process": "Prozess konnte nicht beendet werden",
     "dialogTitle": "Fehler",
     "dialogOk": "OK",
+    "dialogRetry": "Erneut versuchen",
     "showDetail": "Details anzeigen"
   },
   "setup": {

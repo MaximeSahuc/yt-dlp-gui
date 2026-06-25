@@ -25,7 +25,6 @@
     "pasteSuccess": "Đã dán từ bộ nhớ tạm"
   },
   "tray": {
-    "show": "Hiện cửa sổ",
     "quit": "Thoát",
     "quitConfirmTitle": "Xác nhận thoát",
     "quitConfirmContent": "Đang có tải xuống đang chạy. Thoát sẽ ngắt tất cả tải xuống. Bạn chắc chắn muốn thoát?"
@@ -119,7 +118,6 @@
     "disabled": "Tắt",
     "maxConcurrentDownloads": "Số tải xuống đồng thời tối đa",
     "unlimited": "Không giới hạn",
-    "closeToTray": "Thu nhỏ xuống khay khi đóng",
     "autoCheckUpdate": "Kiểm tra cập nhật khi khởi động",
     "pathResolveMode": "Ưu tiên đường dẫn công cụ",
     "pathModeSystemPreferred": "Ưu tiên hệ thống",
@@ -309,18 +307,18 @@
   "browserExt": {
     "title": "Tiện ích trình duyệt",
     "tagBeta": "Beta",
-    "intro": "Cài đặt tiện ích YDL GUI Helper trên trình duyệt nhân Chromium (Chrome / Edge / Brave / Vivaldi…) để gửi URL trang hiện tại và cookie cần thiết tới ứng dụng này chỉ bằng một cú nhấp — đặc biệt hữu ích cho video yêu cầu đăng nhập hoặc dành cho thành viên.",
+    "intro": "Cài đặt tiện ích MP3 Buddy Helper trên trình duyệt nhân Chromium (Chrome / Edge / Brave / Vivaldi…) để gửi URL trang hiện tại và cookie cần thiết tới ứng dụng này chỉ bằng một cú nhấp — đặc biệt hữu ích cho video yêu cầu đăng nhập hoặc dành cho thành viên.",
     "installHeading": "Cài đặt",
     "install1": "Nhấp \"Mở thư mục tiện ích\" bên dưới để mở thư mục tiện ích đi kèm ứng dụng trong trình quản lý tệp.",
     "install2": "Mở chrome://extensions (hoặc edge://extensions) và bật \"Chế độ nhà phát triển\" ở góc trên bên phải.",
     "install3": "Nhấp \"Tải tiện ích đã giải nén\" rồi chọn thư mục browser-extension/.",
-    "install4": "Ghim biểu tượng YDL GUI Helper cạnh thanh địa chỉ để truy cập nhanh.",
+    "install4": "Ghim biểu tượng MP3 Buddy Helper cạnh thanh địa chỉ để truy cập nhanh.",
     "usageHeading": "Sử dụng",
     "usage1": "Mở một trang video được hỗ trợ trong trình duyệt.",
-    "usage2": "Nhấp vào biểu tượng YDL GUI, hoặc nhấp chuột phải vào trang / liên kết video và chọn \"Gửi sang YDL GUI\".",
+    "usage2": "Nhấp vào biểu tượng MP3 Buddy, hoặc nhấp chuột phải vào trang / liên kết video và chọn \"Gửi sang MP3 Buddy\".",
     "usage3": "Ứng dụng sẽ tự động hiện lên với URL và cookie đã được điền sẵn trên trang chủ.",
     "privacyHeading": "Quyền riêng tư",
-    "privacyNote": "Cookie chỉ được xử lý cục bộ — được chuyển trực tiếp sang ứng dụng thông qua giao thức cục bộ (ytdlp-gui://) và không tải lên bất kỳ máy chủ nào.",
+    "privacyNote": "Cookie chỉ được xử lý cục bộ — được chuyển trực tiếp sang ứng dụng thông qua giao thức cục bộ (mp3buddy://) và không tải lên bất kỳ máy chủ nào.",
     "supportedHeading": "Trang hỗ trợ",
     "openLocalFolder": "Mở thư mục tiện ích",
     "viewSource": "Xem mã nguồn trên GitHub"
@@ -384,6 +382,7 @@
     "err_kill_process": "Kết thúc tiến trình thất bại",
     "dialogTitle": "Lỗi",
     "dialogOk": "OK",
+    "dialogRetry": "Thử lại",
     "showDetail": "Hiện chi tiết"
   },
   "setup": {

@@ -25,7 +25,6 @@
     "pasteSuccess": "Collé depuis le presse-papiers"
   },
   "tray": {
-    "show": "Afficher la fenêtre",
     "quit": "Quitter",
     "quitConfirmTitle": "Confirmer la sortie",
     "quitConfirmContent": "Des téléchargements sont en cours. Quitter les interrompra tous. Voulez-vous vraiment quitter ?"
@@ -106,6 +105,7 @@
     "denoTitle": "Runtime JS Deno",
     "denoDesc": "YouTube nécessite un runtime JavaScript pour analyser les infos vidéo. Sans lui, certains formats peuvent être indisponibles",
     "appearance": "Général",
+    "advanced": "Avancé",
     "themeMode": "Thème",
     "themeAuto": "Système",
     "themeLight": "Clair",
@@ -119,7 +119,6 @@
     "disabled": "Désactivé",
     "maxConcurrentDownloads": "Téléchargements simultanés max",
     "unlimited": "Illimité",
-    "closeToTray": "Réduire dans la barre d'état à la fermeture",
     "autoCheckUpdate": "Vérifier les mises à jour au démarrage",
     "pathResolveMode": "Priorité du chemin des outils",
     "pathModeSystemPreferred": "Système prioritaire",
@@ -309,18 +308,18 @@
   "browserExt": {
     "title": "Extension de navigateur",
     "tagBeta": "Bêta",
-    "intro": "Installez l'extension YDL GUI Helper dans un navigateur basé sur Chromium (Chrome / Edge / Brave / Vivaldi, etc.) pour envoyer l'URL de la page et les cookies nécessaires à cette application en un clic — particulièrement utile pour les vidéos nécessitant une connexion ou réservées aux abonnés.",
+    "intro": "Installez l'extension MP3 Buddy Helper dans un navigateur basé sur Chromium (Chrome / Edge / Brave / Vivaldi, etc.) pour envoyer l'URL de la page et les cookies nécessaires à cette application en un clic — particulièrement utile pour les vidéos nécessitant une connexion ou réservées aux abonnés.",
     "installHeading": "Installation",
     "install1": "Cliquez sur « Ouvrir le dossier de l'extension » ci-dessous pour afficher le dossier de l'extension fourni avec l'application dans l'explorateur de fichiers.",
     "install2": "Ouvrez chrome://extensions (ou edge://extensions) et activez le « mode développeur » en haut à droite.",
     "install3": "Cliquez sur « Charger l'extension non empaquetée » et sélectionnez le dossier browser-extension/.",
-    "install4": "Épinglez l'icône YDL GUI Helper à côté de la barre d'adresse pour un accès rapide.",
+    "install4": "Épinglez l'icône MP3 Buddy Helper à côté de la barre d'adresse pour un accès rapide.",
     "usageHeading": "Utilisation",
     "usage1": "Ouvrez une page vidéo prise en charge dans le navigateur.",
-    "usage2": "Cliquez sur l'icône YDL GUI, ou faites un clic droit sur la page ou un lien et choisissez « Envoyer vers YDL GUI ».",
+    "usage2": "Cliquez sur l'icône MP3 Buddy, ou faites un clic droit sur la page ou un lien et choisissez « Envoyer vers MP3 Buddy ».",
     "usage3": "Cette application passe automatiquement au premier plan, l'URL et les cookies sont pré-remplis dans l'accueil.",
     "privacyHeading": "Vie privée",
-    "privacyNote": "Les cookies sont traités uniquement en local — ils sont transmis directement à l'application via un protocole local (ytdlp-gui://) et ne sont envoyés à aucun serveur.",
+    "privacyNote": "Les cookies sont traités uniquement en local — ils sont transmis directement à l'application via un protocole local (mp3buddy://) et ne sont envoyés à aucun serveur.",
     "supportedHeading": "Sites pris en charge",
     "openLocalFolder": "Ouvrir le dossier de l'extension",
     "viewSource": "Voir la source sur GitHub"
@@ -384,6 +383,7 @@
     "err_kill_process": "Échec de l'arrêt du processus",
     "dialogTitle": "Erreur",
     "dialogOk": "OK",
+    "dialogRetry": "Réessayer",
     "showDetail": "Afficher les détails"
   },
   "setup": {
@@ -395,5 +395,39 @@
     "denoHint": "Deno est un runtime JavaScript dont yt-dlp a besoin pour analyser les infos des vidéos YouTube. Son installation donne accès à la liste complète des formats et aux qualités supérieures.",
     "goToSettings": "Aller aux Paramètres",
     "later": "Plus tard"
+  },
+  "mp3buddy": {
+    "title": "MP3 Buddy",
+    "downloadsTitle": "Téléchargements",
+    "urlPlaceholder": "Collez une URL YouTube…",
+    "paste": "Coller",
+    "download": "Télécharger",
+    "quality": "Qualité",
+    "quality320": "Meilleure qualité (320 kbps)",
+    "quality256": "Haute qualité (256 kbps)",
+    "quality192": "Bonne qualité (192 kbps)",
+    "quality128": "Moins de place (128 kbps)",
+    "changeFolder": "Changer le dossier",
+    "noFolder": "Aucun dossier sélectionné",
+    "ready": "Prêt",
+    "fetching": "Chargement…",
+    "preparing": "Préparation…",
+    "errorFetch": "Impossible de charger la vidéo",
+    "idlePlaceholder": "Collez une URL pour commencer",
+    "noFolderWarning": "Aucun dossier de téléchargement sélectionné",
+    "lang": "FR",
+    "settings": "Paramètres",
+    "setupTitle": "Certains outils doivent être téléchargés avant de commencer :",
+    "setupNoFolder": "Choisissez un dossier où vos téléchargements seront enregistrés :",
+    "setupChooseFolder": "Choisir un dossier",
+    "setupReady": "Tout est prêt — collez un lien pour commencer !",
+    "setupDownloading": "Téléchargement de {name}…",
+    "toolYtdlp": "yt-dlp (moteur de téléchargement)",
+    "toolDeno": "Deno (support YouTube)"
+  },
+  "window": {
+    "minimize": "Réduire",
+    "maximize": "Agrandir",
+    "close": "Fermer"
   }
 }

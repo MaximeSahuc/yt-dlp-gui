@@ -25,7 +25,6 @@
     "pasteSuccess": "已從剪貼簿貼上"
   },
   "tray": {
-    "show": "顯示視窗",
     "quit": "退出",
     "quitConfirmTitle": "確認退出",
     "quitConfirmContent": "目前有正在進行的下載任務，退出將中斷所有下載。確定要退出嗎？"
@@ -119,7 +118,6 @@
     "disabled": "不啟用",
     "maxConcurrentDownloads": "最大同時下載數",
     "unlimited": "不限制",
-    "closeToTray": "關閉視窗時最小化到托盤",
     "autoCheckUpdate": "啟動時自動檢查更新",
     "pathResolveMode": "工具路徑優先級",
     "pathModeSystemPreferred": "系統優先",
@@ -309,18 +307,18 @@
   "browserExt": {
     "title": "瀏覽器擴充功能",
     "tagBeta": "測試版",
-    "intro": "在 Chromium 核心瀏覽器（Chrome / Edge / Brave / Vivaldi 等）安裝 YDL GUI 助手擴充功能，即可一鍵將目前頁面連結與所需 Cookie 發送到本應用程式。對需要登入或會員限定的影片特別好用。",
+    "intro": "在 Chromium 核心瀏覽器（Chrome / Edge / Brave / Vivaldi 等）安裝 MP3 Buddy 助手擴充功能，即可一鍵將目前頁面連結與所需 Cookie 發送到本應用程式。對需要登入或會員限定的影片特別好用。",
     "installHeading": "安裝",
     "install1": "點擊下方「開啟擴充功能資料夾」按鈕，在檔案總管中顯示隨應用程式打包的擴充功能檔案。",
     "install2": "開啟 chrome://extensions（或 edge://extensions），在右上角啟用「開發人員模式」。",
     "install3": "點擊「載入未封裝項目」，選擇 browser-extension/ 資料夾。",
-    "install4": "將 YDL GUI 助手圖示固定在網址列旁，方便隨時呼叫。",
+    "install4": "將 MP3 Buddy 助手圖示固定在網址列旁，方便隨時呼叫。",
     "usageHeading": "使用",
     "usage1": "在瀏覽器開啟支援的影片頁面。",
-    "usage2": "點擊 YDL GUI 圖示，或在頁面／影片連結上按右鍵並選擇「傳送到 YDL GUI」。",
+    "usage2": "點擊 MP3 Buddy 圖示，或在頁面／影片連結上按右鍵並選擇「傳送到 MP3 Buddy」。",
     "usage3": "本應用程式會自動喚起，連結與 Cookie 已自動填入首頁。",
     "privacyHeading": "隱私",
-    "privacyNote": "Cookie 僅在本機處理 — 透過本機通訊協定 (ytdlp-gui://) 直接傳給本應用程式，不會上傳到任何伺服器。",
+    "privacyNote": "Cookie 僅在本機處理 — 透過本機通訊協定 (mp3buddy://) 直接傳給本應用程式，不會上傳到任何伺服器。",
     "supportedHeading": "支援的網站",
     "openLocalFolder": "開啟擴充功能資料夾",
     "viewSource": "在 GitHub 查看原始碼"
@@ -384,6 +382,7 @@
     "err_kill_process": "終止處理程序失敗",
     "dialogTitle": "發生錯誤",
     "dialogOk": "確定",
+    "dialogRetry": "重試",
     "showDetail": "查看詳情"
   },
   "setup": {

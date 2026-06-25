@@ -26,7 +26,6 @@
     "pasteSuccess": "已从剪贴板粘贴"
   },
   "tray": {
-    "show": "显示窗口",
     "quit": "退出",
     "quitConfirmTitle": "确认退出",
     "quitConfirmContent": "当前有正在进行的下载任务，退出将中断所有下载。确定要退出吗？"
@@ -126,7 +125,6 @@
     "disabled": "不启用",
     "maxConcurrentDownloads": "最大同时下载数",
     "unlimited": "不限制",
-    "closeToTray": "关闭窗口时最小化到托盘",
     "autoCheckUpdate": "启动时自动检查更新",
     "pathResolveMode": "工具路径优先级",
     "pathModeSystemPreferred": "系统优先",
@@ -348,18 +346,18 @@
   "browserExt": {
     "title": "浏览器扩展",
     "tagBeta": "测试版",
-    "intro": "在 Chromium 内核浏览器（Chrome / Edge / Brave / Vivaldi 等）中安装 YDL GUI 助手扩展，可一键将当前页面链接和所需 Cookie 发送到本应用。对登录后才能观看或会员限定的视频特别有用。",
+    "intro": "在 Chromium 内核浏览器（Chrome / Edge / Brave / Vivaldi 等）中安装 MP3 Buddy 助手扩展，可一键将当前页面链接和所需 Cookie 发送到本应用。对登录后才能观看或会员限定的视频特别有用。",
     "installHeading": "安装",
     "install1": "点击下方「打开扩展目录」按钮，在文件管理器中显示已随应用打包的扩展文件。",
     "install2": "打开 chrome://extensions（或 edge://extensions），在右上角启用「开发者模式」。",
     "install3": "点击「加载已解压的扩展程序」，选择 browser-extension/ 文件夹。",
-    "install4": "将 YDL GUI 助手图标固定到地址栏旁，方便随时使用。",
+    "install4": "将 MP3 Buddy 助手图标固定到地址栏旁，方便随时使用。",
     "usageHeading": "使用",
     "usage1": "在浏览器中打开支持的视频页面。",
-    "usage2": "点击 YDL GUI 图标，或在页面 / 视频链接上右键选择「发送到 YDL GUI」。",
+    "usage2": "点击 MP3 Buddy 图标，或在页面 / 视频链接上右键选择「发送到 MP3 Buddy」。",
     "usage3": "本应用会自动唤起，链接和 Cookie 已自动填入首页。",
     "privacyHeading": "隐私说明",
-    "privacyNote": "Cookie 仅在本地处理 — 通过本地协议 (ytdlp-gui://) 直接传递给本应用，不会上传到任何服务器。",
+    "privacyNote": "Cookie 仅在本地处理 — 通过本地协议 (mp3buddy://) 直接传递给本应用，不会上传到任何服务器。",
     "supportedHeading": "支持的网站",
     "openLocalFolder": "打开扩展目录",
     "viewSource": "在 GitHub 查看源码"
@@ -423,6 +421,7 @@
     "err_kill_process": "终止进程失败",
     "dialogTitle": "出错了",
     "dialogOk": "确定",
+    "dialogRetry": "重试",
     "showDetail": "查看详情"
   },
   "setup": {

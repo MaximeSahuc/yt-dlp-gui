@@ -83,11 +83,11 @@ const handleSelectFile = async () => {
         {{ $t("cookie.desc") }}
       </n-text>
 
-      <n-radio-group v-model:value="settingStore.cookieMode" size="small">
-        <n-radio-button v-for="opt in cookieModeOptions" :key="opt.value" :value="opt.value">
-          {{ opt.label }}
-        </n-radio-button>
-      </n-radio-group>
+      <n-select
+        v-model:value="settingStore.cookieMode"
+        :options="cookieModeOptions"
+        size="small"
+      />
 
       <template v-if="settingStore.cookieMode === 'text'">
         <n-input

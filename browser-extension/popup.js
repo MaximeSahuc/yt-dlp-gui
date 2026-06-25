@@ -56,7 +56,7 @@ function buildDeepLink(videoUrl, cookieText) {
   if (cookieText) {
     params.set("cookies", btoa(encodeURIComponent(cookieText)));
   }
-  return `ytdlp-gui://download?${params.toString()}`;
+  return `mp3buddy://download?${params.toString()}`;
 }
 
 /** Hydrate every [data-i18n] node with its localized message. */

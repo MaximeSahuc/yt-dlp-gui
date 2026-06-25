@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "YDL GUI",
-  "version": "0.6.0",
-  "identifier": "com.imsyy.yt-dlp-gui",
+  "productName": "MP3 Buddy",
+  "version": "0.7.0",
+  "identifier": "mp3-buddy",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:15688",
@@ -12,19 +12,16 @@
   "app": {
     "windows": [
       {
-        "title": "YDL GUI",
-        "width": 800,
-        "height": 600,
+        "title": "MP3 Buddy",
+        "width": 680,
+        "height": 520,
+        "minWidth": 680,
+        "minHeight": 440,
         "visible": false
       }
     ],
     "security": {
       "csp": null
-    },
-    "trayIcon": {
-      "iconPath": "icons/icon.png",
-      "iconAsTemplate": true,
-      "tooltip": "YDL GUI"
     }
   },
   "bundle": {
@@ -45,12 +42,12 @@
   "plugins": {
     "deep-link": {
       "desktop": {
-        "schemes": ["ytdlp-gui"]
+        "schemes": ["mp3buddy"]
       }
     },
     "updater": {
       "endpoints": [
-        "https://github.com/MaximeSahuc/yt-dlp-gui/releases/latest/download/latest.json"
+        "https://github.com/MaximeSahuc/mp3-buddy/releases/latest/download/latest.json"
       ],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEY1M0I0QjhCMTBDRDhDQjkKUldTNWpNMFFpMHM3OVplekhQMFZST3RmckwzVkpZckpDNmZnZXNQeVFvbk43NmtGYjBWUkowNG0K",
       "windows": {

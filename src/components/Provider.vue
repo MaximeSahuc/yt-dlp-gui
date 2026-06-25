@@ -74,6 +74,11 @@ const theme = computed(() => {
       : null;
 });
 
+// 同步暗色 class 到 <html>，供组件 scoped 样式中的 CSS 变量切换浅/暗调色板
+watchEffect(() => {
+  document.documentElement.classList.toggle("dark", theme.value === darkTheme);
+});
+
 // 挂载工具
 const NaiveProviderContent = defineComponent({
   setup() {

@@ -6,7 +6,6 @@ import { exit } from "@tauri-apps/plugin-process";
 import { check } from "@tauri-apps/plugin-updater";
 import { onOpenUrl, getCurrent as getCurrentDeepLink } from "@tauri-apps/plugin-deep-link";
 import IconMdiHome from "~icons/mdi/home";
-import IconMdiPlaylistPlay from "~icons/mdi/playlist-play";
 import IconMdiDownload from "~icons/mdi/download";
 import IconMdiToolbox from "~icons/mdi/toolbox";
 import type { Component } from "vue";
@@ -14,34 +13,22 @@ import { useThemeVars } from "naive-ui";
 import { useI18n } from "vue-i18n";
 import { useSettingStore } from "@/stores/setting";
 import { useDownloadStore } from "@/stores/download";
-import { usePendingStore } from "@/stores/pending";
 import { useStatusStore } from "@/stores/status";
 import { localeEntries } from "@/locales";
+import TitleBar from "@/components/TitleBar.vue";
 
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 const settingStore = useSettingStore();
 const downloadStore = useDownloadStore();
-const pendingStore = usePendingStore();
 const themeVars = useThemeVars();
 
 const navBadgeCounts = computed<Record<string, number>>(() => ({
-  pending: pendingStore.items.length,
   downloads: downloadStore.tasks.filter(
     (t) => t.status === "downloading" || t.status === "queued" || t.status === "paused",
   ).length,
 }));
-
-/** 同步托盘菜单语言 */
-const syncTrayMenu = () => {
-  invoke("update_tray_menu", {
-    showLabel: t("tray.show"),
-    quitLabel: t("tray.quit"),
-  });
-};
-
-watch(() => settingStore.locale, syncTrayMenu);
 
 /** 处理退出请求，有下载任务时弹出确认框 */
 const handleQuitRequest = () => {
@@ -66,28 +53,22 @@ const currentRoute = computed(() => {
   return name;
 });
 
+const showChrome = computed(() => route.name !== "home" && route.name !== "settings");
+
 const navItems: { key: string; icon: Component; labelKey: string }[] = [
   { key: "home", icon: IconMdiHome, labelKey: "nav.home" },
-  { key: "pending", icon: IconMdiPlaylistPlay, labelKey: "nav.pending" },
   { key: "downloads", icon: IconMdiDownload, labelKey: "nav.downloads" },
   { key: "toolbox", icon: IconMdiToolbox, labelKey: "nav.toolbox" },
 ];
 
 const win = getCurrentWindow();
+const isLinux = ref(false);
 
-// 关闭窗口时的行为
-win.onCloseRequested(async (event) => {
-  if (settingStore.closeToTray) {
-    event.preventDefault();
-    await win.hide();
-  } else {
-    event.preventDefault();
-    handleQuitRequest();
-  }
+// 关闭窗口时完全退出应用；有下载中任务时弹出确认
+win.onCloseRequested((event) => {
+  event.preventDefault();
+  handleQuitRequest();
 });
-
-// 监听托盘退出请求
-listen("tray-quit-requested", () => handleQuitRequest());
 
 /** 同一 URL 短时间内重复送达时去重，避免 onOpenUrl + getCurrent 同时触发 */
 let lastDeepLink = "";
@@ -133,8 +114,13 @@ const checkAppUpdate = async () => {
 };
 
 onMounted(async () => {
+  const platform = await invoke<string>("get_platform");
+  if (platform === "linux") {
+    isLinux.value = true;
+    document.documentElement.style.setProperty("--titlebar-height", "32px");
+  }
   win.show();
-  syncTrayMenu();
+  win.setFocus();
   if (settingStore.autoCheckUpdate) {
     checkAppUpdate();
   }
@@ -165,11 +151,12 @@ onMounted(async () => {
     <UpdateModal />
     <SetupModal />
     <n-layout style="height: 100vh">
-      <n-layout-header bordered class="app-header">
+      <TitleBar v-if="isLinux" />
+      <n-layout-header v-if="showChrome" bordered class="app-header">
         <div class="header-side">
           <div class="logo" @click="router.push({ name: 'home' })">
             <img src="/app-icon.svg" alt="" class="logo-img" />
-            <span class="logo-text">YDL GUI</span>
+            <span class="logo-text">MP3 Buddy</span>
           </div>
         </div>
         <div class="header-nav">
@@ -207,7 +194,7 @@ onMounted(async () => {
             quaternary
             circle
             tag="a"
-            href="https://github.com/imsyy/yt-dlp-gui"
+            href="https://github.com/MaximeSahuc/mp3-buddy"
             target="_blank"
           >
             <template #icon>
@@ -243,40 +230,38 @@ onMounted(async () => {
       </n-layout-header>
       <n-layout
         position="absolute"
-        style="top: 56px"
-        content-style="padding: 16px; display: flex; flex-direction: column; min-height: 100%;"
+        :style="{ top: showChrome ? 'calc(var(--titlebar-height) + 56px)' : 'var(--titlebar-height)' }"
+        :content-style="showChrome ? 'padding: 16px; display: flex; flex-direction: column; min-height: 100%;' : 'height: 100%; padding: 0;'"
         :native-scrollbar="false"
       >
         <div style="flex: 1">
           <router-view v-slot="{ Component: RouteComponent }">
-            <Transition name="fade-slide" mode="out-in">
-              <component :is="RouteComponent" />
-            </Transition>
+            <component :is="RouteComponent" />
           </router-view>
         </div>
-        <n-flex justify="center" align="center" :size="4" class="app-footer">
+        <n-flex v-if="showChrome" justify="center" align="center" :size="4" class="app-footer">
           <n-text depth="3" style="font-size: 12px">
             © {{ new Date().getFullYear() }}
             <n-button
               text
               tag="a"
-              href="https://github.com/imsyy"
+              href="https://github.com/MaximeSahuc"
               target="_blank"
               size="tiny"
               style="font-size: 12px"
             >
-              imsyy
+              MaximeSahuc
             </n-button>
             ·
             <n-button
               text
               tag="a"
-              href="https://github.com/imsyy/yt-dlp-gui"
+              href="https://github.com/MaximeSahuc/mp3-buddy"
               target="_blank"
               size="tiny"
               style="font-size: 12px"
             >
-              YDL GUI
+              MP3 Buddy
             </n-button>
           </n-text>
         </n-flex>
@@ -293,7 +278,7 @@ onMounted(async () => {
   padding: 0 16px;
 
   .header-side {
-    width: 120px;
+    min-width: 120px;
     flex-shrink: 0;
     display: flex;
     align-items: center;

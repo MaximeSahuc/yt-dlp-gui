@@ -107,8 +107,9 @@ pub struct DownloadParams {
     pub extract_audio: bool,
     /// 音频转换格式（--audio-format）
     pub audio_convert_format: Option<String>,
+    /// 音频码率（--audio-quality）
+    pub audio_quality: Option<String>,
     pub no_merge: bool,
-    pub recode_format: Option<String>,
     pub limit_rate: Option<String>,
     /// 自定义 FFmpeg 后处理参数（--postprocessor-args）
     pub ffmpeg_args: Option<String>,

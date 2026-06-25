@@ -1,9 +1,9 @@
 /**
- * Background service worker for YDL GUI Helper.
+ * Background service worker for MP3 Buddy Helper.
  * Responsibilities:
  *   - register right-click context menus on install/startup
  *   - keep the action badge in sync with whether the active tab is supported
- *   - dispatch deep links (ytdlp-gui://download?...) on menu clicks
+ *   - dispatch deep links (mp3buddy://download?...) on menu clicks
  */
 
 const SUPPORTED_DOMAINS = [
@@ -64,7 +64,7 @@ function buildDeepLink(videoUrl, cookieText) {
     const b64 = btoa(encodeURIComponent(cookieText));
     params.set("cookies", b64);
   }
-  return `ytdlp-gui://download?${params.toString()}`;
+  return `mp3buddy://download?${params.toString()}`;
 }
 
 /**

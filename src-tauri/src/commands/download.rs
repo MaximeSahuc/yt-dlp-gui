@@ -348,15 +348,15 @@ fn build_download_args(app: &AppHandle, params: &DownloadParams) -> Result<Vec<S
                 args.push(fmt.clone());
             }
         }
+        if let Some(ref q) = params.audio_quality {
+            if !q.is_empty() {
+                args.push("--audio-quality".to_string());
+                args.push(q.clone());
+            }
+        }
     }
     if params.no_merge {
         args.push("--no-merge-output".to_string());
-    }
-    if let Some(ref fmt) = params.recode_format {
-        if !fmt.is_empty() {
-            args.push("--recode-video".to_string());
-            args.push(fmt.clone());
-        }
     }
     if let Some(ref rate) = params.limit_rate {
         if !rate.is_empty() {

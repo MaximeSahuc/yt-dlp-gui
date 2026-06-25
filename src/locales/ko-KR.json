@@ -25,7 +25,6 @@
     "pasteSuccess": "클립보드에서 붙여넣었습니다"
   },
   "tray": {
-    "show": "창 표시",
     "quit": "종료",
     "quitConfirmTitle": "종료 확인",
     "quitConfirmContent": "진행 중인 다운로드가 있습니다. 종료하면 모든 다운로드가 중단됩니다. 종료하시겠습니까?"
@@ -119,7 +118,6 @@
     "disabled": "비활성화",
     "maxConcurrentDownloads": "최대 동시 다운로드 수",
     "unlimited": "제한 없음",
-    "closeToTray": "닫을 때 트레이로 최소화",
     "autoCheckUpdate": "시작 시 자동 업데이트 확인",
     "pathResolveMode": "도구 경로 우선순위",
     "pathModeSystemPreferred": "시스템 우선",
@@ -309,18 +307,18 @@
   "browserExt": {
     "title": "브라우저 확장 프로그램",
     "tagBeta": "베타",
-    "intro": "Chromium 기반 브라우저(Chrome / Edge / Brave / Vivaldi 등)에 YDL GUI Helper 확장 프로그램을 설치하면 현재 페이지의 URL과 필요한 쿠키를 클릭 한 번으로 이 앱에 보낼 수 있습니다. 로그인이 필요한 영상이나 멤버 전용 영상에 특히 유용합니다.",
+    "intro": "Chromium 기반 브라우저(Chrome / Edge / Brave / Vivaldi 등)에 MP3 Buddy Helper 확장 프로그램을 설치하면 현재 페이지의 URL과 필요한 쿠키를 클릭 한 번으로 이 앱에 보낼 수 있습니다. 로그인이 필요한 영상이나 멤버 전용 영상에 특히 유용합니다.",
     "installHeading": "설치",
     "install1": "아래 \"확장 프로그램 폴더 열기\" 버튼을 눌러 앱에 함께 포함된 확장 프로그램 폴더를 파일 관리자에서 엽니다.",
     "install2": "chrome://extensions(또는 edge://extensions)를 열고 오른쪽 위에서 \"개발자 모드\"를 켭니다.",
     "install3": "\"압축해제된 확장 프로그램을 로드합니다\"를 클릭한 뒤 browser-extension/ 폴더를 선택합니다.",
-    "install4": "YDL GUI Helper 아이콘을 주소 표시줄 옆에 고정해 두면 편리합니다.",
+    "install4": "MP3 Buddy Helper 아이콘을 주소 표시줄 옆에 고정해 두면 편리합니다.",
     "usageHeading": "사용",
     "usage1": "브라우저에서 지원되는 영상 페이지를 엽니다.",
-    "usage2": "YDL GUI 아이콘을 클릭하거나 페이지/영상 링크를 우클릭하고 \"YDL GUI로 보내기\"를 선택합니다.",
+    "usage2": "MP3 Buddy 아이콘을 클릭하거나 페이지/영상 링크를 우클릭하고 \"MP3 Buddy로 보내기\"를 선택합니다.",
     "usage3": "이 앱이 자동으로 앞으로 나오며 홈 화면에 URL과 쿠키가 미리 채워집니다.",
     "privacyHeading": "개인정보",
-    "privacyNote": "쿠키는 로컬에서만 처리됩니다 — 로컬 프로토콜(ytdlp-gui://)을 통해 이 앱으로 바로 전달되며 어떤 서버에도 업로드되지 않습니다.",
+    "privacyNote": "쿠키는 로컬에서만 처리됩니다 — 로컬 프로토콜(mp3buddy://)을 통해 이 앱으로 바로 전달되며 어떤 서버에도 업로드되지 않습니다.",
     "supportedHeading": "지원 사이트",
     "openLocalFolder": "확장 프로그램 폴더 열기",
     "viewSource": "GitHub에서 소스 보기"
@@ -384,6 +382,7 @@
     "err_kill_process": "프로세스 종료에 실패했습니다",
     "dialogTitle": "오류",
     "dialogOk": "확인",
+    "dialogRetry": "다시 시도",
     "showDetail": "자세히 보기"
   },
   "setup": {

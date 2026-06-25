@@ -26,7 +26,6 @@
     "pasteSuccess": "Pasted from clipboard"
   },
   "tray": {
-    "show": "Show Window",
     "quit": "Quit",
     "quitConfirmTitle": "Confirm Exit",
     "quitConfirmContent": "There are active downloads. Exiting will interrupt all downloads. Are you sure you want to exit?"
@@ -113,6 +112,7 @@
     "youtubeVisitorData": "Visitor Data",
     "youtubeVisitorDataPlaceholder": "e.g. CgtBYmNkZWZHaGlqaw%3D%3D",
     "appearance": "General",
+    "advanced": "Advanced",
     "themeMode": "Theme",
     "themeAuto": "System",
     "themeLight": "Light",
@@ -126,7 +126,6 @@
     "disabled": "Disabled",
     "maxConcurrentDownloads": "Max Concurrent Downloads",
     "unlimited": "Unlimited",
-    "closeToTray": "Minimize to tray on close",
     "autoCheckUpdate": "Check for updates on startup",
     "pathResolveMode": "Tool Path Priority",
     "pathModeSystemPreferred": "System Preferred",
@@ -348,18 +347,18 @@
   "browserExt": {
     "title": "Browser Extension",
     "tagBeta": "Beta",
-    "intro": "Install the YDL GUI Helper extension in any Chromium-based browser (Chrome / Edge / Brave / Vivaldi etc.) to send the current page URL and required cookies to this app with a single click — particularly helpful for login-required or members-only videos.",
+    "intro": "Install the MP3 Buddy Helper extension in any Chromium-based browser (Chrome / Edge / Brave / Vivaldi etc.) to send the current page URL and required cookies to this app with a single click — particularly helpful for login-required or members-only videos.",
     "installHeading": "Install",
     "install1": "Click \"Open extension folder\" below to reveal the bundled extension files in your file manager.",
     "install2": "Open chrome://extensions (or edge://extensions) and turn on \"Developer mode\" in the top-right.",
     "install3": "Click \"Load unpacked\" and select the browser-extension/ folder.",
-    "install4": "Pin the YDL GUI Helper icon next to the address bar for quick access.",
+    "install4": "Pin the MP3 Buddy Helper icon next to the address bar for quick access.",
     "usageHeading": "Use",
     "usage1": "Open a supported video page in your browser.",
-    "usage2": "Click the YDL GUI icon, or right-click the page / a video link and choose \"Send to YDL GUI\".",
+    "usage2": "Click the MP3 Buddy icon, or right-click the page / a video link and choose \"Send to MP3 Buddy\".",
     "usage3": "This app will be brought to the front automatically with URL and cookies pre-filled on the home page.",
     "privacyHeading": "Privacy",
-    "privacyNote": "Cookies are processed locally only — they are passed straight to this app via a local protocol handler (ytdlp-gui://) and never uploaded to any server.",
+    "privacyNote": "Cookies are processed locally only — they are passed straight to this app via a local protocol handler (mp3buddy://) and never uploaded to any server.",
     "supportedHeading": "Supported sites",
     "openLocalFolder": "Open extension folder",
     "viewSource": "View source on GitHub"
@@ -423,6 +422,7 @@
     "err_kill_process": "Failed to kill process",
     "dialogTitle": "Error",
     "dialogOk": "OK",
+    "dialogRetry": "Retry",
     "showDetail": "Show details"
   },
   "setup": {
@@ -434,5 +434,39 @@
     "denoHint": "Deno is a JavaScript runtime required by yt-dlp to parse YouTube video info. Installing it enables the full format list, including higher quality options.",
     "goToSettings": "Go to Settings",
     "later": "Later"
+  },
+  "mp3buddy": {
+    "title": "MP3 Buddy",
+    "downloadsTitle": "Downloads",
+    "urlPlaceholder": "Paste a YouTube URL…",
+    "paste": "Paste",
+    "download": "Download",
+    "quality": "Quality",
+    "quality320": "Best quality (320 kbps)",
+    "quality256": "High quality (256 kbps)",
+    "quality192": "Good quality (192 kbps)",
+    "quality128": "Less space (128 kbps)",
+    "changeFolder": "Change folder",
+    "noFolder": "No folder selected",
+    "ready": "Ready",
+    "fetching": "Loading…",
+    "preparing": "Preparing…",
+    "errorFetch": "Could not load video",
+    "idlePlaceholder": "Paste a URL to get started",
+    "noFolderWarning": "No download folder selected",
+    "lang": "EN",
+    "settings": "Settings",
+    "setupTitle": "Some tools need to be downloaded before you can start:",
+    "setupNoFolder": "Choose a folder where your downloads will be saved:",
+    "setupChooseFolder": "Choose folder",
+    "setupReady": "Everything's ready — paste a link to start!",
+    "setupDownloading": "Downloading {name}…",
+    "toolYtdlp": "yt-dlp (download engine)",
+    "toolDeno": "Deno (YouTube support)"
+  },
+  "window": {
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "close": "Close"
   }
 }

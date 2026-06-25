@@ -13,7 +13,7 @@ import { useSettingStore } from "@/stores/setting";
 import i18n from "@/locales";
 
 const storage = localforage.createInstance({
-  name: "yt-dlp-gui",
+  name: "mp3-buddy",
   storeName: "downloads",
 });
 
@@ -208,6 +208,27 @@ export const useDownloadStore = defineStore("download", () => {
         task.status = "error";
         task.error = event.payload.error;
         task.speed = "";
+        // Wait briefly for remaining log lines to arrive, then show a dialog
+        setTimeout(() => {
+          const logText = task.logs.slice(-60).join("\n").trim() || event.payload.error;
+          window.$dialog?.error({
+            title: i18n.global.t("errors.dialogTitle"),
+            content: () =>
+              h(
+                "pre",
+                {
+                  style:
+                    "white-space:pre-wrap;word-break:break-all;font-size:12px;max-height:360px;overflow-y:auto;background:#f5f5f5;padding:8px;border-radius:4px;margin:0",
+                },
+                logText,
+              ),
+            positiveText: i18n.global.t("errors.dialogRetry"),
+            negativeText: i18n.global.t("errors.dialogOk"),
+            onPositiveClick: () => {
+              retryTask(task.id);
+            },
+          });
+        }, 400);
       }
       updateTaskbarProgress();
       tryStartNext();

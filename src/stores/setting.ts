@@ -12,7 +12,7 @@ export const useSettingStore = defineStore(
     });
 
     /** 主题模式 */
-    const themeMode = ref<"auto" | "light" | "dark">("auto");
+    const themeMode = ref<"auto" | "light" | "dark">("light");
 
     /** 下载目录 */
     const downloadDir = ref("");
@@ -45,16 +45,10 @@ export const useSettingStore = defineStore(
     const maxConcurrentDownloads = ref(0);
 
     /** 下载完成通知模式 */
-    const notifyMode = ref<"none" | "app" | "system" | "all">("system");
-
-    /** 关闭窗口时最小化到托盘 */
-    const closeToTray = ref(true);
+    const notifyMode = ref<"none" | "app" | "system" | "all">("app");
 
     /** 启动时自动检查更新 */
     const autoCheckUpdate = ref(true);
-
-    /** 二进制路径解析模式（默认仅应用，保证「检测更新」始终对实际使用的副本生效） */
-    const binaryPathResolveMode = ref<"system-preferred" | "app-only">("app-only");
 
     /** YouTube PO Token（用于绕过 403 / 限流） */
     const youtubePoToken = ref("");
@@ -79,9 +73,7 @@ export const useSettingStore = defineStore(
       noOverwrites,
       maxConcurrentDownloads,
       notifyMode,
-      closeToTray,
       autoCheckUpdate,
-      binaryPathResolveMode,
       youtubePoToken,
       youtubeVisitorData,
       showTaskbarProgress,

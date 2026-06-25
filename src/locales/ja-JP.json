@@ -25,7 +25,6 @@
     "pasteSuccess": "クリップボードから貼り付けました"
   },
   "tray": {
-    "show": "ウィンドウを表示",
     "quit": "終了",
     "quitConfirmTitle": "終了の確認",
     "quitConfirmContent": "ダウンロード中のタスクがあります。終了するとすべてのダウンロードが中断されます。終了しますか？"
@@ -119,7 +118,6 @@
     "disabled": "無効",
     "maxConcurrentDownloads": "最大同時ダウンロード数",
     "unlimited": "無制限",
-    "closeToTray": "閉じる時にトレイに最小化",
     "autoCheckUpdate": "起動時にアップデートを自動確認",
     "pathResolveMode": "ツールパス優先度",
     "pathModeSystemPreferred": "システム優先",
@@ -309,18 +307,18 @@
   "browserExt": {
     "title": "ブラウザ拡張機能",
     "tagBeta": "ベータ",
-    "intro": "Chromium 系ブラウザ（Chrome / Edge / Brave / Vivaldi など）に YDL GUI Helper 拡張機能をインストールすると、現在のページの URL と必要な Cookie をワンクリックで本アプリに送信できます。ログインが必要な動画やメンバー限定動画に特に便利です。",
+    "intro": "Chromium 系ブラウザ（Chrome / Edge / Brave / Vivaldi など）に MP3 Buddy Helper 拡張機能をインストールすると、現在のページの URL と必要な Cookie をワンクリックで本アプリに送信できます。ログインが必要な動画やメンバー限定動画に特に便利です。",
     "installHeading": "インストール",
     "install1": "下の「拡張機能フォルダを開く」ボタンをクリックして、アプリに同梱された拡張機能フォルダをファイルマネージャーで表示します。",
     "install2": "chrome://extensions（または edge://extensions）を開き、右上の「デベロッパーモード」をオンにします。",
     "install3": "「パッケージ化されていない拡張機能を読み込む」をクリックし、browser-extension/ フォルダを選択します。",
-    "install4": "YDL GUI Helper アイコンをアドレスバー横にピン留めしておくと便利です。",
+    "install4": "MP3 Buddy Helper アイコンをアドレスバー横にピン留めしておくと便利です。",
     "usageHeading": "使い方",
     "usage1": "ブラウザでサポート対象の動画ページを開きます。",
-    "usage2": "YDL GUI アイコンをクリック、またはページや動画リンクを右クリックして「YDL GUI に送信」を選択します。",
+    "usage2": "MP3 Buddy アイコンをクリック、またはページや動画リンクを右クリックして「MP3 Buddy に送信」を選択します。",
     "usage3": "本アプリが自動的に前面に表示され、ホーム画面に URL と Cookie が入力済みになります。",
     "privacyHeading": "プライバシー",
-    "privacyNote": "Cookie はローカルでのみ処理されます — ローカルプロトコル (ytdlp-gui://) を介して本アプリに直接渡され、外部サーバーには一切送信されません。",
+    "privacyNote": "Cookie はローカルでのみ処理されます — ローカルプロトコル (mp3buddy://) を介して本アプリに直接渡され、外部サーバーには一切送信されません。",
     "supportedHeading": "対応サイト",
     "openLocalFolder": "拡張機能フォルダを開く",
     "viewSource": "GitHub でソースを見る"
@@ -384,6 +382,7 @@
     "err_kill_process": "プロセスの終了に失敗しました",
     "dialogTitle": "エラー",
     "dialogOk": "OK",
+    "dialogRetry": "再試行",
     "showDetail": "詳細を表示"
   },
   "setup": {
