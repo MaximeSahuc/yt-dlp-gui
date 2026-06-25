@@ -52,6 +52,20 @@ cd src-tauri && cargo check
 - Real-time progress uses Tauri event system (`app.emit` on Rust side)
 - Shared types in `src/types/index.ts` mirror Rust structs in `commands/mod.rs`
 
+## Releases & CI (fork constraints)
+
+This repo (`MaximeSahuc/yt-dlp-gui`) is a **fork** of `imsyy/yt-dlp-gui`. Two things follow from that:
+
+- **Forks suppress automatic Actions triggers.** Pushing a `v*` tag will *not* auto-run `.github/workflows/release.yml` until the one-time "enable workflows" button is clicked in the repo's **Actions** tab on github.com. Until then, dispatch manually against the tag ref:
+  ```bash
+  git tag vX.Y.Z && git push origin vX.Y.Z
+  gh workflow run Release --ref vX.Y.Z   # dispatch on the tag so releaseName = vX.Y.Z
+  ```
+  After clicking the enable button once, plain tag pushes will trigger releases normally.
+- **Updater signing is fork-specific.** `tauri.conf.json` has `createUpdaterArtifacts: true`, so the release build *requires* the repo secrets `TAURI_SIGNING_PRIVATE_KEY` and `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` — without them the build fails. The `updater.pubkey` and `updater.endpoints` point to this fork (`MaximeSahuc/yt-dlp-gui`), not upstream. If the signing key is lost, existing installs can no longer validate updates.
+
+Release matrix (`release.yml`) is trimmed to **Windows x64** + **Debian/Ubuntu x64** (`.msi`/`.exe`, `.deb`/`.AppImage`); macOS and Windows-arm64 targets are commented out for easy re-enabling. Releases are created as **drafts** (`releaseDraft: true`) and must be published manually from the Releases page.
+
 ## Key Conventions
 
 - Windows builds use `CREATE_NO_WINDOW` flag (0x08000000) on all subprocess spawns to hide console windows
