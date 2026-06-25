@@ -65,13 +65,12 @@ function onInput(e: Event) {
 
     <!-- Row 2: Quality select + Download button -->
     <div class="action-row">
-      <select class="quality-select" v-model="quality">
-        <option
-          v-for="opt in qualityOptions"
-          :key="opt.value"
-          :value="opt.value"
-        >{{ opt.label }}</option>
-      </select>
+      <n-select
+        v-model:value="quality"
+        :options="qualityOptions"
+        :consistent-menu-width="false"
+        class="quality-select"
+      />
       <NButton
         type="primary"
         :disabled="props.state !== 'ready'"
@@ -156,21 +155,6 @@ function onInput(e: Event) {
 
 .quality-select {
   flex: 1;
-  height: 34px;
-  border: 1px solid var(--mp3-border-strong);
-  border-radius: 6px;
-  padding: 0 8px;
-  font-size: 13px;
-  background: var(--mp3-surface-3);
-  color: var(--mp3-text-2);
-  cursor: pointer;
-  outline: none;
-  box-sizing: border-box;
-  transition: border-color 0.15s;
-
-  &:focus {
-    border-color: var(--mp3-accent);
-  }
 }
 
 .dl-btn {
