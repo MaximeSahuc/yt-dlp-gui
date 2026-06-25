@@ -56,7 +56,7 @@ pub fn run() {
         .plugin(tauri_plugin_single_instance::init(|app, args, _cwd| {
             // 将深链接 URL 转发到前端
             for arg in &args {
-                if arg.starts_with("ytdlp-gui://") {
+                if arg.starts_with("mp3buddy://") {
                     let _ = app.emit("deep-link-url", arg.clone());
                 }
             }

@@ -47,7 +47,7 @@
   "plugins": {
     "deep-link": {
       "desktop": {
-        "schemes": ["ytdlp-gui"]
+        "schemes": ["mp3buddy"]
       }
     },
     "updater": {

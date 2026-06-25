@@ -13,7 +13,7 @@ import { useSettingStore } from "@/stores/setting";
 import i18n from "@/locales";
 
 const storage = localforage.createInstance({
-  name: "yt-dlp-gui",
+  name: "mp3-buddy",
   storeName: "downloads",
 });
 

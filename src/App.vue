@@ -180,7 +180,7 @@ onMounted(async () => {
         <div class="header-side">
           <div class="logo" @click="router.push({ name: 'home' })">
             <img src="/app-icon.svg" alt="" class="logo-img" />
-            <span class="logo-text">YDL GUI</span>
+            <span class="logo-text">MP3 Buddy</span>
           </div>
         </div>
         <div class="header-nav">
@@ -287,7 +287,7 @@ onMounted(async () => {
               size="tiny"
               style="font-size: 12px"
             >
-              YDL GUI
+              MP3 Buddy
             </n-button>
           </n-text>
         </n-flex>

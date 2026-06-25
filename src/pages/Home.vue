@@ -146,7 +146,7 @@ const handleSearch = async () => {
     <n-flex vertical align="center" justify="center" :size="20" class="search-view">
       <n-flex vertical align="center" :size="8">
         <n-flex align="center" class="hero-logo">
-          <span class="hero-text">YDL GUI</span>
+          <span class="hero-text">MP3 Buddy</span>
         </n-flex>
         <n-text depth="3" style="font-size: 16px">
           {{ $t("home.slogan") }}
