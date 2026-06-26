@@ -1,6 +1,6 @@
 [package]
 name = "mp3-buddy"
-version = "0.7.1"
+version = "0.8.0"
 description = "A simple desktop app for downloading music from the web. "
 authors = ["Maxime Sahuc"]
 edition = "2021"

@@ -124,12 +124,18 @@ async function handleDownload({ quality, format }: { quality: string; format: st
   }
 }
 
-onMounted(() => {
-  const queryUrl = route.query.url;
-  if (typeof queryUrl === "string" && queryUrl) {
-    url.value = queryUrl;
-  }
-});
+// React to the `?url=` query both on mount (cold start via deep link) and on
+// later changes (deep link arriving while the app is already on this page) -
+// onMounted alone misses the second case since the component stays mounted.
+watch(
+  () => route.query.url,
+  (queryUrl) => {
+    if (typeof queryUrl === "string" && queryUrl && queryUrl !== url.value) {
+      url.value = queryUrl;
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
