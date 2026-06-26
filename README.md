@@ -24,11 +24,9 @@ Works with YouTube, SoundCloud and [1000+ other sites](https://github.com/yt-dlp
 
 ---
 
-## Getting started
+## Install
 
-### 1. Install
-
-Download the latest version for your system from the
+Download the latest version from the
 [**Releases page**](https://github.com/MaximeSahuc/mp3-buddy/releases):
 
 | Platform | File |
