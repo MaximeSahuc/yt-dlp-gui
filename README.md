@@ -20,15 +20,13 @@ Works with YouTube, SoundCloud and [1000+ other sites](https://github.com/yt-dlp
 
 > [!NOTE]
 > MP3 Buddy comes with an optional **browser extension** that lets you send a video to the app
-> directly from your browser, in one click. See [`browser-extension/README.md`](./browser-extension/README.md).
+> directly from your browser, in one click. See the [Browser extension](#browser-extension) section.
 
 ---
 
-## Getting started
+## Install
 
-### 1. Install
-
-Download the latest version for your system from the
+Download the latest version from the
 [**Releases page**](https://github.com/MaximeSahuc/mp3-buddy/releases):
 
 | Platform | File |
@@ -40,16 +38,19 @@ Download the latest version for your system from the
 
 > [!TIP]
 > If a video asks you to log in (age-restricted, private, or members-only), add your cookies in
-> **Settings → Cookies**. The easiest way is the [browser extension](./browser-extension/README.md),
-> which sends the right cookies for you automatically.
+> **Settings → Cookies**. The easiest way is the [browser extension](#browser-extension), which
+> sends the right cookies for you automatically.
 
 
 ## Browser extension
 
-MP3 Buddy ships with a companion browser extension (Chrome / Edge / Brave / Vivaldi). It adds a
-button that sends the current page - and the cookies needed to download it - straight to the app.
+MP3 Buddy ships with a companion browser extension. It adds a button that sends the current page -
+and the cookies needed to download it - straight to the app. Pick the build for your browser:
 
-👉 **Full setup and usage instructions:** [`browser-extension/README.md`](./browser-extension/README.md)
+| Browser | Extension | Setup guide |
+|---------|-----------|-------------|
+| Chrome / Edge / Brave / Vivaldi … | Chromium build | [`browser-extension/chrome/README.md`](./browser-extension/chrome/README.md) |
+| Firefox / LibreWolf / Zen … | Gecko build | [`browser-extension/firefox/README.md`](./browser-extension/firefox/README.md) |
 
 ## For developers
 

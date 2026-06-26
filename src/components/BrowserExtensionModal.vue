@@ -14,7 +14,7 @@ const { t } = useI18n();
 
 const show = defineModel<boolean>("show", { default: false });
 
-const REPO_FOLDER_URL = "https://github.com/MaximeSahuc/mp3-buddy/tree/master/browser-extension";
+const REPO_FOLDER_URL = "https://github.com/MaximeSahuc/mp3-buddy/tree/master/browser-extension/chrome";
 
 const SUPPORTED_SITES = [
   "YouTube", "Bilibili", "Twitch", "Vimeo", "Dailymotion", "Niconico",

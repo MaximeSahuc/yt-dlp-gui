@@ -100,3 +100,34 @@ jobs:
           path: |
             src-tauri/target/${{ matrix.target }}/release/bundle/deb/*.deb
             src-tauri/target/${{ matrix.target }}/release/bundle/appimage/*.AppImage
+
+  # Package the browser extensions and attach them to the same release.
+  extensions:
+    name: Browser extensions
+    needs: release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Package extensions
+        run: |
+          set -euo pipefail
+          mkdir -p dist-ext
+          # zip the folder *contents* so manifest.json sits at the archive root
+          ( cd browser-extension/chrome  && zip -r -FS "$GITHUB_WORKSPACE/dist-ext/mp3-buddy-extension-chrome.zip" . -x '.*' )
+          # an .xpi is just a zip; Firefox can load it directly (temporary add-on / dev install)
+          ( cd browser-extension/firefox && zip -r -FS "$GITHUB_WORKSPACE/dist-ext/mp3-buddy-extension-firefox.xpi" . -x '.*' )
+          ls -l dist-ext
+
+      - name: Upload as workflow artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: browser-extensions
+          path: dist-ext/*
+
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "${{ github.ref_name }}" dist-ext/* --clobber

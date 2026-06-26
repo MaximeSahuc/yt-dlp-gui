@@ -26,14 +26,9 @@ fn reveal_browser_extension(app: tauri::AppHandle) -> Result<String, String> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_updater::Builder::new().build())
-        .plugin(tauri_plugin_opener::init())
-        .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_dialog::init())
-        .plugin(tauri_plugin_clipboard_manager::init())
-        .plugin(tauri_plugin_notification::init())
-        .plugin(tauri_plugin_process::init())
-        .plugin(tauri_plugin_deep_link::init())
+        // single-instance MUST be the first plugin: it short-circuits a second
+        // launch (e.g. the OS opening a `mp3buddy://` deep link) and forwards the
+        // args to the already-running instance instead of starting a new one.
         .plugin(tauri_plugin_single_instance::init(|app, args, _cwd| {
             // forward deep-link URLs to the frontend
             for arg in &args {
@@ -47,10 +42,27 @@ pub fn run() {
                 let _ = w.set_focus();
             }
         }))
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_clipboard_manager::init())
+        .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_process::init())
+        .plugin(tauri_plugin_deep_link::init())
         .setup(|_app| {
             #[cfg(target_os = "linux")]
             if let Some(w) = _app.get_webview_window("main") {
                 let _ = w.set_decorations(false);
+            }
+
+            // On Linux the `mp3buddy://` scheme is registered via a .desktop file.
+            // Installed bundles handle this, but `tauri dev` does not - register it
+            // at runtime so the browser extension's deep links work in development.
+            #[cfg(any(target_os = "linux", debug_assertions))]
+            {
+                use tauri_plugin_deep_link::DeepLinkExt;
+                let _ = _app.deep_link().register_all();
             }
 
             Ok(())

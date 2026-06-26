@@ -1,0 +1,71 @@
+{
+  "extName": {
+    "message": "MP3 Buddy Helper"
+  },
+  "extDesc": {
+    "message": "Send video URLs and cookies from your browser to the MP3 Buddy desktop app."
+  },
+  "popupSupported": {
+    "message": "Supported video site"
+  },
+  "popupUnsupported": {
+    "message": "This page is not a supported video site"
+  },
+  "popupChecking": {
+    "message": "Checking page…"
+  },
+  "popupSendCookies": {
+    "message": "Send page cookies"
+  },
+  "popupSendCookiesHint": {
+    "message": "Required for members-only or login-restricted videos"
+  },
+  "popupSendBtn": {
+    "message": "Send to MP3 Buddy"
+  },
+  "popupSending": {
+    "message": "Sending…"
+  },
+  "popupSent": {
+    "message": "Sent! Switch to MP3 Buddy"
+  },
+  "popupFailed": {
+    "message": "Failed to send, please try again"
+  },
+  "popupAppNotFoundTitle": {
+    "message": "Did the app open?"
+  },
+  "popupAppNotFoundDesc": {
+    "message": "If nothing happened, make sure MP3 Buddy is installed and running."
+  },
+  "popupDownload": {
+    "message": "Download MP3 Buddy"
+  },
+  "popupSupportedSites": {
+    "message": "Supported sites"
+  },
+  "menuSendPage": {
+    "message": "Send page to MP3 Buddy"
+  },
+  "menuSendLink": {
+    "message": "Download link with MP3 Buddy"
+  },
+  "menuSendSelection": {
+    "message": "Send selected URL to MP3 Buddy"
+  },
+  "notifyTitle": {
+    "message": "MP3 Buddy Helper"
+  },
+  "notifySent": {
+    "message": "Request sent to MP3 Buddy"
+  },
+  "notifyFailed": {
+    "message": "Could not open MP3 Buddy. Make sure the app is installed."
+  },
+  "notifyUnsupported": {
+    "message": "This URL is not from a supported video site."
+  },
+  "badgeOn": {
+    "message": "↓"
+  }
+}
